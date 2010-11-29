@@ -53,7 +53,7 @@ Listes des transactions réseaux
 -------------------------------
 - *From* Windows *to* VxWorks :
 	1. Configuration : L'ensemble des paramètres de configuration d'un lot est envoyé en même temps, dans *un seul flux réseau*.
-	2. Clapet : Ouverture ou fermeture du clapet ( Cf. Traitement des erreurs, 5. )
+	2. Clapet : Ouverture ou fermeture du clapet ( Cf. Traitement des erreurs, 5. ) **A CHECKER**
 
 - *From* VxWorks *to* Windows :
 	1. Envoie des logs
