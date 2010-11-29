@@ -1,0 +1,29 @@
+=============================
+Spécifications fonctionnelles
+=============================
+
+Journal de bord
+---------------
+Sont loggées toutes les opérations que réalise le système (opération de contrôle, emballage, impression)
+
+Configuration
+-------------
+
+Pour chaque lot, le superviseur doit renseigner :
+- Numéro du lot
+= Numéro de l'opération
+- Nombre de cartons
+- Nombre de pièces par carton
+- Date
+
+Le superviseur (**ou quelqu'un d'autre**) doit aussi fournir : 
+- Le seuil de pièces défectueuses
+- Le nombre de carton maximal en attente entre le capteur et l'imprimante
+
+Liste des erreurs
+-----------------
+
+- Carton absent
+- Plus de pièce
+- Seuil de pièces défectueuses atteint (défini lors de la configuration)
+- Deux imprimantes en pannes + File d'attente remplie
