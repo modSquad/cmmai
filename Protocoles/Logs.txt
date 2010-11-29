@@ -1,0 +1,6 @@
+L1: LOG\n
+L2: [Message]\n
+L3: \n
+L4: \n
+
+Ceci impose qu'aucun retour chariot ne doit être présent dans le message du log.
