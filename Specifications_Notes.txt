@@ -4,25 +4,46 @@ Spécifications fonctionnelles
 
 Journal de bord
 ---------------
-Sont loggées toutes les opérations que réalise le système (opération de contrôle, emballage, impression)
+Sont logguées toutes les opérations que réalise le système (opération de contrôle, emballage, impression)
 
 Configuration
 -------------
+Le superviseur doit fournir : 
+- Le seuil de pièces défectueuses accepté
 
 Pour chaque lot, le superviseur doit renseigner :
-- Numéro du lot
-= Numéro de l'opération
 - Nombre de cartons
 - Nombre de pièces par carton
-- Date
 
-Le superviseur doit aussi fournir : 
-- Le seuil de pièces défectueuses
+Les informations suivantes sont ajoutées automatiquement par le serveur *VxWorks*:
+- Numéro du lot
+- Numéro de l'opération
+- Date 
+
+**VALIDÉ**
 
 Liste des erreurs
 -----------------
-
 - Carton absent
 - Plus de pièce
 - Seuil de pièces défectueuses atteint (défini lors de la configuration)
 - Deux imprimantes en pannes + File d'attente remplie
+
+Liste des anomalies
+-------------------
+- Une seule imprimante en panne
+
+Traitement des erreurs
+----------------------
+1. Fermeture du clapet
+2. Allumer le voyant rouge de l'atelier
+2. Génération d'un message destiné au superviseur 
+3. Écriture du message dans les logs
+4. Passage en mode interactif ( mode dialogue) avec le *superviseur* : "Voulez vous reprendre car réparation ?"
+5. Oui : Reprise de l'application. Non : Fin.
+
+Traitement des anomalies
+------------------------
+1. Envoyer un message au poste *utilisateur*
+2. Allumer le voyant orange de l'atelier
+3. Écrire dans le log
