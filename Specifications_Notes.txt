@@ -12,12 +12,12 @@ Le superviseur doit fournir :
 - Le seuil de pièces défectueuses accepté
 
 Pour chaque lot, le superviseur doit renseigner :
+- Référence du lot
+- Code opérateur
 - Nombre de cartons
 - Nombre de pièces par carton
 
 Les informations suivantes sont ajoutées automatiquement par le serveur *VxWorks*:
-- Numéro du lot
-- Numéro de l'opération
 - Date 
 
 **VALIDÉ**
@@ -32,18 +32,29 @@ Liste des erreurs
 Liste des anomalies
 -------------------
 - Une seule imprimante en panne
+- Deux imprimantes en panne
 
 Traitement des erreurs
 ----------------------
 1. Fermeture du clapet
 2. Allumer le voyant rouge de l'atelier
-2. Génération d'un message destiné au superviseur 
-3. Écriture du message dans les logs
-4. Passage en mode interactif ( mode dialogue) avec le *superviseur* : "Voulez vous reprendre car réparation ?"
-5. Oui : Reprise de l'application. Non : Fin.
+3. Génération d'un message destiné au superviseur 
+4. Écriture du message dans les logs
+5. Passage en mode interactif ( mode dialogue) avec le *superviseur* : "Voulez vous reprendre car réparation ?"
+6. Oui : Reprise de l'application. Non : Fin.
 
 Traitement des anomalies
 ------------------------
 1. Envoyer un message au poste *utilisateur*
 2. Allumer le voyant orange de l'atelier
 3. Écrire dans le log
+
+Listes des transactions réseaux
+-------------------------------
+- *From* Windows *to* VxWorks :
+	1. Configuration : L'ensemble des paramètres de configuration d'un lot est envoyé en même temps, dans *un seul flux réseau*.
+	2. Clapet : Ouverture ou fermeture du clapet ( Cf. Traitement des erreurs, 5. ) **A CHECKER**
+
+- *From* VxWorks *to* Windows :
+	1. Envoie des logs
+	2. Envoie des erreurs et des anomalies (Cf. Listes)

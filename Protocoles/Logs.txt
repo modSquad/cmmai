@@ -1,0 +1,6 @@
+Ajoute au logune nouvelle entrée. Aucun retour chariot ne doit être présent dans le message du log.
+
+L1: LOG\n
+L2: [Message]\n
+L3: \n
+

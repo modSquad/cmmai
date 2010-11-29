@@ -1,0 +1,5 @@
+Signale à la machine windows que l'erreur [Code] est survenue.
+
+L1: ERROR\n
+L2: [Code]\n
+L3: \n

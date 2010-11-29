@@ -1,0 +1,4 @@
+Ordonne la reprise du processus après une erreur critique
+
+L1: RESUME\n
+L2: \n

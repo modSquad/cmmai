@@ -1,0 +1,4 @@
+Signifie qu'une pièce est rentré dans un des cartons du lot
+
+L1: ACCEPTED\n
+L2: \n
