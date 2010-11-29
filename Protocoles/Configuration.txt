@@ -1,9 +1,10 @@
+Séquence de configuration d'un lot. Note : Référence != Numéro du lot
+
 L1: CONFIG\n
 L2: [Code opérateur]\n
 L3: [Seuil]\n
-L4: [Numéro du lot]\n
+L4: [Référence du lot]\n
 L5: [Nombre de cartons]\n
 L6: [Nombre de pièces/carton]\n
 L8: \n
-L9: \n
 
