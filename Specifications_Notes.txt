@@ -16,9 +16,8 @@ Pour chaque lot, le superviseur doit renseigner :
 - Nombre de pièces par carton
 - Date
 
-Le superviseur (**ou quelqu'un d'autre**) doit aussi fournir : 
+Le superviseur doit aussi fournir : 
 - Le seuil de pièces défectueuses
-- Le nombre de carton maximal en attente entre le capteur et l'imprimante
 
 Liste des erreurs
 -----------------
