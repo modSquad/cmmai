@@ -17,7 +17,7 @@ void Socket::Receive()
 
     if(message.endsWith("\n\n"))
     {
-        QList<QString> list = message.split("/n", QString::SkipEmptyParts);
+        QList<QString> list = message.split("\n", QString::SkipEmptyParts);
 
         if(list[0].compare("LOG") == 0)
         {
@@ -44,36 +44,19 @@ void Socket::Receive()
         {
             emit gotLog(QString("Unknown message received : ") + message);
         }
+        message.clear();
     }
+}
 
-    /*
-    L1: ACCEPTED\n
-    L2: \n
+void Socket::SendConfig(int operatorCode, int threshold, int bundleReference, int boxCount, int piecesPerBox)
+{
+    QString config( "CONFIG\n[" + QString::number(operatorCode) + "]\n["
+                                + QString::number(threshold) + "]\n["
+                                + QString::number(bundleReference) + "]\n["
+                                + QString::number(boxCount) + "]\n["
+                                + QString::number(piecesPerBox) + "]\n\n"
+                                );
 
-    L1: CONFIG\n
-    L2: [Code opérateur]\n
-    L3: [Seuil]\n
-    L4: [Référence du lot]\n
-    L5: [Nombre de cartons]\n
-    L6: [Nombre de pièces/carton]\n
-    L8: \n
-
-    L1: ERROR\n
-    L2: [Code]\n
-    L3: \n
-
-    L1: LAUNCH\n
-    L2: \n
-
-    L1: LOG\n
-    L2: [Message]\n
-    L3: \n
-
-    L1: REJECTED\n
-    L2: \n
-
-    L1: RESUME\n
-    L2: \n
-*/
-
+    //TODO check if there's no other way to send QString over socket.
+    write(config.toUtf8());
 }

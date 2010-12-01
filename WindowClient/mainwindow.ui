@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>550</width>
-    <height>466</height>
+    <width>1008</width>
+    <height>749</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -62,8 +62,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>550</width>
-     <height>22</height>
+     <width>1008</width>
+     <height>29</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuServers">
@@ -89,7 +89,7 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents">
     <layout class="QGridLayout" name="gridLayout_2">
-     <item row="12" column="0">
+     <item row="11" column="0">
       <spacer name="verticalSpacer">
        <property name="orientation">
         <enum>Qt::Vertical</enum>
@@ -208,99 +208,6 @@
        </layout>
       </widget>
      </item>
-     <item row="11" column="0">
-      <widget class="QGroupBox" name="configurationLayout">
-       <property name="title">
-        <string>Confguration</string>
-       </property>
-       <layout class="QVBoxLayout" name="verticalLayout">
-        <item>
-         <layout class="QHBoxLayout" name="triggerLayout">
-          <item>
-           <widget class="QLabel" name="triggerLabel">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="trigger"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="OperatorCodeLayout_3">
-          <item>
-           <widget class="QLabel" name="operatoCodeLabel_3">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="operatorCode_3"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="OperatorCodeLayout_4">
-          <item>
-           <widget class="QLabel" name="operatoCodeLabel_4">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="operatorCode_4"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="OperatorCodeLayout">
-          <item>
-           <widget class="QLabel" name="operatoCodeLabel">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="operatorCode"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="OperatorCodeLayout_6">
-          <item>
-           <widget class="QLabel" name="operatoCodeLabel_6">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="operatorCode_6"/>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="OperatorCodeLayout_5">
-          <item>
-           <widget class="QLabel" name="operatoCodeLabel_5">
-            <property name="text">
-             <string>TextLabel</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="operatorCode_5"/>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
     </layout>
    </widget>
   </widget>
@@ -346,6 +253,118 @@
        <property name="text">
         <string>127.0.0.1:42424</string>
        </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget_2">
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QGroupBox" name="configurationLayout">
+       <property name="title">
+        <string>Confguration</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <layout class="QHBoxLayout" name="OperatorCodeLayout">
+          <item>
+           <widget class="QLabel" name="operatoCodeLabel">
+            <property name="text">
+             <string>Operator Code</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="operatorCode"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="thresholdLayout">
+          <item>
+           <widget class="QLabel" name="thresholdLabel">
+            <property name="text">
+             <string>Threshold</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="threshold"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="bundleReferenceLayout">
+          <item>
+           <widget class="QLabel" name="bundleReferenceLabel">
+            <property name="text">
+             <string>Bundle Reference</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="bundleReference"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="numberOfBoxLayout">
+          <item>
+           <widget class="QLabel" name="numberOfBoxLabel">
+            <property name="text">
+             <string>Number of box</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="numberOfBox"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="piecesBoxLayout">
+          <item>
+           <widget class="QLabel" name="piecesBoxLavbel">
+            <property name="text">
+             <string>Pieces / box</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="piecesBox"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="sendConfigButtonLayout">
+          <item>
+           <spacer name="sendConfigButtonSpacer">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="sendConfigButton">
+            <property name="text">
+             <string>Ok</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>

@@ -17,6 +17,8 @@ MainWindow::MainWindow(Socket *connection, QWidget *parent) :
 
     connect(connection, SIGNAL(gotLog(QString)), this, SLOT(appendLog(QString)));
 
+    connect(ui->sendConfigButton, SIGNAL(clicked()), this, SLOT(sendConfig()));
+
     connect(ui->ConnectionButton, SIGNAL(clicked()), this, SLOT(connectToHost()));
 
     connect(connection, SIGNAL(connected()), this, SLOT(connectionNotify()));
@@ -36,9 +38,19 @@ void MainWindow::addRejected(int number)
 
 void MainWindow::appendLog(QString logLine)
 {
-    //logLine.replace(QString("\n"), QString(""));
+    logLine.replace(QString("\n"), QString(""));
     QDateTime time(QDateTime::currentDateTime());
     new QListWidgetItem(time.toString(QString("hh:mm:ss.zzz : ")) + logLine, ui->LogView);
+}
+
+void MainWindow::sendConfig()
+{
+    //TODO make control on ui values
+    connection->SendConfig(ui->operatorCode->text().toInt(),
+                           ui->threshold->text().toInt(),
+                           ui->bundleReference->text().toInt(),
+                           ui->numberOfBox->text().toInt(),
+                           ui->piecesBox->text().toInt());
 }
 
 void MainWindow::connectToHost()

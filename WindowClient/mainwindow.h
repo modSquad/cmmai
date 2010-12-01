@@ -22,6 +22,8 @@ public slots:
     void addRejected(int number);
     void appendLog(QString logLine);
 
+    void sendConfig();
+
     void connectToHost();
     void connectionNotify();
     void disconnectionNotify();
