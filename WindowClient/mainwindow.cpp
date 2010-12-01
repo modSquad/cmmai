@@ -19,6 +19,10 @@ MainWindow::MainWindow(Socket *connection, QWidget *parent) :
 
     connect(ui->sendConfigButton, SIGNAL(clicked()), this, SLOT(sendConfig()));
 
+    connect(ui->launchButton, SIGNAL(clicked()), connection, SLOT(Launch()));
+    connect(ui->resumeButton, SIGNAL(clicked()), connection, SLOT(Resume()));
+    connect(ui->stopButton, SIGNAL(clicked()), connection, SLOT(Stop()));
+
     connect(ui->ConnectionButton, SIGNAL(clicked()), this, SLOT(connectToHost()));
 
     connect(connection, SIGNAL(connected()), this, SLOT(connectionNotify()));

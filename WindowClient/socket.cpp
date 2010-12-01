@@ -36,7 +36,13 @@ void Socket::Receive()
         }*/
         else if(list[0].compare("ERROR") == 0)
         {
-            list[1].replace("[","error number ");
+            list[1].replace("[","Error ");
+            list[1].replace("]","");
+            emit gotLog(list[1]);
+        }
+        else if(list[0].compare("WARNINGS") == 0)
+        {
+            list[1].replace("[","Warnings ");
             list[1].replace("]","");
             emit gotLog(list[1]);
         }
@@ -59,4 +65,19 @@ void Socket::SendConfig(int operatorCode, int threshold, int bundleReference, in
 
     //TODO check if there's no other way to send QString over socket.
     write(config.toUtf8());
+}
+
+void Socket::Launch()
+{
+    write("LAUNCH\n\n");
+}
+
+void Socket::Resume()
+{
+    write("RESUME\n\n");
+}
+
+void Socket::Stop()
+{
+    write("STOP\n\n");
 }

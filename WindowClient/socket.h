@@ -15,6 +15,9 @@ signals:
 public slots:
     void Receive();
     void SendConfig(int operatorCode, int threshold, int bundleReference, int boxCount, int piecesPerBox);
+    void Launch();
+    void Stop();
+    void Resume();
 
 private:
 
