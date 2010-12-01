@@ -1,0 +1,50 @@
+﻿Guide de style, projet CIAI
+ 
+Ce guide présente une série de règles qu’il est nécessaire de respecter lors
+des phases de développement du projet :
+
+ 1. Le code est en anglais exclusivement, les noms de symboles ne doivent pas
+contenir de français,
+
+ 2. Les symboles n’étant pas définis dans les interfaces (au sens interfaces
+définies dans la conception, pas les .h) sont privés,
+
+ 3. Les symboles privés en dehors des fonctions doivent être précédés du mot clé
+static, et ceci pour deux raisons : d’une part parce que c’est “obligatoire à
+l’insa” (lol), d’autre part parce que nous risquons des collisions de noms d’un
+lot à l’autre,
+
+ 4. Commentez chaque action en expliquant en quoi ça répond aux exigences du
+cahier des charges (vous pouvez rester succin, l’idée étant qu’à la relecture
+et les tests, tout le monde s’y retrouve, ça inclut les profs qui, je n’en
+doute pas, liront notre code très attentivement),
+
+ 5. On ne respecte pas le guide de style insa ! notamment : les noms de
+fonctions sont en camelCase, ne commencent JAMAIS par une majuscule (cf
+exemples de code), les objets privés commencent par “_”.
+
+ 6. Un nouveau type est suffixé par “_t” (exemple : chaton_t est un type
+chaton).
+
+ 7. Les variables partagées commencent par une majuscule,
+
+ 8. La syntaxe des variables locales est libre, mais restez cohérent dans un
+module et choisissez des noms explicites (une variable peut avoir un nom très
+long, le copier/coller est une fonctionnalité qui marche pas mal sur les
+machines modernes, et personne ne code sur un windows phone 7),
+
+ 9. Aucune valeur dans le code, tout passe par des constantes et tout
+particulièrement : les codes d’erreur, les taille des objets de communication &
+synchronisation,
+
+ 10. Commentez dans les .h si public, commentez les variables (surtout si elles
+ne sont pas de type scalaire) et donnant des détails sur leur structure et le
+sens de leur valeur.
+
+ 11. Les structures doivent être commentées globalement et pour chaque attribut
+de la structure.
+
+ 12. l’encodage des fichiers doit être en UTF8, si vous codez sur un OS
+vieillissant, configurez votre éditeur de texte (eclipse, workbench, QtCreator
+possèdent un paramètre encodage des caractère qui peut être défini à l’échelle
+du projet). Sinon, je recommande Notepad++ qui sait très bien gérer l’utf8.
