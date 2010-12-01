@@ -16,10 +16,10 @@
    viewBox="0 0 907.88262 741.6521"
    xml:space="preserve"
    inkscape:version="0.48.0 r9654"
-   sodipodi:docname="LogsHandler.svg"><metadata
+   sodipodi:docname="LogsHandler_alternate.svg"><metadata
    id="metadata105"><rdf:RDF><cc:Work
        rdf:about=""><dc:format>image/svg+xml</dc:format><dc:type
-         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title></dc:title></cc:Work></rdf:RDF></metadata><defs
+         rdf:resource="http://purl.org/dc/dcmitype/StillImage" /><dc:title /></cc:Work></rdf:RDF></metadata><defs
    id="defs103"><inkscape:perspective
    sodipodi:type="inkscape:persp3d"
    inkscape:vp_x="0 : 300 : 1"
@@ -262,9 +262,9 @@
    inkscape:window-height="977"
    id="namedview101"
    showgrid="false"
-   inkscape:zoom="0.55625732"
-   inkscape:cx="309.90774"
-   inkscape:cy="403.49693"
+   inkscape:zoom="4.4500586"
+   inkscape:cx="128.28188"
+   inkscape:cy="508.02073"
    inkscape:window-x="0"
    inkscape:window-y="25"
    inkscape:window-maximized="1"
@@ -425,6 +425,7 @@
 
 
 
+
 <g
    id="g2917"
    transform="matrix(1.8242971,0,0,1.7586234,-963.5486,-288.84944)"><ellipse
@@ -458,6 +459,7 @@
    id="text87"
    x="360.65335"
    y="19.117167">LogsHandler</text>
+
 
 
 
@@ -626,12 +628,14 @@
    style="font-size:12px;font-family:MyriadPro-Regular"
    id="text75-8"
    x="74.854179"
-   y="235.36636">errorCode, batchId, boxId,</text>
+   y="235.36636">eventCode, batchId, boxId,</text>
+
 <text
    style="font-size:12px;font-family:MyriadPro-Regular"
    x="49.685974"
    y="248.84933"
    id="text3623">boxedProducts, defectiveProducts</text>
+
 
 
 
@@ -662,27 +666,31 @@
 
 
 
+
 <g
    id="g3162"
    transform="translate(-7.9662792,62.94933)"><text
-     y="267.91693"
-     x="828.42944"
-     id="text75-8-8"
-     style="font-size:12.00000095px;font-family:MyriadPro-Regular">F</text>
+   y="267.91693"
+   x="828.42944"
+   id="text75-8-8"
+   style="font-size:12.00000095px;font-family:MyriadPro-Regular">F</text>
+
 <text
-     y="267.9234"
-     x="849.8999"
-     id="text75-8-8-0"
-     style="font-size:12.00000191px;font-family:MyriadPro-Regular">O</text>
+   y="267.9234"
+   x="849.8999"
+   id="text75-8-8-0"
+   style="font-size:12.00000191px;font-family:MyriadPro-Regular">O</text>
+
 <path
-     id="path2993"
-     d="m 801.85385,246.90596 -17.71716,17.71716 17.58118,17.58118 84.66988,-0.38948 17.47882,-17.58894 -17.31992,-17.31992 -84.6928,0 z"
-     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-     inkscape:connector-curvature="0" /><text
-     y="242.50899"
-     x="822.48199"
-     id="text39-3-7"
-     style="font-size:12.00000095px;font-family:MyriadPro-Regular">Logfile</text>
+   id="path2993"
+   d="m 801.85385,246.90596 -17.71716,17.71716 17.58118,17.58118 84.66988,-0.38948 17.47882,-17.58894 -17.31992,-17.31992 -84.6928,0 z"
+   style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+   inkscape:connector-curvature="0" /><text
+   y="242.50899"
+   x="822.48199"
+   id="text39-3-7"
+   style="font-size:12.00000095px;font-family:MyriadPro-Regular">Logfile</text>
+
 </g>
 
 
@@ -696,6 +704,7 @@
    id="text87-5"
    x="458.06772"
    y="19.908533">105</text>
+
 
 
 
@@ -714,6 +723,7 @@
    id="text39-6"
    x="204.81465"
    y="83.693535">200</text>
+
 <path
    style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
    d="m 133.77101,167.00824 0,29.23729 294.91526,0"
@@ -733,6 +743,7 @@
      x="585.27124"
      y="206.40213"
      id="tspan4409">correspondant au code d'erreur reçu</tspan></text>
+
 <g
    transform="translate(-308.87519,-358.16218)"
    id="g3575-8"><polygon
@@ -779,6 +790,7 @@
      id="tspan4536"
      x="466.84909"
      y="244.82994">0</tspan></text>
+
 <text
    xml:space="preserve"
    style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -790,6 +802,7 @@
      id="tspan4540"
      x="467.74796"
      y="287.07657">1</tspan></text>
+
 <text
    xml:space="preserve"
    style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -801,6 +814,7 @@
      id="tspan4544"
      x="466.84909"
      y="329.32321">2</tspan></text>
+
 <text
    xml:space="preserve"
    style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -812,6 +826,7 @@
      id="tspan4548"
      x="468.64682"
      y="438.46765">n</tspan></text>
+
 <text
    xml:space="preserve"
    style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -823,6 +838,7 @@
      id="tspan4552"
      x="464.94229"
      y="494.13916">END_CODE</tspan></text>
+
 <path
    style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
    d="m 484.61848,544.19265 110.25831,0 0,30.50847 -37.36449,0"
@@ -868,6 +884,7 @@
      id="tspan4905-7"
      x="668.3111"
      y="570.22437">EndSync</tspan></text>
+
 <text
    xml:space="preserve"
    style="font-size:12.00000191px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -879,6 +896,7 @@
      id="tspan4905-6"
      x="836.6062"
      y="569.3255">1</tspan></text>
+
 <text
    xml:space="preserve"
    style="font-size:12.00000381px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -890,6 +908,7 @@
      id="tspan4905-6-6-3"
      x="837.61963"
      y="638.15411">0</tspan></text>
+
 <path
    style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
    d="m 484.8264,532.4666 290.33325,0 0,43.1455"
