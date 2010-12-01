@@ -1,22 +1,26 @@
+#include <QDateTime>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(LogModel *logModel, Connection *connection, QWidget *parent) :
+MainWindow::MainWindow(Socket *connection, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    logModel(logModel),
     connection(connection)
 {
     ui->setupUi(this);
+    // TODO set header data
+    //ui->LogView->setHorizontalHeaderItem(0, );
+    //ui->LogView->setHorizontalHeaderItem(1, );
 
-    ui->LogView->setModel(logModel->getModel());
+    //ui->LogView->set
 
-    connect(connection, SIGNAL(gotLog(QString)), logModel, SLOT(appendLog(QString)));
-    connect(connection, SIGNAL(gotAccepted(int)), this, SLOT(addAccepted(int)));
-    connect(connection, SIGNAL(gotRejected(int)), this, SLOT(addRejected(int)));
+    connect(connection, SIGNAL(gotLog(QString)), this, SLOT(appendLog(QString)));
 
     connect(ui->ConnectionButton, SIGNAL(clicked()), this, SLOT(connectToHost()));
-    connect()
+
+    connect(connection, SIGNAL(connected()), this, SLOT(connectionNotify()));
+    connect(connection, SIGNAL(disconnected()), this, SLOT(disconnectionNotify()));
 }
 
 void MainWindow::addAccepted(int number)
@@ -30,19 +34,39 @@ void MainWindow::addRejected(int number)
     ui->RejectedBar->setValue(ui->RejectedBar->value()+number);
 }
 
+void MainWindow::appendLog(QString logLine)
+{
+    //logLine.replace(QString("\n"), QString(""));
+    QDateTime time(QDateTime::currentDateTime());
+    new QListWidgetItem(time.toString(QString("hh:mm:ss.zzz : ")) + logLine, ui->LogView);
+}
+
 void MainWindow::connectToHost()
 {
-    connection->connectToHost(ui->AddressLine->text());
+    qDebug() << connection->state();
+
+    if(connection->state() == QAbstractSocket::ConnectedState)
+    {
+        connection->disconnectFromHost();
+    }
+    else
+    {
+        QList<QString> addressList = ui->AddressLine->text().split(":");
+        if(addressList.count() > 0)
+        {
+           connection->connectToHost(addressList[0],addressList[1].toInt());
+        }
+    }
 }
 
 void MainWindow::connectionNotify()
 {
-    ui->ConnectionLabel->setText(QString("Connected"));
+    ui->ConnectionButton->setText(QString("Disconnect"));
 }
 
 void MainWindow::disconnectionNotify()
 {
-    ui->ConnectionLabel->setText(QString("Disconnected"));
+    ui->ConnectionButton->setText(QString("Connect"));
 }
 
 MainWindow::~MainWindow()

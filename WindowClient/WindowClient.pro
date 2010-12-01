@@ -12,11 +12,9 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    logmodel.cpp \
-    connection.cpp
+    socket.cpp
 
 HEADERS  += mainwindow.h \
-    logmodel.h \
-    connection.h
+    socket.h
 
 FORMS    += mainwindow.ui
