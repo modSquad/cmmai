@@ -9,5 +9,11 @@
 
 #include "boxingServer.h"
 
+/**
+ * Application bootstrap.
+ * @return int
+ */
+int boxingServer();
+
 #endif
 

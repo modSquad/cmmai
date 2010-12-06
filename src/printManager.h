@@ -9,5 +9,13 @@
 
 #include "boxingServer.h"
 
+/**
+ * Bootstrap for printManager task.
+ * @param eventsQueue	Queue of events
+ * @param boxesQueue	Queue of boxes to be labelled
+ * @return int
+ */
+int printManager(MSG_Q_ID eventsQueue, MSG_Q_ID boxesQueue);
+
 #endif
 
