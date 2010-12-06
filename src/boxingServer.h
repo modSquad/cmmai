@@ -66,5 +66,10 @@ typedef enum {
 	EVT_ERR_PRODUCT_STARVATION
 } event_t;
 
+/**
+ * Size of the boxes queue before printing operations
+ */
+static const int MAX_BOXES_QUEUE_SIZE = 5;
+
 #endif
 
