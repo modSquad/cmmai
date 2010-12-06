@@ -1,3 +1,4 @@
+[CLIENT] -> [SERVEUR]
 Ordonne la reprise du processus après une erreur critique
 
 L1: RESUME\n

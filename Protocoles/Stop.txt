@@ -1,4 +1,5 @@
-Ordonne l'arrêt du processus après une erreur critique
+[CLIENT] -> [SERVEUR]
+Ordonne l'arrêt du processus
 
 L1: STOP\n
 L@: \n

@@ -1,4 +1,5 @@
-Ajoute au logune nouvelle entrée. Aucun retour chariot ne doit être présent dans le message du log.
+[SERVEUR] -> [CLIENT]
+Ajoute au log une nouvelle entrée. Aucun retour chariot ne doit être présent dans le message du log.
 
 L1: LOG\n
 L2: [Message]\n
