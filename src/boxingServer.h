@@ -8,12 +8,7 @@
 #ifndef BOXING_SERVER_H
 #define BOXING_SERVER_H
 
-/* Boolean type */
-typedef enum
-{
-	FALSE,
-	TRUE
-} BOOL;
+typedef int BOOL;
 
 /*
  * Misc data types

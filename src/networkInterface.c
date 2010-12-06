@@ -10,10 +10,23 @@
 /* -------------------------------------------------------------------- */
 /* ------------------------------------------------------------ INCLUDE */
 /* ---------------------------------------------------- Include système */
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
-#include <sockLib.h>
 
-#include <eventToString.h>
+#include <netdb.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include <unistd.h>
+
+#include <sockLib.h>
+#include <taskLib.h>
+#include <inetLib.h>
+#include <fioLib.h>
+
+#include "networkInterface.h"
+#include "eventToString.h"
 
 /* -------------------------------------------------- Include personnel */
 
@@ -81,7 +94,7 @@ int createServerSocket(int port) {
 	if (bind (fd, (struct sockaddr *) &serverAddr, sockAddrSize) == ERROR)
 	{
 		perror ("bind");
-		close (sFd);
+		close (fd);
 		
 		return NETWORK_ERROR;
 	}
@@ -93,7 +106,7 @@ int createServerSocket(int port) {
 	if (listen (fd, SERVER_MAX_CONNECTIONS) == ERROR)
 	{
 		perror ("listen");
-		close (sFd);
+		close (fd);
 		
 		return NETWORK_ERROR;
 	}
@@ -101,7 +114,7 @@ int createServerSocket(int port) {
 	if ((newFd = accept (fd, (struct sockaddr *) &clientAddr, &sockAddrSize)) == ERROR)
 	{
 		perror ("accept");
-		close (sFd);
+		close (fd);
 		
 		return NETWORK_ERROR;
 	}
