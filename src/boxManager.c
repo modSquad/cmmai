@@ -48,7 +48,7 @@ static BOOL sendBox ( )
 		msgQSend(_eventsQueue, &eventMsg, sizeof(eventMsg),
 				WAIT_FOREVER, MSG_PRI_NORMAL);
 
-		_settings->batchBoxesCount += 1; /* TODO : copier dans le schéma de conception (oubli) */
+		_settings->batchBoxesCount += 1;
 		_boxState.boxID += 1;
 		_boxState.boxedProductsCount = 0;
 		_boxState.defectiveProductsCount = 0;
@@ -180,7 +180,7 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 			is requested by user. In this case, the request is ignored (will be
 			processed at the end of the current box)
 		*/
-		if (!_boxState.filling) /* TODO ajouter ce test dans la conception */
+		if (!_boxState.filling)
 		{
 			if (_boxState.boxedProductsCount >=
 					_settings->productsPerBox)
@@ -200,8 +200,6 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 				}
 				else if (_settings->batchBoxesCount < _settings->batchBoxesAsked)
 				{
-					/* TODO : inverser les "if" dans la conception : pas besoin de déclencher une erreur
-					de famine de carton si le lot est terminé */
 					startBoxFilling();
 				}
 			}
