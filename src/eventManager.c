@@ -3,23 +3,31 @@
 
 void sendEvent (event_t eventType, const boxData_t *boxData)
 {
-	/* TODO */
+	eventStruct_t eventStruct;
+
+	eventStruct.eventType = eventType;
+	eventStruct.eventType = boxData;
+
+	if((msgQSend(eventsQueue,eventStruct,sizeof(eventStruct_t), WAIT_FOREVER, MSG_PRI_NORMAL)) == ERROR)
+	{
+		// Send message fail
+	}
 }
 
-void eventManager ()
+void eventManager (int socketInput, MSG_Q_ID eventsQueue)
 {
-	char eventBuffer[MAX_EVENT_LENGTH]
+	eventStruct_t eventStruct;
 	
-
 	for(;;)
 	{
-		if( msgQReceive(eventsQueue, eventBuffer, MAX_EVENT_LENGTH, WAIT_FOREVER) == ERROR )
+		if( msgQReceive(eventsQueue, eventBuffer, sizeof(eventStruct_t), WAIT_FOREVER) == ERROR )
 		{
 			// Receive message fail
-		};
+		}
 
+		
+		
 
-		if((msgQSend(mesgQueueId,message,MAX_EVENT_LENGTH, WAIT_FOREVER, MSG_PRI_NORMAL)) == ERROR)
 		
 	}
 }
