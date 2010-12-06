@@ -29,7 +29,7 @@ typedef struct
  * @param boxesQueue			queue of boxes to be labelled by printers
  * @param eventsQueue			queue of events to be logged or given to client
  * @param settings				Structure of settings
- * @param boxHandlingRequest	semaphore of activation of the box handling
+ * @param boxHandlingRequest	semaphore activating the box manager
  * @return int
  */
 int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,

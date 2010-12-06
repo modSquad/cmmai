@@ -13,8 +13,8 @@ typedef int BOOL;
 /*
  * Misc data types
  */
-typedef unsigned int batchID_t;
-typedef unsigned int boxID_t;
+typedef unsigned long batchID_t;
+typedef unsigned long boxID_t;
 typedef unsigned int productsCount_t;
 typedef unsigned int boxCount_t;
 
@@ -53,13 +53,18 @@ typedef struct
 /**
  * event_t represent an event happening in the application.
  */
-typedef enum {
+typedef enum
+{
 	/* Dummy value for a dummy event */
 	EVT_NONE,
 	/* Sent by NetworkListener when start requested  by user via network*/
 	EVT_APPLICATION_START,
 	/* Sent by NetworkListener when stop requested  by user via network*/
 	EVT_APPLICATION_STOP,
+	/* Sent by BoxManager when it stops managing box filling due to
+	 * application end request
+	 */
+	EVT_END_FILLING,
 	/* Sent by PrintManager when it receives the end application flag */
 	EVT_CLOSE_APPLICATION, 
 	/* Sent by EmergencyStopHandler when activated */
@@ -85,10 +90,20 @@ typedef enum {
 /**
  * Type of a message in the events queue.
  */
-typedef struct {
+typedef struct
+{
 	event_t event;
 	boxData_t boxData;
 } event_msg_t;
+
+/**
+ * Type of a message in the boxes queue.
+ */
+typedef struct
+{
+	BOOL lastMessage;
+	boxData_t boxData;
+} boxesQueueMsg_t;
 
 /**
  * Size of the boxes queue before printing operations

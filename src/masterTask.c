@@ -21,7 +21,7 @@ int boxingServer()
 	endSync = semMCreate(SEM_Q_FIFO|SEM_DELETE_SAFE);
 	boxHandlingRequest = semMCreate(SEM_Q_FIFO|SEM_DELETE_SAFE);
 	settings = (settings_t*) malloc(sizeof(settings_t));
-	boxesQueue = msgQCreate(MAX_BOXES_QUEUE_SIZE, sizeof(boxData_t), MSG_Q_FIFO);
+	boxesQueue = msgQCreate(MAX_BOXES_QUEUE_SIZE, sizeof(boxesQueueMsg_t), MSG_Q_FIFO);
 	eventsQueue = msgQCreate(MAX_EVENTS_QUEUE_SIZE, sizeof(events_msg_t), MSG_Q_FIFO);
 	
 	/* Spawning tasks */

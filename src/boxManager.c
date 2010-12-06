@@ -1,15 +1,22 @@
+#include <taskLib.h>
 #include <msgQLib.h>
 #include <semLib.h>
 #include <wdLib.h>
 #include "boxManager.h"
 
+static const int PRODUCT_STARVATION_DELAY = 5;
+	/* Time, in seconds, after which an error is triggered if no
+	 * product was dropped to the machine
+	 */
+
 static boxState_t	_boxState;
 static WDOG_ID		_productStarvationHandlerID = NULL;
-static MSG_Q_ID		_boxesQueue = NULL; /* TODO : utile ? */
+static MSG_Q_ID		_boxesQueue = NULL;
 static MSG_Q_ID		_eventsQueue = NULL;
 static settings_t	*_settings = NULL;
 static SEM_ID		_boxHandlingRequest = NULL;
 
+static void ProductStarvationHandler();
 
 /*--------------------------------------------------*/
 /* Private functions */
@@ -17,77 +24,129 @@ static SEM_ID		_boxHandlingRequest = NULL;
 static BOOL sendBox ( )
 {
 	boxData_t boxData =
+		{
+			_settings->batchID,
+			_boxState.boxID,
+			_boxState.boxedProductsCount,
+			_boxState.defectiveProductsCount
+		};
+	boxesQueueMsg_t boxMsg =
+		{
+			false,
+			boxData
+		};
+	event_msg_t eventMsg =
+		{
+			EVT_NONE,
+			boxData
+		};
+
+	if ( msgQSend(_boxesQueue, &boxMsg, sizeof(boxMsg),
+				NO_WAIT, MSG_PRI_NORMAL) == OK )
 	{
-		_settings->batchID,
-		_boxState.boxID,
-		_boxState.boxedProductsCount,
-		_boxState.defectiveProductsCount
-	};
-	
-	/* TODO : créer une boîte aux lettres correcte pour PrintManager (gestion de la fin de l'appli) */
-	if (1/*msgQSend(TODO) == OK*/)
-	{
-		sendEvent(EVT_BOX_PROCESSED,&boxData); /* TODO : msgQSend ? */
-		
+		eventMsg.event = EVT_BOX_PROCESSED;
+		msgQSend(_eventsQueue, &eventMsg, sizeof(eventMsg),
+				WAIT_FOREVER, MSG_PRI_NORMAL);
+
 		_settings->batchBoxesCount += 1; /* TODO : copier dans le schéma de conception (oubli) */
 		_boxState.boxID += 1;
 		_boxState.boxedProductsCount = 0;
 		_boxState.defectiveProductsCount = 0;
 		_boxState.filling = FALSE;
-		
+
 		return TRUE;
 	}
 	else
 	{
-		sendEvent(EVT_ERR_FULL_QUEUE,&boxData); /* TODO : msgQSend ? */
+		eventMsg.event = EVT_ERR_FULL_QUEUE;
+		msgQSend(_eventsQueue, &eventMsg, sizeof(eventMsg),
+				WAIT_FOREVER, MSG_PRI_NORMAL);
 		return FALSE;
 	}
 }
 
 static void startBoxFilling ( )
 {
-	if (1/*TODOcarton présent*/)
+	if (1/*TODO carton présent*/)
 	{
 		_boxState.filling = TRUE;
-		/* TODO relancer ProductStarvationHandler */
+		wdStart(_productStarvationHandlerID,
+				PRODUCT_STARVATION_DELAY*sysClkRateGet(),
+				(FUNCTPTR)ProductStarvationHandler, 0);
 		/* TODO ouvrir le clapet */
 	}
 	else
 	{
-		sendEvent(EVT_ERR_BOX_STARVATION, NULL):
+		event_msg_t eventMsg =
+			{
+				EVT_ERR_BOX_STARVATION,
+				{ /* Box Data */
+					_settings->batchID,
+					_boxState.boxID,
+					_boxState.boxedProductsCount,
+					_boxState.defectiveProductsCount
+				}
+			};
+		msgQSend(_eventsQueue, &eventMsg, sizeof(eventMsg),
+				WAIT_FOREVER, MSG_PRI_NORMAL);
 	}
 }
 
 static void stopBoxFilling ( )
 {
 	/* TODO fermer le clapet  */
-	/* TODO arrêter ProductStarvationHandler */
+	wdCancel(_productStarvationHandlerID);
 	_boxState.filling = FALSE;
 	/* TODO ajouter & détailler l'écriture dans BoxState dans la conception */
+}
+
+static void endTask ( )
+{
+	boxData_t boxData =
+		{
+			_settings->batchID,
+			_boxState.boxID,
+			_boxState.boxedProductsCount,
+			_boxState.defectiveProductsCount
+		};
+	boxesQueueMsg_t boxMsg =
+		{
+			TRUE,
+			boxData
+		};
+	event_msg_t eventMsg =
+		{
+			EVT_END_FILLING,
+			boxData
+		};
+	msgQSend(_eventsQueue, &eventMsg, sizeof(eventMsg),
+			WAIT_FOREVER, MSG_PRI_NORMAL);
+	msgQSend(_boxesQueue, &boxMsg, sizeof(boxMsg),
+			WAIT_FOREVER, MSG_PRI_NORMAL);
+
+	taskSuspend(taskIdSelf());
 }
 
 /*--------------------------------------------------*/
 /* IT and alarm handlers */
 
 /* TODO : vérifier la signature */
-static int ProductStarvationHandler ( )
+static void ProductStarvationHandler ( )
 {
 	stopBoxFilling();
-	return 0;
 }
 
 /* TODO : vérifier la signature */
-static int ProductInflowHandler ( )
+static void ProductInflowHandler ( )
 {
 	/* TODO : n'utiliser que stopBoxFilling(); , ne pas accéder directement au clapet */
-	return 0;
+	/* TODO : mettre à jour _boxState.filling si on est à la fin d'un carton */
 }
 
 /* TODO : vérifier la signature */
-static int EmergencyStopHandler ( )
+static void EmergencyStopHandler ( )
 {
 	stopBoxFilling();
-	return 0;
 }
 
 
@@ -102,7 +161,12 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 	_eventsQueue = eventsQueue;
 	_settings = settings;
 	_boxHandlingRequest = boxHandlingRequest;
-	/*TODO:init boxState*/
+
+	_boxState.boxID = 0;
+	_boxState.boxedProductsCount = 0;
+	_boxState.defectiveProductsCount = 0;
+	_boxState.filling = FALSE;
+
 	/* TODO : fermer le clapet */
 
 	/* JOB */
@@ -116,7 +180,7 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 			is requested by user. In this case, the request is ignored (will be
 			processed at the end of the current box)
 		*/
-		if (!_boxState.filling) /* TODO ajouter le ce test dans la conception */
+		if (!_boxState.filling) /* TODO ajouter ce test dans la conception */
 		{
 			if (_boxState.boxedProductsCount >=
 					_settings->productsPerBox)
@@ -127,11 +191,12 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 
 			if (!boxError)
 			{
-				/* We can continue dropping products */
-				
+				/* We're in a clean state ; we can continue dropping products
+				 * or stop the application
+				 */
 				if (_settings->applicationEndRequest)
 				{
-					/*TODO*/
+					break;
 				}
 				else if (_settings->batchBoxesCount < _settings->batchBoxesAsked)
 				{
@@ -144,8 +209,8 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 	}
 
 	/* END */
-	/*TODO*/
+	endTask();
 
-	return 0; /*TODO*/
+	return 0;
 }
 
