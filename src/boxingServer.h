@@ -8,6 +8,33 @@
 #ifndef BOXING_SERVER_H
 #define BOXING_SERVER_H
 
+/* Boolean type */
+typedef enum
+{
+	FALSE,
+	TRUE
+} BOOL;
+
+/*
+ * Misc data types
+ */
+typedef unsigned int batchID_t;
+typedef unsigned int boxID_t;
+typedef unsigned int productsCount_t;
+
+/**
+ * Data allowing box tracing
+ */
+typedef struct
+{
+	batchID_t batchID;
+	boxID_t boxID;
+	productsCount_t boxedProducts;
+		/* Count of correct products currently boxed */
+	productsCount_t defectiveProducts;
+		/* Count of defective products received when filling this box */
+} boxData_t;
+
 /**
  * event_t represent an event happening in the application.
  */
