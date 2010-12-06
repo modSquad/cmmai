@@ -12,22 +12,12 @@
  * event_t represent an event happening in the application.
  */
 typedef enum {
-	/**
-	 * Dummy value for a dummy event.
-	 */
-	EVT_NONE
-	
+	EVT_NONE, /* Dummy value for a dummy event. */
+	EVT_BOX_PROCESSED,
+		/* Sent by BoxHandler when a box is filled and sent to the queue */
+	EVT_ERR_BOX_STARVATION,
+	EVT_ERR_PRODUCT_STARVATION
 } event_t;
-
-/**
- * error_t represent an error occuring in the application.
- */
-typedef enum {
-	/**
-	 * Value meaning there is no error
-	 */
-	ERR_NONE
-} error_t;
 
 #endif
 
