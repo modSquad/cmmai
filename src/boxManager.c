@@ -10,6 +10,60 @@ static MSG_Q_ID		_eventsQueue = NULL;
 static settings_t	*_settings = NULL;
 static SEM_ID		_boxHandlingRequest = NULL;
 
+
+/*--------------------------------------------------*/
+/* Private functions */
+
+static BOOL sendBox ( )
+{
+	if (1/*msgQSend(TODO) == OK*/)
+	{
+		/*sendEvent(carton déposé)*/
+		return TRUE;
+	}
+	else
+	{
+		/*sendEvent(file pleine)*/
+		return FALSE;
+	}
+}
+
+static void getBox ( )
+{
+	if (1/*TODOcarton présent*/)
+	{
+	}
+	else
+	{
+		/*sendEvent(TODOpas de carton)*/
+	}
+}
+
+/*--------------------------------------------------*/
+/* IT and alarm handlers */
+
+/* TODO : vérifier la signature */
+static int ProductStarvationHandler ( )
+{
+	return 0;
+}
+
+/* TODO : vérifier la signature */
+static int ProductInflowHandler ( )
+{
+	return 0;
+}
+
+/* TODO : vérifier la signature */
+static int EmergencyStopHandler ( )
+{
+	return 0;
+}
+
+
+/*--------------------------------------------------*/
+/* Bootstrap */
+
 int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 		settings_t* settings, SEM_ID boxHandlingRequest)
 {
@@ -23,23 +77,33 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 	/* JOB */
 	for ( ; ; )
 	{
-		STATUS boxPushStatus = OK;
+		BOOL boxError = FALSE;
 
 		semTake(_boxHandlingRequest, WAIT_FOREVER);
 
 		if (_boxState.boxedProductsCount >=
 				_settings->productsPerBox)
 		{
-			/*boxPushStatus = msgQSend()*/
+			boxError = sendBox();
 		}
-		
-		if (!_settings->applicationEndRequest)
+
+		if (!boxError)
 		{
-			/*TODO*/
+		
+			if (_settings->applicationEndRequest)
+			{
+				/*TODO*/
+			}
+			else
+			{
+				getBox();
+			}
 		}
 	}
 
 	/* END */
 	/*TODO*/
 
+	return 0; /*TODO*/
 }
+
