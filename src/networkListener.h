@@ -10,5 +10,16 @@
 
 #include "boxingServer.h"
 
+/**
+ * networkListener is the bootstrap of the self-named task.
+ * @param socketOutput			file descriptor of the socket
+ * @param eventsQueue			Queue of events
+ * @param settings				Settings structure
+ * @param boxHandlingRequest	Sync of networkListener and boxHandler
+ * @return int
+ */
+int networkListener(int socketOutput, MSG_Q_ID eventsQueue,
+	settings_t settings, SEM_ID boxHandlingRequest);
+
 #endif
 
