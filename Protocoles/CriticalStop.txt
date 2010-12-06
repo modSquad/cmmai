@@ -1,4 +1,0 @@
-Ordonne l'arrêt du processus après une erreur critique
-
-L1: CSTOP\n
-L@: \n

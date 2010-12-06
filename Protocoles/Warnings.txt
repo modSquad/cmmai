@@ -1,3 +1,4 @@
+[SERVEUR] -> [CLIENT]
 Signale qu'un avertissement de code [Code] est survenu
 
 L1: WARNINGS\n

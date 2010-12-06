@@ -1,3 +1,4 @@
+[CLIENT] -> [SERVEUR]
 Ordonne le lancement du processus du lot précédemment configuré par le superviseur
 
 L1: LAUNCH\n

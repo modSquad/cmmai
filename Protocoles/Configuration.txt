@@ -1,3 +1,4 @@
+[CLIENT] -> [SERVEUR]
 Séquence de configuration d'un lot. Note : Référence != Numéro du lot
 
 L1: CONFIG\n

@@ -1,3 +1,4 @@
+[SERVEUR] -> [CLIENT]
 Signifie qu'une pièce a été rejecté
 
 L1: REJECTED\n

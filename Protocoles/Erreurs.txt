@@ -1,3 +1,4 @@
+[SERVEUR] -> [CLIENT}
 Signale à la machine windows que l'erreur [Code] est survenue.
 
 L1: ERROR\n
