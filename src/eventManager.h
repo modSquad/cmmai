@@ -28,7 +28,5 @@ int eventManager(int socketInput, MSG_Q_ID eventsQueue);
  */
 void sendEvent (event_t eventType, const boxData_t *boxData);
 
-void eventManager ();
-
 #endif
 
