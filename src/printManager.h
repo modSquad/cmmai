@@ -4,8 +4,8 @@
  * Task managing the printing of label on boxes.
  */
 
-#ifndef PRINT_HANDLER_H
-#define PRINT_HANDLER_H
+#ifndef PRINT_MANAGER_H
+#define PRINT_MANAGER_H
 
 #include "boxingServer.h"
 

@@ -6,10 +6,12 @@ Socket::Socket(QObject *parent) :
     QTcpSocket(parent)
 {
     connect(this, SIGNAL(readyRead()), this, SLOT(Receive()));
-
-
 }
 
+
+/** Receive()
+  * Called when data is received by the socket
+  */
 void Socket::Receive()
 {
     static QString message;
@@ -54,6 +56,10 @@ void Socket::Receive()
     }
 }
 
+
+/** SendConfig(int operatorCode, int threshold, int bundleReference, int boxCount, int piecesPerBox)
+  * Called to send the config data to the server
+  */
 void Socket::SendConfig(int operatorCode, int threshold, int bundleReference, int boxCount, int piecesPerBox)
 {
     QString config( "CONFIG\n[" + QString::number(operatorCode) + "]\n["
@@ -63,21 +69,32 @@ void Socket::SendConfig(int operatorCode, int threshold, int bundleReference, in
                                 + QString::number(piecesPerBox) + "]\n\n"
                                 );
 
-    //TODO check if there's no other way to send QString over socket.
-    write(config.toUtf8());
+    write(QByteArray(config.toStdString().c_str(), config.length()));
 }
 
+
+/** Launch()
+  * Send a Launch order to the server
+  */
 void Socket::Launch()
 {
     write("LAUNCH\n\n");
 }
 
-void Socket::Resume()
-{
-    write("RESUME\n\n");
-}
 
+/** Stop()
+  * Send a Stop order to the server
+  */
 void Socket::Stop()
 {
     write("STOP\n\n");
+}
+
+
+/** Resume()
+  * Send a Resume order to the server
+  */
+void Socket::Resume()
+{
+    write("RESUME\n\n");
 }
