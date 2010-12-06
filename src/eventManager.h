@@ -11,6 +11,14 @@
 #include "boxingServer.h"
 
 /**
+ * Bootstrap for the eventManager task.
+ * @param socketInput	descriptor of the socket used to write data to client
+ * @param eventsQueue	queue of events to be managed
+ * @return int
+ */
+int eventManager(int socketInput, MSG_Q_ID eventsQueue);
+
+/**
  * Send an event that will be processed by the event manager.
  *
  * @pre When the event does not concern a particular box,
