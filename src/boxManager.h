@@ -17,8 +17,10 @@
  */
 typedef struct
 {
+	boxID_t boxID;
 	productsCount_t boxedProductsCount;
 	productsCount_t defectiveProductsCount;
+	BOOL filling; /* Are we currently filling the box ? */
 	/* TODO */
 } boxState_t;
 
