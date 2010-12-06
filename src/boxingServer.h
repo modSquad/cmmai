@@ -59,12 +59,41 @@ typedef struct
  * event_t represent an event happening in the application.
  */
 typedef enum {
-	EVT_NONE, /* Dummy value for a dummy event. */
-	EVT_BOX_PROCESSED,
-		/* Sent by BoxHandler when a box is filled and sent to the queue */
-	EVT_ERR_BOX_STARVATION,
-	EVT_ERR_PRODUCT_STARVATION
+	/* Dummy value for a dummy event */
+	EVT_NONE,
+	/* Sent by NetworkListener when start requested  by user via network*/
+	EVT_APPLICATION_START,
+	/* Sent by NetworkListener when stop requested  by user via network*/
+	EVT_APPLICATION_STOP,
+	/* Sent by PrintManager when it receives the end application flag */
+	EVT_CLOSE_APPLICATION, 
+	/* Sent by EmergencyStopHandler when activated */
+	EVT_EMERGENCY_STOP, 
+	/* Sent by BoxManager when a box is filled and sent to the printer queue */
+	EVT_BOX_PROCESSED, 
+	/* Sent by PrintManager when a box has been printed */
+	EVT_BOX_PRINTED, 
+	/* Sent by PrintManager when a printer doesn't work  - we suppose that the
+	 * event contains a flag that specifies the printer */
+	EVT_ANOMALY_PRINTER, 
+	/* Sent by ProductInflow when the treshold of defective products is reached */
+	EVT_ERR_DEFECTIVE_TRESHOLD_REACHED,
+	/* Sent by Box Manager when the queue containing the boxes to be printed is
+	 * full (it already contains 5 boxes) */
+	EVT_ERR_FULL_QUEUE, 
+	/* Sent by BoxManager when the box is not present */
+	EVT_ERR_BOX_STARVATION, 
+	/* Sent by ProductStarvationHandler when there is a product famine */
+	EVT_ERR_PRODUCT_STARVATION 
 } event_t;
+
+/**
+ * Type of a message in the events queue.
+ */
+typedef struct {
+	event_t event;
+	boxData_t boxData;
+} event_msg_t;
 
 /**
  * Size of the boxes queue before printing operations
