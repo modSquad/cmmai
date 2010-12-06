@@ -11,6 +11,15 @@
 #include "boxingServer.h"
 
 /**
+ * Event data
+ */
+typedef struct
+{
+	event_t eventType;
+	boxData_t boxData;
+} eventStruct_t;
+
+/**
  * Bootstrap for the eventManager task.
  * @param socketInput	descriptor of the socket used to write data to client
  * @param eventsQueue	queue of events to be managed
