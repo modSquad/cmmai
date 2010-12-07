@@ -8,19 +8,32 @@
 #ifndef BOX_MANAGER_H
 #define BOX_MANAGER_H
 
+#include <msgQLib.h>
+#include <semLib.h>
 #include "boxingServer.h"
 
 /**
+ * Currently filling box data
+ */
+typedef struct
+{
+	boxID_t boxID;
+	productsCount_t boxedProductsCount;
+	productsCount_t defectiveProductsCount;
+	BOOL filling; /* Are we currently filling the box ? */
+	/* TODO */
+} boxState_t;
+
+/**
  * Bootstrap for boxManagerTask.
- * @param productStarvation		Id of the watchdog looking for product starvation
  * @param boxesQueue			queue of boxes to be labelled by printers
  * @param eventsQueue			queue of events to be logged or given to client
  * @param settings				Structure of settings
- * @param boxState				Structure of currently managed box by boxManager
- * @param boxHandlingRequest	semaphore of activation of the box handling
+ * @param boxHandlingRequest	semaphore activating the box manager
  * @return int
  */
-int boxManager(WDOG_ID productStarvation, MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue, settings_t settings, boxstate_t boxState, SEM_ID boxHandlingRequest);
+int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
+		settings_t* settings, SEM_ID boxHandlingRequest);
 
 #endif
 

@@ -1,7 +1,7 @@
 RASTERIZE=inkscape --export-pdf
 GRAPHICS_EXTENSION=pdf
 
-GRAPHICSPATH=./raster/
+GRAPHICSPATH=./
 RESSOURCESPATH=./src/
 
 RESSOURCES=$(wildcard $(RESSOURCESPATH)/*.svg)

@@ -1,25 +1,20 @@
 #include "eventManager.h"
 #include "msgQLib.h"
 
-void sendEvent (event_t eventType, const boxData_t *boxData)
+void eventManager (int socketInput, MSG_Q_ID eventsQueue)
 {
-	/* TODO */
-}
-
-void eventManager ()
-{
-	char eventBuffer[MAX_EVENT_LENGTH]
+	eventStruct_t eventStruct;
 	
-
 	for(;;)
 	{
-		if( msgQReceive(eventsQueue, eventBuffer, MAX_EVENT_LENGTH, WAIT_FOREVER) == ERROR )
+		if( msgQReceive(eventsQueue, eventBuffer, sizeof(eventStruct_t), WAIT_FOREVER) == ERROR )
 		{
 			// Receive message fail
-		};
+		}
 
+		
+		
 
-		if((msgQSend(mesgQueueId,message,MAX_EVENT_LENGTH, WAIT_FOREVER, MSG_PRI_NORMAL)) == ERROR)
 		
 	}
 }
