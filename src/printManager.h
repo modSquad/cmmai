@@ -1,7 +1,8 @@
 /* CIAI : Développement Multi-lots
  * @author H4203
  *
- * Task managing the printing of label on boxes.
+ * printManager task : manages the box printing
+ *
  */
 
 #ifndef PRINT_MANAGER_H
@@ -9,13 +10,14 @@
 
 #include "boxingServer.h"
 
+
 /**
- * Bootstrap for printManager task.
- * @param eventsQueue	Queue of events
- * @param boxesQueue	Queue of boxes to be labelled
+ * Bootstrap for printManagerTask.
+ * @param boxesQueue			queue of boxes to be labelled by printers
+ * @param eventsQueue			queue of events to be logged or given to client
  * @return int
  */
-int printManager(MSG_Q_ID eventsQueue, MSG_Q_ID boxesQueue);
+int printManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue);
 
 #endif
 

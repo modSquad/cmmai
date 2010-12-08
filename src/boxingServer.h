@@ -1,4 +1,4 @@
-/* CIAI : Développement Multi-lots
+﻿/* CIAI : Développement Multi-lots
  * @author H4203
  *
  * This file contains common constants and objects shared between
@@ -73,9 +73,9 @@ typedef enum
 	EVT_BOX_PROCESSED, 
 	/* Sent by PrintManager when a box has been printed */
 	EVT_BOX_PRINTED, 
-	/* Sent by PrintManager when a printer doesn't work  - we suppose that the
-	 * event contains a flag that specifies the printer */
-	EVT_ANOMALY_PRINTER, 
+	/* Sent by PrintManager when a printer doesn't work */
+	EVT_ANOMALY_PRINTER1, 
+	EVT_ANOMALY_PRINTER2,
 	/* Sent by ProductInflow when the treshold of defective products is reached */
 	EVT_ERR_DEFECTIVE_TRESHOLD_REACHED,
 	/* Sent by Box Manager when the queue containing the boxes to be printed is
