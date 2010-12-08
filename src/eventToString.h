@@ -10,7 +10,7 @@
 #include <stddef.h>
 #include "boxingServer.h"
 
-static const size_t MIN_EVENT_STRING_SIZE = 512;
+#define MIN_EVENT_STRING_SIZE 512
 
 /*
  * Convert an event to a human-readable string.
@@ -25,7 +25,7 @@ static const size_t MIN_EVENT_STRING_SIZE = 512;
  * @pre <eventString> must be non-NULL, allocated by user and
  * at least MIN_EVENT_STRING_SIZE long.
  */
-void eventToString (event_t eventType, const boxData_t* boxData,
+void eventToString (boxingEvent_t eventType, const boxData_t* boxData,
 		char* eventString);
 
 #endif

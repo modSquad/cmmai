@@ -5,8 +5,8 @@
 #include "masterTask.h"
 
 #include <stdlib.h>
-#include <semMLib.h>
 #include <msgQLib.h>
+#include <semLib.h>
 
 int boxingServer()
 {

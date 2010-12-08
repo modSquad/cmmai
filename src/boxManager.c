@@ -1,7 +1,8 @@
+#include <wdLib.h>
 #include <taskLib.h>
 #include <msgQLib.h>
 #include <semLib.h>
-#include <wdLib.h>
+#include <sysLib.h>
 #include "boxManager.h"
 
 static const int PRODUCT_STARVATION_DELAY = 5;
@@ -23,29 +24,26 @@ static void ProductStarvationHandler();
 
 static BOOL sendBox ( )
 {
-	boxData_t boxData =
-		{
-			_settings->batchID,
-			_boxState.boxID,
-			_boxState.boxedProductsCount,
-			_boxState.defectiveProductsCount
-		};
-	boxesQueueMsg_t boxMsg =
-		{
-			false,
-			boxData
-		};
-	event_msg_t eventMsg =
-		{
-			EVT_NONE,
-			boxData
-		};
+	boxData_t boxData;
+	boxesQueueMsg_t boxMsg;
+	event_msg_t eventMsg;
+	
+	boxData.batchID = _settings->batchID;
+	boxData.boxID = _boxState.boxID;
+	boxData.boxedProducts = _boxState.boxedProductsCount;
+	boxData.defectiveProducts = _boxState.defectiveProductsCount;
 
-	if ( msgQSend(_boxesQueue, &boxMsg, sizeof(boxMsg),
+	boxMsg.lastMessage = FALSE;
+	boxMsg.boxData = boxData;
+
+	eventMsg.event = EVT_NONE;
+	eventMsg.boxData = boxData;
+
+	if ( msgQSend(_boxesQueue, (char*)&boxMsg, sizeof(boxMsg),
 				NO_WAIT, MSG_PRI_NORMAL) == OK )
 	{
 		eventMsg.event = EVT_BOX_PROCESSED;
-		msgQSend(_eventsQueue, &eventMsg, sizeof(eventMsg),
+		msgQSend(_eventsQueue, (char*)&eventMsg, sizeof(eventMsg),
 				WAIT_FOREVER, MSG_PRI_NORMAL);
 
 		_settings->batchBoxesCount += 1;
@@ -59,7 +57,7 @@ static BOOL sendBox ( )
 	else
 	{
 		eventMsg.event = EVT_ERR_FULL_QUEUE;
-		msgQSend(_eventsQueue, &eventMsg, sizeof(eventMsg),
+		msgQSend(_eventsQueue, (char*)&eventMsg, sizeof(eventMsg),
 				WAIT_FOREVER, MSG_PRI_NORMAL);
 		return FALSE;
 	}
@@ -72,22 +70,19 @@ static void startBoxFilling ( )
 		_boxState.filling = TRUE;
 		wdStart(_productStarvationHandlerID,
 				PRODUCT_STARVATION_DELAY*sysClkRateGet(),
-				(FUNCTPTR)ProductStarvationHandler, 0);
+				(FUNCPTR)ProductStarvationHandler, 0);
 		/* TODO ouvrir le clapet */
 	}
 	else
 	{
-		event_msg_t eventMsg =
-			{
-				EVT_ERR_BOX_STARVATION,
-				{ /* Box Data */
-					_settings->batchID,
-					_boxState.boxID,
-					_boxState.boxedProductsCount,
-					_boxState.defectiveProductsCount
-				}
-			};
-		msgQSend(_eventsQueue, &eventMsg, sizeof(eventMsg),
+		event_msg_t eventMsg;
+		eventMsg.event = EVT_ERR_BOX_STARVATION;
+		eventMsg.boxData.batchID = _settings->batchID;
+		eventMsg.boxData.boxID = _boxState.boxID;
+		eventMsg.boxData.boxedProducts = _boxState.boxedProductsCount;
+		eventMsg.boxData.defectiveProducts = _boxState.defectiveProductsCount;
+
+		msgQSend(_eventsQueue, (char*)&eventMsg, sizeof(eventMsg),
 				WAIT_FOREVER, MSG_PRI_NORMAL);
 	}
 }
@@ -102,26 +97,23 @@ static void stopBoxFilling ( )
 
 static void endTask ( )
 {
-	boxData_t boxData =
-		{
-			_settings->batchID,
-			_boxState.boxID,
-			_boxState.boxedProductsCount,
-			_boxState.defectiveProductsCount
-		};
-	boxesQueueMsg_t boxMsg =
-		{
-			TRUE,
-			boxData
-		};
-	event_msg_t eventMsg =
-		{
-			EVT_END_FILLING,
-			boxData
-		};
-	msgQSend(_eventsQueue, &eventMsg, sizeof(eventMsg),
+	boxData_t boxData;
+	boxesQueueMsg_t boxMsg;
+	event_msg_t eventMsg;
+	
+	boxData.batchID = _settings->batchID;
+	boxData.boxID = _boxState.boxID;
+	boxData.boxedProducts = _boxState.boxedProductsCount;
+	boxData.defectiveProducts = _boxState.defectiveProductsCount;
+
+	boxMsg.lastMessage = FALSE;
+	boxMsg.boxData = boxData;
+	eventMsg.event = EVT_END_FILLING;
+	eventMsg.boxData = boxData;
+	
+	msgQSend(_eventsQueue, (char*)&eventMsg, sizeof(eventMsg),
 			WAIT_FOREVER, MSG_PRI_NORMAL);
-	msgQSend(_boxesQueue, &boxMsg, sizeof(boxMsg),
+	msgQSend(_boxesQueue, (char*)&boxMsg, sizeof(boxMsg),
 			WAIT_FOREVER, MSG_PRI_NORMAL);
 
 	taskSuspend(taskIdSelf());

@@ -1,5 +1,7 @@
+#include <msgQLib.h>
+#include "boxingServer.h"
 #include "eventManager.h"
-#include "msgQLib.h"
+/*
 
 void eventManager (int socketInput, MSG_Q_ID eventsQueue)
 {
@@ -18,3 +20,5 @@ void eventManager (int socketInput, MSG_Q_ID eventsQueue)
 		
 	}
 }
+
+*/

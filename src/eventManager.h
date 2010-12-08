@@ -8,7 +8,7 @@
 #ifndef EVENT_MANAGER_H
 #define EVENT_MANAGER_H
 
-#include "boxingServer.h"
+#include <msgQLib.h>
 
 /**
  * Bootstrap for the eventManager task.

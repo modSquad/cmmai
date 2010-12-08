@@ -1,4 +1,4 @@
-﻿/* CIAI : Développement Multi-lots
+/* CIAI : Développement Multi-lots
  * @author H4203
  *
  * This file contains common constants and objects shared between
@@ -51,7 +51,7 @@ typedef struct
 } settings_t;
 
 /**
- * event_t represent an event happening in the application.
+ * boxingEvent_t represent an event happening in the application.
  */
 typedef enum
 {
@@ -85,14 +85,14 @@ typedef enum
 	EVT_ERR_BOX_STARVATION, 
 	/* Sent by ProductStarvationHandler when there is a product famine */
 	EVT_ERR_PRODUCT_STARVATION 
-} event_t;
+} boxingEvent_t;
 
 /**
  * Type of a message in the events queue.
  */
 typedef struct
 {
-	event_t event;
+	boxingEvent_t event;
 	boxData_t boxData;
 } event_msg_t;
 
