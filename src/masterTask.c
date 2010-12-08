@@ -3,6 +3,7 @@
  */
 
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <msgQLib.h>
 #include <taskLib.h>
@@ -15,6 +16,9 @@
 #include "printManager.h"
 #include "logsManager.h"
 #include "eventToString.h"
+
+/* Application constants */
+#define SERVER_PORT 1001
 
 /* Tasks priorities (relatives) */
 #define BASE_PRIORITY (100)
@@ -55,6 +59,7 @@ int boxingServer()
 	logsEventQueue = msgQCreate(MAX_LOGS_QUEUE_SIZE, sizeof(event_msg_t), MSG_Q_FIFO);
 
 	/* TODO int	socket = init_connection(); */
+	socket = getClientSocket(SERVER_PORT);
 
 	/* Spawning tasks */
 	networkListenerId = taskSpawn("networkListenerTask",
