@@ -39,7 +39,7 @@ static BOOL printBox(printerName_t printerName, boxData_t boxData)
 /* Bootstrap */
 /*--------------------------------------------------*/
 
-static BOOL printManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue)
+BOOL printManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue)
 {
 	/* Initialization */
 	_boxesQueue = boxesQueue;

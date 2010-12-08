@@ -12,11 +12,12 @@
 
 /**
  * Bootstrap for the eventManager task.
- * @param socketInput	descriptor of the socket used to write data to client
- * @param eventsQueue	queue of events to be managed
+ * @param socketInput		descriptor of the socket used to write data to client
+ * @param eventsQueue		queue of events to be managed
+ * @param logsEventQueue	queue of messages to be logged
  * @return int
  */
-int eventManager(int socketInput, MSG_Q_ID eventsQueue);
+int eventManager(int socketInput, MSG_Q_ID eventsQueue, MSG_Q_ID logsEventQueue);
 
 #endif
 
