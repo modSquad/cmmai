@@ -51,7 +51,8 @@ int boxingServer()
 	eventManagerId = taskSpawn("eventManagerTask",
 		BASE_PRIORITY+EVENT_MANAGER_PRIORITY,
 		0, 1024, eventManager,
-		socket, (MSG_Q_ID) eventsQueue, 0, 0, 0, 0, 0, 0, 0, 0
+		socket, (MSG_Q_ID) eventsQueue, (MSG_Q_ID) logsEventQueue,
+		0, 0, 0, 0, 0, 0, 0
 	);
 		
 	boxManagerId = taskSpawn("boxManagerTask",
