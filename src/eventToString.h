@@ -10,7 +10,7 @@
 #include <stddef.h>
 #include "boxingServer.h"
 
-#define MIN_EVENT_STRING_SIZE 512
+#define MIN_EVENT_STRING_BUFFER_SIZE 512
 
 /*
  * Convert an event to a human-readable string.

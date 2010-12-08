@@ -59,7 +59,6 @@ int boxingServer()
 	eventsQueue = msgQCreate(MAX_EVENTS_QUEUE_SIZE, sizeof(event_msg_t), MSG_Q_FIFO);
 	logsEventQueue = msgQCreate(MAX_LOGS_QUEUE_SIZE, sizeof(event_msg_t), MSG_Q_FIFO);
 
-	/* TODO int	socket = init_connection(); */
 	socket = getClientSocket(SERVER_PORT);
 
 	/* Spawning tasks */
@@ -69,7 +68,7 @@ int boxingServer()
 		socket, (int) eventsQueue, (int) settings,
 		(int) boxHandlingRequest, 0, 0, 0, 0, 0, 0
 	);
-
+	
 	eventManagerId = taskSpawn("eventManagerTask",
 		BASE_PRIORITY+EVENT_MANAGER_PRIORITY,
 		0, DEFAULT_STACK_SIZE, eventManager,

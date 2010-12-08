@@ -124,7 +124,7 @@ int sendWarning(int fd, int errCode) {
 }
 
 int sendLog(int fd, char* logMessage, int len) {
-	char msg[MIN_EVENT_STRING_SIZE + 9];
+	char msg[MIN_EVENT_STRING_BUFFER_SIZE + 9];
 	int result;
 	sprintf(msg, "ERROR\n%s\n\n", logMessage);
 	result = sendData(fd, msg, strlen(msg));
