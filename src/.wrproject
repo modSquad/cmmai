@@ -3741,12 +3741,12 @@
     <buildtargets>
         <buildtarget buildtool="Linker" name="cmmai" passed="false" targetname="cmmai">
             <contents>
-                <folder name="/src" recursive="true"/>
+                <buildtargetreference name="/cmmai/cmmai_partialImage"/>
             </contents>
         </buildtarget>
         <buildtarget buildtool="Partial Image Linker" name="cmmai_partialImage" passed="true" targetname="cmmai_partialImage">
             <contents>
-                <folder name="/src" recursive="true"/>
+                <folder name="/cmmai" recursive="true"/>
             </contents>
         </buildtarget>
     </buildtargets>
