@@ -53,7 +53,7 @@
  * La fonction revoie : 	len si l''echange s'est bien pass'e.
  * 							NETWORK_ERROR sinon
  */
-static int sendData(const int fd, const char* const buffer,const int len){
+static int sendData(const int fd, char* buffer,const int len){
 	int sent = write(fd, buffer, len);
 	return (sent == len) ? len : NETWORK_ERROR;
 }
@@ -74,6 +74,8 @@ int createServerSocket(int port) {
 	struct sockaddr_in serverAddr; /* server's socket address */
 	int sockAddrSize; /* size of socket address structure */ 
 	int fd; /* socket file descriptor */
+	int newFd = -1;
+	struct sockaddr_in clientAddr; /* client's socket address */
 	
 	/* set up the local address */
 	sockAddrSize = sizeof (struct sockaddr_in);
@@ -98,9 +100,6 @@ int createServerSocket(int port) {
 		
 		return NETWORK_ERROR;
 	}
-	
-	int newFd = -1;
-	struct sockaddr_in clientAddr; /* client's socket address */
 	
 	/* create queue for client connection requests */
 	if (listen (fd, SERVER_MAX_CONNECTIONS) == ERROR)
@@ -137,22 +136,28 @@ int partRejected(int fd) {
 }
 
 int sendError(int fd, int errCode) {
-	char msg[128]; sprintf(msg, "ERROR\n%d\n\n", errCode);
-	int result = sendData(fd, msg, strlen(msg));
+	char msg[128];
+	int result;
+	sprintf(msg, "ERROR\n%d\n\n", errCode);
+	result = sendData(fd, msg, strlen(msg));
 	
 	return (result == NETWORK_ERROR) ? NETWORK_ERROR : NETWORK_SUCCESS;
 }
 
 int sendWarning(int fd, int errCode) {
-	char msg[128]; sprintf(msg, "WARNING\n%d\n\n", errCode);
-	int result = sendData(fd, msg, strlen(msg));
+	char msg[128];
+	int result;
+	sprintf(msg, "WARNING\n%d\n\n", errCode);
+	result = sendData(fd, msg, strlen(msg));
 	
 	return (result == NETWORK_ERROR) ? NETWORK_ERROR : NETWORK_SUCCESS;
 }
 
 int sendLog(int fd, char* logMessage, int len) {
-	char msg[MIN_EVENT_STRING_SIZE + 128]; sprintf(msg, "ERROR\n%s\n\n", logMessage);
-	int result = sendData(fd, msg, strlen(msg));
+	char msg[MIN_EVENT_STRING_SIZE + 128];
+	int result;
+	sprintf(msg, "ERROR\n%s\n\n", logMessage);
+	result = sendData(fd, msg, strlen(msg));
 	
 	return (result == NETWORK_ERROR) ? NETWORK_ERROR : NETWORK_SUCCESS;
 }

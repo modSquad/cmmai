@@ -2,18 +2,34 @@
  * @author H4203
  */
 
-#include "masterTask.h"
 
 #include <stdlib.h>
 #include <msgQLib.h>
 #include <taskLib.h>
 
+#include "masterTask.h"
+#include "boxingServer.h"
 #include "networkListener.h"
 #include "eventManager.h"
 #include "boxManager.h"
 #include "printManager.h"
 #include "logsManager.h"
 #include "eventToString.h"
+
+/* Tasks priorities (relatives) */
+#define BASE_PRIORITY (100)
+#define NETWORK_LISTENER_PRIORITY (3)
+#define EVENT_MANAGER_PRIORITY (2)
+#define BOX_MANAGER_PRIORITY (0)
+#define PRINT_MANAGER_PRIORITY (1)
+#define LOGS_MANAGER_PRIORITY (2)
+
+/* Queues sizes */
+#define MAX_EVENTS_QUEUE_SIZE 	100
+#define MAX_LOGS_QUEUE_SIZE 	200
+
+/* Stack size */
+#define DEFAULT_STACK_SIZE		10000	
 
 int boxingServer()
 {
@@ -24,10 +40,10 @@ int boxingServer()
 	MSG_Q_ID eventsQueue;
 	MSG_Q_ID logsEventQueue;
 	int socket;
-	int networkListernerId;
+	int networkListenerId;
 	int eventManagerId;
 	int boxManagerId;
-	int printManagerId
+	int printManagerId;
 	int logsManagerId;
 
 	/* Creation of shared objects */
@@ -35,43 +51,43 @@ int boxingServer()
 	boxHandlingRequest = semMCreate(SEM_Q_FIFO|SEM_DELETE_SAFE);
 	settings = (settings_t*) malloc(sizeof(settings_t));
 	boxesQueue = msgQCreate(MAX_BOXES_QUEUE_SIZE, sizeof(boxesQueueMsg_t), MSG_Q_FIFO);
-	eventsQueue = msgQCreate(MAX_EVENTS_QUEUE_SIZE, sizeof(events_msg_t), MSG_Q_FIFO);
-	logsEventQueue = msgQCreate(MAX_EVENTS_QUEUE_SIZE, sizeof(MIN_EVENT_STRING_SIZE, MSG_Q_FIFO);
+	eventsQueue = msgQCreate(MAX_EVENTS_QUEUE_SIZE, sizeof(event_msg_t), MSG_Q_FIFO);
+	logsEventQueue = msgQCreate(MAX_LOGS_QUEUE_SIZE, sizeof(event_msg_t), MSG_Q_FIFO);
 	/* TODO int	socket = init_connection(); */
 
 	/* Spawning tasks */
 	networkListenerId = taskSpawn("networkListenerTask",
 		BASE_PRIORITY+NETWORK_LISTENER_PRIORITY,
-		0, 1024, networkListener,
-		socket, (MSG_Q_ID) eventsQueue, (settings_t*) settings,
-		(SEM_ID) boxHandlingRequest, 0, 0, 0, 0, 0, 0
+		0, DEFAULT_STACK_SIZE, networkListener,
+		socket, (int) eventsQueue, (int) settings,
+		(int) boxHandlingRequest, 0, 0, 0, 0, 0, 0
 	);
 
 	eventManagerId = taskSpawn("eventManagerTask",
 		BASE_PRIORITY+EVENT_MANAGER_PRIORITY,
-		0, 1024, eventManager,
-		socket, (MSG_Q_ID) eventsQueue, (MSG_Q_ID) logsEventQueue,
+		0, DEFAULT_STACK_SIZE, eventManager,
+		socket, (int) eventsQueue, (int) logsEventQueue,
 		0, 0, 0, 0, 0, 0, 0
 	);
 		
 	boxManagerId = taskSpawn("boxManagerTask",
 		BASE_PRIORITY+BOX_MANAGER_PRIORITY,
-		0, 1024, boxManager,
-		(MSG_Q_ID) boxesQueue, (MSG_Q_ID) eventsQueue, (settings_t*) settings,
-		(SEM_ID) boxHandlingRequest, 0, 0, 0, 0, 0, 0
+		0, DEFAULT_STACK_SIZE, boxManager,
+		(int) boxesQueue, (int) eventsQueue, (int) settings,
+		(int) boxHandlingRequest, 0, 0, 0, 0, 0, 0
 	);
 
 	printManagerId = taskSpawn("printManagerTask",
 		BASE_PRIORITY+PRINT_MANAGER_PRIORITY,
-		0, 1024, printManager,
-		(MSG_Q_ID) eventsQueue, (MSG_Q_ID) boxesQueue,
+		0, DEFAULT_STACK_SIZE, printManager,
+		(int) eventsQueue, (int) boxesQueue,
 		0, 0, 0, 0, 0, 0, 0, 0
 	);
 
 	logsManagerId = taskSpawn("logsManagerTask",
 		BASE_PRIORITY+LOGS_MANAGER_PRIORITY,
-		0, 1024, logsManager,
-		(MSG_Q_ID) logsEventQueue, (SEM_ID) endSync,
+		0, DEFAULT_STACK_SIZE, logsManager,
+		(int) logsEventQueue, (int) endSync,
 		0, 0, 0, 0, 0, 0, 0, 0
 	);
 
