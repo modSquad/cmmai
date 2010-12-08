@@ -1,15 +1,3 @@
-/* -------------------------------------------------------------------- */
-/*                                                                      */
-/*                    <networkInterface>.c  -  description                           */
-/*                        -----------------------                       */
-/*                                                                      */
-/* -------------------------------------------------------------------- */
-/*                                                                      */
-/*    Realisation de la tache VxWorks <networkInterface>.c      */
-/*                                                                      */
-/* -------------------------------------------------------------------- */
-/* ------------------------------------------------------------ INCLUDE */
-/* ---------------------------------------------------- Include systme */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,25 +16,15 @@
 #include "networkInterface.h"
 #include "eventToString.h"
 
-/* -------------------------------------------------- Include personnel */
-
-/* -------------------------------------------------------------------- */
-/*                                                                      */
-/*                        PRIVE                                         */
-/*                                                                      */
 /* --------------------------------------------------------- Constantes */
-
 #define SERVER_WORK_PRIORITY 100 	/* priority of server's work task */
 #define SERVER_STACK_SIZE 10000 	/* stack size of server's work task */
 #define SERVER_MAX_CONNECTIONS 4 	/* max clients connected at a time */
 #define REQUEST_MSG_SIZE 1024 		/* max size of request message */
-/* -------------------------------------------------------------- Types */
 
-
-/* -------------------------------------------------- Variables privees */
-
-
-/*--------------------------------------------------- Fonctions privees */
+/* PRIVATE
+   * @brief
+   */
 static int sendData(const int fd, char* buffer,const int len){
 	int sent = write(fd, buffer, len);
 	return (sent == len) ? len : NETWORK_ERROR;
