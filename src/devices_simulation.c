@@ -114,13 +114,13 @@ void print(printerName_t printerName, boxData_t boxData)
 /* Interface for the lights */
 void setColor(color_t color)
 {
-	lightsColor = color;
+	_lightsColor = color;
 	printf( "the color is set  \n");
 } 
 
 color_t getColor()
 {
-	return lightsColor;
+	return _lightsColor;
 }
 
 /*------------------------------------------------------------
@@ -140,7 +140,6 @@ void refreshScreen ( )
 	/* PRINTERS */
 	
 	/* VALVES */
-	printStatus()
 	
 	/* SENSORS (last read) */
 }
@@ -157,7 +156,7 @@ int devicesSimulator()
 	sysClkRateSet(CLOCK_RATE);
 	
 	printf("\n");
-	for ( i = 0 ; ; ++i )
+	for ( updatesCount = 0 ; ; ++updatesCount )
 	{
 		if (updatesCount >= SCREEN_REFRESH_STEP)
 		{
