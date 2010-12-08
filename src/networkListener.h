@@ -1,6 +1,5 @@
 /* CIAI : Développement Multi-lots
  * @author H4203
- *
  */
 
 #ifndef NETWORK_LISTENER_H
