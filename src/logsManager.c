@@ -7,8 +7,11 @@
 #include "eventToString.h"
 #include "logsManager.h"
 
+const char* FILENAME = "log.log";
+
 int logsManager(MSG_Q_ID logsEventsQueue, SEM_ID endSync)
 {
+	char logEntry[MIN_EVENT_STRING_BUFFER_SIZE];
 	event_msg_t event_buffer;
 	int log_fd = 0;
 	
@@ -28,9 +31,8 @@ int logsManager(MSG_Q_ID logsEventsQueue, SEM_ID endSync)
 		}
 		else
 		{
-			char buffer[MIN_EVENT_STRING_SIZE];
-			eventToString(event_buffer.event, &event_buffer.boxData, buffer);
-			write(log_fd, buffer, strlen(buffer));
+			eventToString(event_buffer.event, &event_buffer.boxData, logEntry);
+			write(log_fd, logEntry, strlen(logEntry));
 		}	
 	}
 }

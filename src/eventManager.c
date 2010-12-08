@@ -7,10 +7,71 @@
 #include "eventToString.h"
 #include "networkInterface.h"
 
+ /* Compute and set the color corresponding to an event */
+void setLight(boxingEvent_t event)
+{
+/* THIS METHOD HAS NO WAY TO WORK PROPERLY
+ * because any of "Red" or "Orange" event could be set as resolved.
+ */
+
+	static boxingEvent_t lastPrimaryEvent = EVT_NONE;
+	static boxingEvent_t lastSecondaryEvent = EVT_NONE; 
+	
+	if(event == EVT_NONE)
+	{
+		setColor(GREEN);
+	}
+
+	//Red :
+	if(event == EVT_EMERGENCY_STOP
+	|| event == EVT_ERR_FULL_QUEUE
+	|| event == EVT_ERR_PRODUCT_STARVATION
+	|| event == EVT_ERR_BOX_STARVATION
+	|| event == EVT_ERR_DEFECTIVE_TRESHOLD_REACHED )
+	{
+		setColor(RED);
+		lastPrimaryEvent = event;
+	}
+
+	//Orange :
+	if(event == EVT_ANOMALY_PRINTER1
+	|| event == EVT_ANOMALY_PRINTER2 )
+	{
+		if(lastPrimaryEvent == EVT_NONE)
+		{
+			setColor(ORANGE);
+		}
+		else
+		{
+			lastSecondaryEvent = event;
+		}
+	}
+
+	//Green :
+	if(event == EVT_END_FILLING
+	|| event == EVT_CLOSE_APPLICATION
+	|| event == EVT_BOX_PROCESSED
+	|| event == EVT_BOX_PRINTED )
+	{
+		if(lastPrimaryEvent == EVT_NONE)
+		{
+			if(lastSecondaryEvent == EVT_NONE)
+			{
+				setColor(GREEN);
+			}
+			else
+			{
+				setColor(ORANGE);
+			}
+		}
+	}
+}
+
+
 int eventManager (int socketInput, MSG_Q_ID eventsQueue, MSG_Q_ID logsEventQueue)
 {
 	event_msg_t eventMsg;
-	char logLine[MIN_EVENT_STRING_SIZE];
+	char logLine[MIN_EVENT_STRING_BUFFER_SIZE];
 	
 	for(;;)
 	{
@@ -27,7 +88,7 @@ int eventManager (int socketInput, MSG_Q_ID eventsQueue, MSG_Q_ID logsEventQueue
 		}
 
 		eventToString (eventMsg.event, &eventMsg.boxData, logLine);
-		sendLog( socketInput, logLine, MIN_EVENT_STRING_SIZE);
+		sendLog( socketInput, logLine, MIN_EVENT_STRING_BUFFER_SIZE);
 
 		if( eventMsg.event != EVT_NONE )
 		{

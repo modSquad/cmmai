@@ -9,8 +9,6 @@
 
 #include "boxingServer.h"
 
-const char* FILENAME = "log.log";
-
 /**
  * Application bootstrap.
  * @param logsEventsQueue	Queue of events to be logged

@@ -80,10 +80,10 @@ static int handleRequest(const char* const buffer, int size, MSG_Q_ID eventsQueu
 }
 
 int networkListener(int socketOutput, MSG_Q_ID eventsQueue,	settings_t* settings, SEM_ID boxHandlingRequest) {
-	char* clientRequest = (char*)calloc(MIN_EVENT_STRING_SIZE, sizeof(char));
+	char* clientRequest = (char*)calloc(MIN_EVENT_STRING_BUFFER_SIZE, sizeof(char));
 	int readBytes = -1;
 
-	while ((readBytes = read (socketOutput, clientRequest, MIN_EVENT_STRING_SIZE)) > 0)
+	while ((readBytes = read (socketOutput, clientRequest, MIN_EVENT_STRING_BUFFER_SIZE)) > 0)
 	{
 		handleRequest(clientRequest, readBytes, eventsQueue, settings,  boxHandlingRequest);		
 	}
