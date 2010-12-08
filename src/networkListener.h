@@ -22,7 +22,7 @@
  * @return int
  */
 int networkListener(int socketOutput, MSG_Q_ID eventsQueue,
-	settings_t settings, SEM_ID boxHandlingRequest);
+	settings_t* settings, SEM_ID boxHandlingRequest);
 
 #endif
 
