@@ -23,8 +23,8 @@
 #include "networkInterface.h"
 
 
-/* PRIVATE 
- * handleClient request such as : CONFIG - Write new configuration to shared memory block.
+/*  
+ * @brief handleClient request such as : CONFIG - Write new configuration to shared memory block.
  *                                LAUNCH - Launch the process.
  *                                RESUME - Restart all task after an emergency stop.
  *                                STOP - Stop the process and initiate the application end.
@@ -97,3 +97,4 @@ int networkListener(int socketOutput, MSG_Q_ID eventsQueue,	settings_t* settings
 	close(socketOutput);
 	return NETWORK_SUCCESS;
 }
+
