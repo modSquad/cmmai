@@ -122,15 +122,19 @@ int getClientSocket(int port) {
 }
 
 int partAccepted(int fd, int n) {
-	char msg[128]; sprintf(msg, "ACCEPTED\n%d\n\n", n);
-	int result = sendData(fd, msg, strlen(msg));
+	char msg[128];
+	int result;
+	sprintf(msg, "ACCEPTED\n%d\n\n", n);
+	result = sendData(fd, msg, strlen(msg));
 		
 	return (result == NETWORK_ERROR) ? NETWORK_ERROR : NETWORK_SUCCESS;
 }
 
 int partRejected(int fd, int n) {
-	char msg[128]; sprintf(msg, "REJECTED\n%d\n\n", n);
-	int result = sendData(fd, msg, strlen(msg));
+	char msg[128];
+	int result;
+	sprintf(msg, "REJECTED\n%d\n\n", n);
+	result = sendData(fd, msg, strlen(msg));
 		
 	return (result == NETWORK_ERROR) ? NETWORK_ERROR : NETWORK_SUCCESS;
 }

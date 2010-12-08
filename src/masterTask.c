@@ -10,6 +10,7 @@
 
 #include "masterTask.h"
 #include "boxingServer.h"
+#include "networkInterface.h"
 #include "networkListener.h"
 #include "eventManager.h"
 #include "boxManager.h"
@@ -110,7 +111,7 @@ int boxingServer()
 	taskDelete(networkListenerId);
 
 	/* destruct resources */
-	close(socket);
+	/* TODO : close(socket); */
 	msgQDelete(logsEventQueue);
 	msgQDelete(eventsQueue);
 	msgQDelete(boxesQueue);
