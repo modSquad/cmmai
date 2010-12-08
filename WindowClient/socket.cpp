@@ -23,30 +23,23 @@ void Socket::Receive()
 
         if(list[0].compare("LOG") == 0)
         {
-            list[1].replace("[","");
-            list[1].replace("]","");
             emit gotLog(list[1]);
         }
-        /* This is actualy not implemented in the server
         else if(list[0].compare("ACCEPTED") == 0)
         {
-
+            emit gotAccepted(list[1].toInt());
         }
         else if(list[0].compare("REJECTED") == 0)
         {
-
-        }*/
+            emit gotRejected(list[1].toInt());
+        }
         else if(list[0].compare("ERROR") == 0)
         {
-            list[1].replace("[","Error ");
-            list[1].replace("]","");
-            emit gotLog(list[1]);
+            emit gotError(list[1].toInt());
         }
         else if(list[0].compare("WARNINGS") == 0)
         {
-            list[1].replace("[","Warnings ");
-            list[1].replace("]","");
-            emit gotLog(list[1]);
+            emit gotWarning(list[1].toInt());
         }
         else
         {
@@ -62,11 +55,11 @@ void Socket::Receive()
   */
 void Socket::SendConfig(int operatorCode, int threshold, int bundleReference, int boxCount, int piecesPerBox)
 {
-    QString config( "CONFIG\n[" + QString::number(operatorCode) + "]\n["
-                                + QString::number(threshold) + "]\n["
-                                + QString::number(bundleReference) + "]\n["
-                                + QString::number(boxCount) + "]\n["
-                                + QString::number(piecesPerBox) + "]\n\n"
+    QString config( "CONFIG\n" + QString::number(operatorCode) + "\n"
+                                + QString::number(threshold) + "\n"
+                                + QString::number(bundleReference) + "\n"
+                                + QString::number(boxCount) + "\n["
+                                + QString::number(piecesPerBox) + "\n\n"
                                 );
 
     write(QByteArray(config.toStdString().c_str(), config.length()));

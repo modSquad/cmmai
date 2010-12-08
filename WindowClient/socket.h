@@ -14,6 +14,10 @@ signals:
       * signal emitted when a logLine is receive from the server
       */
     void gotLog(QString logLine);
+    void gotAccepted(int);
+    void gotRejected(int);
+    void gotError(int);
+    void gotWarning(int);
 
 public slots:
     /** Receive()
