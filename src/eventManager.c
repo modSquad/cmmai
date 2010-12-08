@@ -2,71 +2,10 @@
 #include "msgQLib.h"
 #include "taskLib.h"
 
-void setLight(event_t event)
-{
-
-/* THIS METHOD HAS NO WAY TO WORK PROPERLY
- * because any of "Red" or "Orange" event could be set as resolved.
- */
-
-	static lastPrimaryEvent = EVT_NONE;
-	static lastSecondaryEvent = EVT_NONE; 
-	
-	if(event == EVT_NONE)
-	{
-		setColor(GREEN);
-	}
-
-	//Red :
-	if(event == EVT_EMERGENCY_STOP
-	|| event == EVT_ERR_FULL_QUEUE
-	|| event == EVT_ERR_PRODUCT_STARVATION
-	|| event == EVT_ERR_BOX_STARVATION
-	|| event == EVT_ERR_DEFECTIVE_TRESHOLD_REACHED )
-	{
-		setColor(RED);
-		lastPrimaryEvent = event;
-	}
-
-	//Orange :
-	if(event == EVT_ANOMALY_PRINTER1
-	|| event == EVT_ANOMALY_PRINTER2 )
-	{
-		if(lastPrimaryEvent == EVT_NONE)
-		{
-			setColor(ORANGE)
-		}
-		else
-		{
-			lastSecondaryEvent == event;
-		}
-	}
-
-	//Green :
-	if(event == EVT_END_FILLING
-	|| event == EVT_CLOSE_APPLICATION
-	|| event == EVT_BOX_PROCESSED
-	|| event == EVT_BOX_PRINTED )
-	{
-		if(lastPrimaryEvent == EVT_NONE)
-		{
-			if(lastSecondaryEvent == EVT_NONE)
-			{
-				setColor(GREEN);
-			}
-			else
-			{
-				setColor(ORANGE);
-			}
-		}
-	}
-}
-
 void eventManager (int socketInput, MSG_Q_ID eventsQueue, MSG_Q_ID logsEventQueue)
 {
 	event_msg_t eventMsg;
 	char[MIN_EVENT_STRING_SIZE] logLine;
-	static event_t lastEvent;
 	
 	for(;;)
 	{

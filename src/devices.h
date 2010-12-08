@@ -8,6 +8,8 @@
 #ifndef DEVICES_H
 #define DEVICES_H
 
+#include "boxingServer.h"
+
 typedef enum {
 	INLET_VALVE,
 	OUTLET_VALVE
@@ -45,5 +47,5 @@ void print(printerName_t printerName, boxData_t boxData); /* sends the print com
 /* Interface for the lights */
 void setColor(color_t color); /* Sets the color of the light device*/
 color_t getColor();
-
+void setLight(event_t event); /* Determine and set the color with an event */
 #endif
