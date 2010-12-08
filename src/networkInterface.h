@@ -4,18 +4,18 @@
 /*                         ----------------------                       */
 /*                                                                      */
 /*======================================================================*/
-/* ---------------  Interface de la tâche VxWorks <networkInterface> (fichier networkInterace.h) */
+/* ---------------  Interface de la tï¿½che VxWorks <networkInterface> (fichier networkInterace.h) */
 #ifndef NETWORK_INTERFACE_H
 #define NETWORK_INTERFACE_H
 
 /* -------------------------------------------------------------------- */
-/* Rôle de la tâche <networkInterace>                                               */
+/* Rï¿½le de la tï¿½che <networkInterace>                                               */
 /*                                                                      */
 /* -------------------------------------------------------------------- */
 /*                                                                      */
 /* -------------------------------------------------------------INCLUDE */
 /*                                                                      */
-/* ------------------------------------------------Interfaces utilisées */
+/* ------------------------------------------------Interfaces utilisï¿½es */
 
 /*---------------------------------------------------------- Constantes */
 #define NETWORK_SUCCESS 	0
@@ -29,10 +29,10 @@
 /*------------------------------------------------- Variables publiques */
 
 /*------------------------------------------------- Fonctions publiques */
-int createServerSocket(int port);
+int getClientSocket(int port);
 
-int partAccepted(int fd);
-int partRejected(int fd);
+int partAccepted(int fd, int n);
+int partRejected(int fd, int n);
 
 int sendError(int fd, int errCode);
 int sendWarning(int fd, int errCode);

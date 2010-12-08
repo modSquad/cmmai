@@ -9,7 +9,7 @@
 /*                                                                      */
 /* -------------------------------------------------------------------- */
 /* ------------------------------------------------------------ INCLUDE */
-/* ---------------------------------------------------- Include système */
+/* ---------------------------------------------------- Include systme */
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -70,7 +70,7 @@ static int sendData(const int fd, const char* const buffer,const int len){
  * If the socket is effectively created and binded, the file descriptor is returned.
  * Otherwise, NETWORK_ERROR is resurned
  */
-int createServerSocket(int port) {
+int getClientSocket(int port) {
 	struct sockaddr_in serverAddr; /* server's socket address */
 	int sockAddrSize; /* size of socket address structure */ 
 	int fd; /* socket file descriptor */
@@ -122,17 +122,17 @@ int createServerSocket(int port) {
 	return newFd;
 }
 
-int partAccepted(int fd) {
-	char msg[] = "ACCEPTED\n\n";
+int partAccepted(int fd, int n) {
+	char msg[128]; sprintf(msg, "ACCEPTED\n%d\n\n", n);
 	int result = sendData(fd, msg, strlen(msg));
-	
+		
 	return (result == NETWORK_ERROR) ? NETWORK_ERROR : NETWORK_SUCCESS;
 }
 
-int partRejected(int fd) {
-	char msg[] = "REJECTED\n\n";
+int partRejected(int fd, int n) {
+	char msg[128]; sprintf(msg, "REJECTED\n%d\n\n", n);
 	int result = sendData(fd, msg, strlen(msg));
-	
+		
 	return (result == NETWORK_ERROR) ? NETWORK_ERROR : NETWORK_SUCCESS;
 }
 

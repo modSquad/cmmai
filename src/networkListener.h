@@ -8,6 +8,9 @@
 #ifndef NETWORK_LISTENER_H
 #define NETWORK_LISTENER_H
 
+#include <msgQLib.h>
+#include <semLib.h>
+
 #include "boxingServer.h"
 
 /**

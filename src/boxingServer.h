@@ -1,5 +1,5 @@
-﻿/* CIAI : Développement Multi-lots
- * @author H4203
+﻿/* 
+* @author H4203
  *
  * This file contains common constants and objects shared between
  * modules.
