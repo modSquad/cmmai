@@ -37,7 +37,7 @@ int boxingServer()
 	settings = (settings_t*) malloc(sizeof(settings_t));
 	boxesQueue = msgQCreate(MAX_BOXES_QUEUE_SIZE, sizeof(boxesQueueMsg_t), MSG_Q_FIFO);
 	eventsQueue = msgQCreate(MAX_EVENTS_QUEUE_SIZE, sizeof(events_msg_t), MSG_Q_FIFO);
-	logsEventQueue = msgQCreate(MAX_EVENTS_QUEUE_SIZE, sizeof(MIN_EVENT_STRING_SIZE, MSG_Q_FIFO);
+	logsEventQueue = msgQCreate(MAX_EVENTS_QUEUE_SIZE, sizeof(events_msg_t), MSG_Q_FIFO);
 	/* TODO int	socket = init_connection(); */
 
 	/* Spawning tasks */
