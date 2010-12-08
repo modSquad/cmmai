@@ -72,6 +72,7 @@ int eventManager (int socketInput, MSG_Q_ID eventsQueue, MSG_Q_ID logsEventQueue
 {
 	event_msg_t eventMsg;
 	char logLine[MIN_EVENT_STRING_BUFFER_SIZE];
+
 	
 	for(;;)
 	{
@@ -87,8 +88,31 @@ int eventManager (int socketInput, MSG_Q_ID eventsQueue, MSG_Q_ID logsEventQueue
 			// send to log error
 		}
 
+		
+		if(eventMsg.event == EVT_BOX_PROCESSED)
+		{
+			partAccepted(socketInput, event.boxData.boxedProducts);
+			partRejected(socketInput, event.boxData.defectiveProducts);
+		}
+
+		if(eventMsg.event == EVT_ANOMALY_PRINTER1
+		|| eventMsg.event == EVT_ANOMALY_PRINTER2 )
+		{
+			sendWarning(socketInput, eventMsg.event);
+		}
+
+		if(eventMsg.event == EVT_ERR_DEFECTIVE_TRESHOLD_REACHED
+		|| eventMsg.event == EVT_ERR_FULL_QUEUE
+		|| eventMsg.event == EVT_ERR_BOX_STARVATION
+		|| eventMsg.event == EVT_ERR_PRODUCT_STARVATION )
+		{
+			sendError(socketInput, eventMsg.event);
+		}
+
+
 		eventToString (eventMsg.event, &eventMsg.boxData, logLine);
-		sendLog( socketInput, logLine, MIN_EVENT_STRING_BUFFER_SIZE);
+		sendLog(socketInput, logLine, MIN_EVENT_STRING_SIZE);
+
 
 		if( eventMsg.event != EVT_NONE )
 		{

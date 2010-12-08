@@ -55,6 +55,31 @@ public slots:
       */
     void disconnectionNotify();
 
+
+    /** errorNotify()
+      * display prompt to get user choice
+      */
+    void errorNotify(int errCode);
+
+    /** warningNotify()
+      */
+    void warningNotify(int errCode);
+
+    /** launch()
+      * Send a resume command to the server.
+      */
+    void launch();
+
+    /** resume()
+      * Send a resume command to the server.
+      */
+    void resume();
+
+    /** stop()
+      * Send a stop command to the server.
+      */
+    void stop();
+
 private:
     Ui::MainWindow *ui;
     Socket *connection;
