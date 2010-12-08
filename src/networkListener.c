@@ -50,24 +50,21 @@ static int handleRequest(const char* const buffer, int size, MSG_Q_ID eventsQueu
 		settings->productsPerBox = partPerBox;
 		settings->batchBoxesAsked = boxes;
 	}
-
-	if(strcmp(header, "LAUNCH") == 0) {
+	else if(strcmp(header, "LAUNCH") == 0) {
 		event_msg_t msg; 
 		semGive(boxHandlingRequest); /* Allow other tasks to restart */
 
 		msg.event = EVT_APPLICATION_START;
 		msgQSend(eventsQueue, (char*)&msg, sizeof(msg),NO_WAIT, MSG_PRI_NORMAL);
 	}
-
-	if(strcmp(header, "RESUME") == 0) {
+	else if(strcmp(header, "RESUME") == 0) {
 		event_msg_t msg; 
 		semGive(boxHandlingRequest); /* Allow other tasks to restart */
 
 		msg.event = EVT_APPLICATION_START;
 		msgQSend(eventsQueue, (char*)&msg, sizeof(msg),NO_WAIT, MSG_PRI_NORMAL);
 	}
-
-	if(strcmp(header, "STOP") == 0) {
+	else if(strcmp(header, "STOP") == 0) {
 		event_msg_t msg; 
 		settings->applicationEndRequest = TRUE;
 
