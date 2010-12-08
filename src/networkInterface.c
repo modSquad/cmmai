@@ -47,12 +47,6 @@
 
 
 /*--------------------------------------------------- Fonctions privees */
-/*
- * Envoie les donn'ees contenues dans le buffer pass'e en param`etre 
- * sur le fichier fd pass'e en param`etre.
- * La fonction revoie : 	len si l''echange s'est bien pass'e.
- * 							NETWORK_ERROR sinon
- */
 static int sendData(const int fd, char* buffer,const int len){
 	int sent = write(fd, buffer, len);
 	return (sent == len) ? len : NETWORK_ERROR;
@@ -65,11 +59,6 @@ static int sendData(const int fd, char* buffer,const int len){
 /* ------------------------------------------------ Variables publiques */
 
 /*------------------------------------------------- Fonctions publiques */
-/*
- * This method create a server socket and bind it on the specified port.\
- * If the socket is effectively created and binded, the file descriptor is returned.
- * Otherwise, NETWORK_ERROR is resurned
- */
 int getClientSocket(int port) {
 	struct sockaddr_in serverAddr; /* server's socket address */
 	int sockAddrSize; /* size of socket address structure */ 
@@ -109,7 +98,8 @@ int getClientSocket(int port) {
 		
 		return NETWORK_ERROR;
 	}
-	
+
+	/* validate client connection and store its file descriptor in newFd */
 	if ((newFd = accept (fd, (struct sockaddr *) &clientAddr, &sockAddrSize)) == ERROR)
 	{
 		perror ("accept");
@@ -122,7 +112,7 @@ int getClientSocket(int port) {
 }
 
 int partAccepted(int fd, int n) {
-	char msg[128];
+	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result;
 	sprintf(msg, "ACCEPTED\n%d\n\n", n);
 	result = sendData(fd, msg, strlen(msg));
@@ -131,7 +121,7 @@ int partAccepted(int fd, int n) {
 }
 
 int partRejected(int fd, int n) {
-	char msg[128];
+	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result;
 	sprintf(msg, "REJECTED\n%d\n\n", n);
 	result = sendData(fd, msg, strlen(msg));
@@ -140,7 +130,7 @@ int partRejected(int fd, int n) {
 }
 
 int sendError(int fd, int errCode) {
-	char msg[128];
+	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result;
 	sprintf(msg, "ERROR\n%d\n\n", errCode);
 	result = sendData(fd, msg, strlen(msg));
@@ -149,7 +139,7 @@ int sendError(int fd, int errCode) {
 }
 
 int sendWarning(int fd, int errCode) {
-	char msg[128];
+	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result;
 	sprintf(msg, "WARNING\n%d\n\n", errCode);
 	result = sendData(fd, msg, strlen(msg));
@@ -158,7 +148,7 @@ int sendWarning(int fd, int errCode) {
 }
 
 int sendLog(int fd, char* logMessage, int len) {
-	char msg[MIN_EVENT_STRING_SIZE + 128];
+	char msg[MIN_EVENT_STRING_SIZE + 9];
 	int result;
 	sprintf(msg, "ERROR\n%s\n\n", logMessage);
 	result = sendData(fd, msg, strlen(msg));
