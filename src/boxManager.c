@@ -3,6 +3,7 @@
 #include <msgQLib.h>
 #include <semLib.h>
 #include <sysLib.h>
+#include <stdio.h>
 #include "boxManager.h"
 
 static const int PRODUCT_STARVATION_DELAY = 5;
@@ -119,6 +120,25 @@ static void endTask ( )
 	taskSuspend(taskIdSelf());
 }
 
+/** @TODO : This has to be implemented.
+ * This purpose of this function is to mock
+ * a hardware size sensor.
+ */
+static double getSizeSensorData()
+{
+	return 1.0;
+}
+
+/**
+ * This return true if the size from the sensor is acceptable,
+ * false otherwise.
+ */
+static double sizeAcceptable()
+{
+	return TRUE;
+}
+
+
 /*--------------------------------------------------*/
 /* IT and alarm handlers */
 
@@ -128,12 +148,54 @@ static void ProductStarvationHandler ( )
 	stopBoxFilling();
 }
 
+static void sendDefectiveThresholdErrorMessage()
+{
+	boxData_t boxData;
+	boxesQueueMsg_t boxMsg;
+	event_msg_t eventMsg;
+	
+	boxData.batchID = _settings->batchID;
+	boxData.boxID = _boxState.boxID;
+	boxData.boxedProducts = _boxState.boxedProductsCount;
+	boxData.defectiveProducts = _boxState.defectiveProductsCount;
+
+	boxMsg.lastMessage = FALSE;
+	boxMsg.boxData = boxData;
+	eventMsg.event = EVT_ERR_DEFECTIVE_TRESHOLD_REACHED;
+	eventMsg.boxData = boxData;
+	
+	msgQSend(_eventsQueue, (char*)&eventMsg, sizeof(eventMsg),
+			WAIT_FOREVER, MSG_PRI_NORMAL);
+}
+
 /* TODO : vérifier la signature */
 static void ProductInflowHandler ( )
 {
-	/* TODO : n'utiliser que stopBoxFilling(); , ne pas accéder directement au clapet */
-	/* TODO : mettre à jour _boxState.filling si on est à la fin d'un carton */
+	double size = getSizeSensorData();	
+	if(sizeAcceptable(size))
+	{
+		/** The box is full **/
+		_boxState.boxedProductsCount++;
+		if(_boxState.boxedProductsCount == _settings->productsPerBox)
+		{
+			stopBoxFilling();
+			if(semGive(_boxHandlingRequest) == ERROR)
+			{
+				fprintf(stderr, "_boxHandlingRequest : cannot give semaphore\n");
+			}
+		}
+	}
+	else /* The product is rejected */
+	{
+		++_boxState.defectiveProductsCount;
+		if(_boxState.defectiveProductsCount == _settings->maxDefectiveProductsPerBox)
+		{
+			stopBoxFilling();
+			sendDefectiveThresholdErrorMessage();
+		}
+	}
 }
+
 
 /* TODO : vérifier la signature */
 static void EmergencyStopHandler ( )
