@@ -331,6 +331,7 @@
                 <stringAttribute value="-I$(WIND_BASE)/target/h"/>
                 <stringAttribute value="-I$(WIND_BASE)/target/h/wrn/coreip"/>
             </listAttribute>
+            <listAttribute key="BLD::Info|Libs|SIMNTdiab"/>
             <listAttribute key="BLD::Info|Macros">
                 <stringAttribute value="VX_CPU_FAMILY"/>
                 <stringAttribute value="CPU"/>
@@ -3741,12 +3742,17 @@
     <buildtargets>
         <buildtarget buildtool="Linker" name="cmmai" passed="false" targetname="cmmai">
             <contents>
-                <buildtargetreference name="/cmmai/cmmai_partialImage"/>
+                <buildtargetreference name="/src/cmmai_partialImage"/>
             </contents>
         </buildtarget>
         <buildtarget buildtool="Partial Image Linker" name="cmmai_partialImage" passed="true" targetname="cmmai_partialImage">
             <contents>
-                <folder name="/cmmai" recursive="true"/>
+                <folder name="/src" recursive="true"/>
+            </contents>
+        </buildtarget>
+        <buildtarget buildtool="Linker" name="testSimulation" passed="false" targetname="testSimulation">
+            <contents>
+                <file name="/src/devices_simulation.c"/>
             </contents>
         </buildtarget>
     </buildtargets>

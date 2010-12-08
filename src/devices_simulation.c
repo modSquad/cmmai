@@ -5,21 +5,41 @@
 * 
 */
 
+
 #include <stdio.h>
+#include <taskLib.h>
+#include <sysLib.h>
 #include "devices_simulation.h"
 
-/* the state of the Inlet valve */
-static valveState_t inletValveState = FALSE;
+#define CLOCK_RATE		4000
+#define UPDATE_DELAY	0.05
+#define SCREEN_REFRESH_STEP	10
+#define NEWPAGE "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
 
-/* the state of the Outlet valve */
-static valveState_t outletValveState = FALSE;
+#define DEFECT_RATE			10	/* One in DEFECT_RATE products will be defective (randomly) */
+#define MISSING_BOX_RATE	100	/* One in DEFECT_RATE boxes will be missing */
+#define BROKEN_PRINTER_RATE	10	/* One in DEFECT_RATE print try will abort */
+
+
+/* the valves states */
+static valveState_t _valveState[] =
+{
+		FALSE, /* INLET_VALVE  */
+		FALSE  /* OUTLET_VALVE */
+};
 
 /* the color of the lights */
-static color_t lightsColor = GREEN;
+static color_t _lightsColor = GREEN;
 
-/* the state of the printers */
-static BOOL printer1State = TRUE;
-static BOOL printer2State = TRUE;
+/* the printers states */
+static BOOL _printerState[] =
+{
+		TRUE, /* PRINTR1 */
+		TRUE  /* PRINTR2 */
+};
+
+static BOOL _productDefect = FALSE;
+static BOOL _missingBox = FALSE;
 
 /* Interface methods */
 /* ----------------------------------------------------------------- */
@@ -28,14 +48,7 @@ static BOOL printer2State = TRUE;
 
 void setValveState(valveName_t valveName, valveState_t valveState)
 {
-	if(valveName == INLET_VALVE)
-	{
-		inletValveState = valveState;
-	}
-	else
-	{
-		outletValveState = valveState;
-	}
+	_valveState[valveName] = valveState;
 	printf("the valve state is set! \n");
 }
 
@@ -43,43 +56,53 @@ valveState_t valveState (valveName_t valveName)
 /* returns TRUE if the valve is opened and FALSE if not */
 {
 	printf( "returns the state of the valve - opened or closed \n");
-	if(valveName == INLET_VALVE)
-	{
-		return inletValveState;
-	}
-	else
-	{
-		return outletValveState;
-	}
+	return _valveState[valveName];
 } 
 
 /* Interface for the sensors */
 BOOL presenceDetected(presenceSensorName_t sensorName)
 {
 	printf( "returns whether the sensor detected presence or not  \n");
-	/* TODO: create mechanism that simulates the sensor state */
-	return TRUE;
+
+	if (rand()%DEFECT_RATE == 0)
+	{
+		_missingBox = TRUE;
+	}
+	else
+	{
+		_missingBox = FALSE;
+	}
+	
+	return !_missingBox;
 }
 
 BOOL defectiveProduct(defectSensorName_t sensorName)
 {
 	printf( "detects whether the product that passed in front of the sensor is defected or not  \n");
-	/* TODO: create mechanism that simulates the defected product */
-	return TRUE;
+
+	if (rand()%DEFECT_RATE == 0)
+	{
+		_productDefect = TRUE;
+	}
+	else
+	{
+		_productDefect = FALSE;
+	}
+	
+	return _productDefect;
 } 
 
 /* Interface for the printers */
 
 BOOL printerState(printerName_t printerName) 
 {
-	printf( "returns whether a printer is ready to print or not  \n");
-	if(printerName == PRINTR1)
+	if (rand()%BROKEN_PRINTER_RATE == 0)
 	{
-		return printer1State;
+		_printerState[printerName] = FALSE;
 	}
 	else
 	{
-		return printer2State;
+		_printerState[printerName] = TRUE;
 	}
 } 
 
@@ -91,13 +114,13 @@ void print(printerName_t printerName, boxData_t boxData)
 /* Interface for the lights */
 void setColor(color_t color)
 {
-	lightsColor = color;
+	_lightsColor = color;
 	printf( "the color is set  \n");
 } 
 
 color_t getColor()
 {
-	return lightsColor;
+	return _lightsColor;
 }
 
 /*------------------------------------------------------------
@@ -106,19 +129,44 @@ color_t getColor()
 
 void setPrinterState(printerName_t printerName, BOOL newPrinterState) 
 {
-	if(printerName == PRINTR1)
-	{
-		printer1State = newPrinterState;
-	}
-	else
-	{
-		printer2State = newPrinterState;
-	}
+	_printerState[printerName] = newPrinterState;
 	printf( "the printer state is set  \n");
+}
+
+void refreshScreen ( )
+{
+	/* LIGHT */
+	
+	/* PRINTERS */
+	
+	/* VALVES */
+	
+	/* SENSORS (last read) */
+}
+
+void simulate ( )
+{
+	
 }
 
 int devicesSimulator()
 {
+	int updatesCount;
 	
+	sysClkRateSet(CLOCK_RATE);
+	
+	printf("\n");
+	for ( updatesCount = 0 ; ; ++updatesCount )
+	{
+		if (updatesCount >= SCREEN_REFRESH_STEP)
+		{
+			refreshScreen();
+			updatesCount = 0;
+		}
+		
+		simulate();
+		
+		taskDelay((int)(UPDATE_DELAY*sysClkRateGet()));
+	}
 }
 
