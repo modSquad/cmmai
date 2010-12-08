@@ -26,7 +26,7 @@ static BOOL printer2State = TRUE;
 
 /* Interface for the valves  - InletValve, OutletValve*/
 
-void setValveState(valveName_t valveName, BOOL valveState);
+void setValveState(valveName_t valveName, BOOL valveState)
 {
 	if(valveName == INLET_VALVE)
 	{
@@ -69,15 +69,15 @@ BOOL defectedProduct(sensorName_t sensorName)
 } 
 
 /* Interface for the printers */
-void setPrinterState(printerName_t printerName, BOOL printerState) 
+void setPrinterState(printerName_t printerName, BOOL newPrinterState) 
 {
 	if(printerName == PRINTR1)
 	{
-		printer1State = printerState;
+		printer1State = newPrinterState;
 	}
 	else
 	{
-		printer2State = printerState;
+		printer2State = newPrinterState;
 	}
 	printf( "the printer state is set  \n");
 } 
@@ -101,15 +101,13 @@ void print(printerName_t printerName, boxData_t boxData)
 } 
 
 /* Interface for the lights */
-void setColor(color_t color);
+void setColor(color_t color)
 {
 	lightsColor = color;
 	printf( "the color is set  \n");
 } 
 
-color_t getColor();
+color_t getColor()
 {
 	return lightsColor;
 } 
-
-#endif

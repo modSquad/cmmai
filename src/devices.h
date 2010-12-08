@@ -8,6 +8,8 @@
 #ifndef DEVICES_H
 #define DEVICES_H
 
+#include "boxingServer.h"
+
 typedef enum {
 	INLET_VALVE,
 	OUTLET_VALVE
@@ -38,7 +40,7 @@ BOOL presenceDetected(sensorName_t sensorName); /* returns whether the sensor de
 BOOL defectedProduct(sensorName_t sensorName); /* detects whether the product that passed in front of the sensor is defected or not */
 
 /* Interface for the printers */
-void setPrinterState(printerName_t printerName, BOOL printerState) /* sets the state of a printer - ready to print or not */
+void setPrinterState(printerName_t printerName, BOOL newPrinterState); /* sets the state of a printer - ready to print or not */
 BOOL printerState(printerName_t printerName); /* returns whether a printer is ready to print or not */
 void print(printerName_t printerName, boxData_t boxData); /* sends the print command to the printer, the printer is unavailable while printing */
 
