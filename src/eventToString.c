@@ -42,4 +42,3 @@ void eventToString (boxingEvent_t eventType, const boxData_t* boxData,
 			break;
 	}
 }
-

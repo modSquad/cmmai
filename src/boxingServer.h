@@ -74,17 +74,17 @@ typedef enum
 	/* Sent by PrintManager when a box has been printed */
 	EVT_BOX_PRINTED, 
 	/* Sent by PrintManager when a printer doesn't work */
-	EVT_ANOMALY_PRINTER1, 
-	EVT_ANOMALY_PRINTER2,
+	EVT_ANOMALY_PRINTER1 = 201, 
+	EVT_ANOMALY_PRINTER2 = 202,
 	/* Sent by ProductInflow when the treshold of defective products is reached */
-	EVT_ERR_DEFECTIVE_TRESHOLD_REACHED,
+	EVT_ERR_DEFECTIVE_TRESHOLD_REACHED = 101,
 	/* Sent by Box Manager when the queue containing the boxes to be printed is
 	 * full (it already contains 5 boxes) */
-	EVT_ERR_FULL_QUEUE, 
+	EVT_ERR_FULL_QUEUE = 102, 
 	/* Sent by BoxManager when the box is not present */
-	EVT_ERR_BOX_STARVATION, 
+	EVT_ERR_BOX_STARVATION = 103, 
 	/* Sent by ProductStarvationHandler when there is a product famine */
-	EVT_ERR_PRODUCT_STARVATION 
+	EVT_ERR_PRODUCT_STARVATION = 104 
 } boxingEvent_t;
 
 /**
