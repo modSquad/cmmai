@@ -90,7 +90,7 @@ int getClientSocket(int port) {
 int partAccepted(int fd, int n) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result, msgLen;
-	sprintf(msg, "ACCEPTED\n%d\n\n", n); msgLen = strlen(msg);
+	msgLen = sprintf(msg, "ACCEPTED\n%d\n\n", n);
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
@@ -98,8 +98,8 @@ int partAccepted(int fd, int n) {
 
 int partRejected(int fd, int n) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
-	int result;
-	sprintf(msg, "REJECTED\n%d\n\n", n);msgLen = strlen(msg);
+	int result, msgLen;
+	msgLen = sprintf(msg, "REJECTED\n%d\n\n", n);
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
@@ -107,8 +107,8 @@ int partRejected(int fd, int n) {
 
 int sendError(int fd, int errCode) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
-	int result;
-	sprintf(msg, "ERROR\n%d\n\n", errCode);msgLen = strlen(msg);
+	int result, msgLen;
+	msgLen = sprintf(msg, "ERROR\n%d\n\n", errCode);
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
@@ -116,8 +116,8 @@ int sendError(int fd, int errCode) {
 
 int sendWarning(int fd, int errCode) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
-	int result;
-	sprintf(msg, "WARNING\n%d\n\n", errCode);msgLen = strlen(msg);
+	int result, msgLen;
+	msgLen = sprintf(msg, "WARNING\n%d\n\n", errCode);
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
@@ -125,8 +125,8 @@ int sendWarning(int fd, int errCode) {
 
 int sendLog(int fd, char* logMessage, int len) {
 	char msg[MIN_EVENT_STRING_BUFFER_SIZE + 9];
-	int result;
-	sprintf(msg, "ERROR\n%s\n\n", logMessage);msgLen = strlen(msg);
+	int result, msgLen;
+	msgLen = sprintf(msg, "ERROR\n%s\n\n", logMessage);
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;

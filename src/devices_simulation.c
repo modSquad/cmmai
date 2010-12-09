@@ -9,17 +9,89 @@
 #include <stdio.h>
 #include <taskLib.h>
 #include <sysLib.h>
+#include <time.h>
 #include "devices_simulation.h"
 
+
+/* ------------------------------------------------------------
+ * SIMULATION SETTINGS
+ * ------------------------------------------------------------ */
+
 #define CLOCK_RATE		4000
-#define UPDATE_DELAY	0.05
-#define SCREEN_REFRESH_STEP	10
-#define NEWPAGE "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+#define UPDATE_DELAY	0.05	/* In seconds */
+#define SCREEN_REFRESH_STEP	20
+	/* A screen refresh will occur every SCREEN_REFRESH_STEP updates */
+#define PRODUCT_INFLOW_STEP 10
+	/* A product inflow will occur every PRODUCT_INFLOW_STEP updates */
 
 #define DEFECT_RATE			10	/* One in DEFECT_RATE products will be defective (randomly) */
 #define MISSING_BOX_RATE	100	/* One in DEFECT_RATE boxes will be missing */
 #define BROKEN_PRINTER_RATE	10	/* One in DEFECT_RATE print try will abort */
 
+
+/* ------------------------------------------------------------
+ * SCREEN OUTPUT
+ * ------------------------------------------------------------ */
+
+#define NEWPAGE "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+
+#define SIMULATOR_PROMPT "\
+Simulator v1.0\n\
+\n\
+\n\
+============================================================\n\
+Light:         %s\n\
+============================================================\n\
+Valve     | Inlet  | Outlet \n\
+----------+--------+--------\n\
+status    | %6s | %6s \n\
+============================================================\n\
+Printer # |    1    |    2    \n\
+----------+---------+---------\n\
+status    | %7s | %7s \n\
+============================================================\n\
+Last product was defective:  %s\n\
+Last box was missing:        %s\n\
+============================================================\n\
+"
+const char* COLOR_LABEL[] =
+{
+	"RED",
+	"GREEN",
+	"ORANGE"
+};
+
+const char* VALVE_STATE_LABEL[] =
+{
+	"CLOSED",
+	"OPEN"
+};
+
+const char* PRINTER_STATE_LABEL[] =
+{
+	"BROKEN",
+	"OK"
+};
+
+const char* LAST_PRODUCT_DEFECT_LABEL[] =
+{
+	"NO",
+	"YES"
+};
+
+const char* LAST_BOX_MISSING_LABEL[] =
+{
+	"NO",
+	"YES"
+};
+
+
+/* ------------------------------------------------------------
+ * STATIC VARIABLES
+ * ------------------------------------------------------------ */
+
+/* the light color */
+static color_t _lightColor = GREEN;
 
 /* the valves states */
 static valveState_t _valveState[] =
@@ -28,9 +100,6 @@ static valveState_t _valveState[] =
 		FALSE  /* OUTLET_VALVE */
 };
 
-/* the color of the lights */
-static color_t _lightsColor = GREEN;
-
 /* the printers states */
 static BOOL _printerState[] =
 {
@@ -38,11 +107,13 @@ static BOOL _printerState[] =
 		TRUE  /* PRINTR2 */
 };
 
-static BOOL _productDefect = FALSE;
-static BOOL _missingBox = FALSE;
+static BOOL _lastProductDefect = FALSE;
+static BOOL _lastBoxMissing = FALSE;
 
-/* Interface methods */
-/* ----------------------------------------------------------------- */
+
+/* ------------------------------------------------------------
+ * INTERFACE METHODS
+ * ------------------------------------------------------------ */
 
 /* Interface for the valves  - InletValve, OutletValve*/
 
@@ -53,7 +124,7 @@ void setValveState(valveName_t valveName, valveState_t valveState)
 }
 
 valveState_t valveState (valveName_t valveName)
-/* returns TRUE if the valve is opened and FALSE if not */
+/* returns TRUE if the valve is open and FALSE if not */
 {
 	printf( "returns the state of the valve - opened or closed \n");
 	return _valveState[valveName];
@@ -66,14 +137,14 @@ BOOL presenceDetected(presenceSensorName_t sensorName)
 
 	if (rand()%DEFECT_RATE == 0)
 	{
-		_missingBox = TRUE;
+		_lastBoxMissing = TRUE;
 	}
 	else
 	{
-		_missingBox = FALSE;
+		_lastBoxMissing = FALSE;
 	}
 	
-	return !_missingBox;
+	return !_lastBoxMissing;
 }
 
 BOOL defectiveProduct(defectSensorName_t sensorName)
@@ -82,14 +153,14 @@ BOOL defectiveProduct(defectSensorName_t sensorName)
 
 	if (rand()%DEFECT_RATE == 0)
 	{
-		_productDefect = TRUE;
+		_lastProductDefect = TRUE;
 	}
 	else
 	{
-		_productDefect = FALSE;
+		_lastProductDefect = FALSE;
 	}
 	
-	return _productDefect;
+	return _lastProductDefect;
 } 
 
 /* Interface for the printers */
@@ -114,57 +185,60 @@ void print(printerName_t printerName, boxData_t boxData)
 /* Interface for the lights */
 void setColor(color_t color)
 {
-	_lightsColor = color;
+	_lightColor = color;
 	printf( "the color is set  \n");
 } 
 
 color_t getColor()
 {
-	return _lightsColor;
+	return _lightColor;
 }
 
-/*------------------------------------------------------------
-  SIMULATOR
-  ------------------------------------------------------------*/
 
-void setPrinterState(printerName_t printerName, BOOL newPrinterState) 
-{
-	_printerState[printerName] = newPrinterState;
-	printf( "the printer state is set  \n");
-}
+/* ------------------------------------------------------------
+ * SIMULATOR
+ * ------------------------------------------------------------ */
 
 void refreshScreen ( )
 {
-	/* LIGHT */
-	
-	/* PRINTERS */
-	
-	/* VALVES */
-	
-	/* SENSORS (last read) */
+	printf(NEWPAGE);
+
+	printf(SIMULATOR_PROMPT,
+			COLOR_LABEL[_lightColor],
+			PRINTER_STATE_LABEL[_printerState[PRINTR1]],
+			PRINTER_STATE_LABEL[_printerState[PRINTR2]],
+			VALVE_STATE_LABEL[_valveState[INLET_VALVE]],
+			VALVE_STATE_LABEL[_valveState[OUTLET_VALVE]],
+			LAST_PRODUCT_DEFECT_LABEL[_lastProductDefect],
+			LAST_BOX_MISSING_LABEL[_lastBoxMissing]);
 }
 
-void simulate ( )
+void simulate (int updatesCount)
 {
+	if (updatesCount%PRODUCT_INFLOW_STEP == 0)
+	{
+		/* TODO : déclencher l'arrivée de pièce */
+	}
 	
+	/* TODO simuler l'arrêt d'urgence */
 }
 
 int devicesSimulator()
 {
 	int updatesCount;
 	
+	srand(time(NULL));
 	sysClkRateSet(CLOCK_RATE);
 	
 	printf("\n");
 	for ( updatesCount = 0 ; ; ++updatesCount )
 	{
-		if (updatesCount >= SCREEN_REFRESH_STEP)
+		if (updatesCount%SCREEN_REFRESH_STEP == 0)
 		{
 			refreshScreen();
-			updatesCount = 0;
 		}
 		
-		simulate();
+		simulate(updatesCount);
 		
 		taskDelay((int)(UPDATE_DELAY*sysClkRateGet()));
 	}

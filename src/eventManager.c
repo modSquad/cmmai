@@ -91,8 +91,8 @@ int eventManager (int socketInput, MSG_Q_ID eventsQueue, MSG_Q_ID logsEventQueue
 		
 		if(eventMsg.event == EVT_BOX_PROCESSED)
 		{
-			partAccepted(socketInput, event.boxData.boxedProducts);
-			partRejected(socketInput, event.boxData.defectiveProducts);
+			partAccepted(socketInput, eventMsg.boxData.boxedProducts);
+			partRejected(socketInput, eventMsg.boxData.defectiveProducts);
 		}
 
 		if(eventMsg.event == EVT_ANOMALY_PRINTER1
@@ -111,7 +111,7 @@ int eventManager (int socketInput, MSG_Q_ID eventsQueue, MSG_Q_ID logsEventQueue
 
 
 		eventToString (eventMsg.event, &eventMsg.boxData, logLine);
-		sendLog(socketInput, logLine, MIN_EVENT_STRING_SIZE);
+		sendLog(socketInput, logLine, MIN_EVENT_STRING_BUFFER_SIZE);
 
 
 		if( eventMsg.event != EVT_NONE )
