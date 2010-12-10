@@ -10,6 +10,6 @@
 
 #include "devices.h"
 
-int devicesSimulator();
+int simulator();
 
 #endif

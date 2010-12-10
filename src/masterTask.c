@@ -1,7 +1,7 @@
 /* CIAI : Développement Multi-lots
  * @author H4203
  */
-
+#define SIMULATION
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,10 +17,12 @@
 #include "printManager.h"
 #include "logsManager.h"
 #include "eventToString.h"
+#ifdef SIMULATION
+#include "devices_simulation.h"
+#endif
 
 /* Application constants */
-#define SERVER_PORT 1001
-
+#define SERVER_PORT 4802
 /* Tasks priorities (relatives) */
 #define BASE_PRIORITY (100)
 #define NETWORK_LISTENER_PRIORITY (3)
@@ -28,6 +30,9 @@
 #define BOX_MANAGER_PRIORITY (0)
 #define PRINT_MANAGER_PRIORITY (1)
 #define LOGS_MANAGER_PRIORITY (2)
+#ifdef SIMULATION
+#define SIMULATOR_PRIORITY (-1)
+#endif
 
 /* Queues sizes */
 #define MAX_EVENTS_QUEUE_SIZE 	100
@@ -45,6 +50,9 @@ int boxingServer()
 	MSG_Q_ID eventsQueue;
 	MSG_Q_ID logsEventQueue;
 	int socket;
+#ifdef SIMULATION
+	int simulatorId;
+#endif
 	int networkListenerId;
 	int eventManagerId;
 	int boxManagerId;
@@ -52,7 +60,7 @@ int boxingServer()
 	int logsManagerId;
 
 	/* Creation of shared objects */
-	endSync = semMCreate(SEM_Q_FIFO|SEM_DELETE_SAFE);
+	endSync = semBCreate(0,SEM_EMPTY);
 	boxHandlingRequest = semMCreate(SEM_Q_FIFO|SEM_DELETE_SAFE);
 	settings = (settings_t*) malloc(sizeof(settings_t));
 	boxesQueue = msgQCreate(MAX_BOXES_QUEUE_SIZE, sizeof(boxesQueueMsg_t), MSG_Q_FIFO);
@@ -62,6 +70,14 @@ int boxingServer()
 	socket = getClientSocket(SERVER_PORT);
 
 	/* Spawning tasks */
+#ifdef SIMULATION
+	simulatorId = taskSpawn("simulatorTask",
+		BASE_PRIORITY+SIMULATOR_PRIORITY,
+		0, DEFAULT_STACK_SIZE, simulator,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	);
+#endif
+	
 	networkListenerId = taskSpawn("networkListenerTask",
 		BASE_PRIORITY+NETWORK_LISTENER_PRIORITY,
 		0, DEFAULT_STACK_SIZE, networkListener,
@@ -108,6 +124,9 @@ int boxingServer()
 	taskDelete(boxManagerId);
 	taskDelete(eventManagerId);
 	taskDelete(networkListenerId);
+#ifdef SIMULATION
+	taskDelete(simulatorId);
+#endif
 
 	/* destruct resources */
 	/* TODO : close(socket); */

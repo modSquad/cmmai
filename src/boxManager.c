@@ -120,6 +120,9 @@ static void endTask ( )
 /*--------------------------------------------------*/
 /* IT and alarm handlers */
 
+/* Alarm handler for product starvation
+ * 
+ */
 static void ProductStarvationHandler ( )
 {
 	boxData_t boxData;
@@ -132,11 +135,14 @@ static void ProductStarvationHandler ( )
 	sendEvent(EVT_ERR_PRODUCT_STARVATION,&boxData,NO_WAIT);
 }
 
-static void ProductInflowHandler ( )
+/* IT Handler for product inflow
+ * This function is not static for testing purpose.
+ */
+/*static*/ void ProductInflowHandler ( )
 {
 	if(defectiveProduct(PRODUCT_DEFECT_SENSOR))
 	{
-		/* The box is full **/
+		/* The box is full */
 		setValveState(OUTLET_VALVE, CLOSED); /* TODO : modifier le schéma de conception en conséquence */
 		_boxState.boxedProductsCount++;
 		if(_boxState.boxedProductsCount == _settings->productsPerBox)
@@ -152,8 +158,12 @@ static void ProductInflowHandler ( )
 	{
 		setValveState(OUTLET_VALVE, OPEN); /* TODO : modifier le schéma de conception en conséquence */
 		++_boxState.defectiveProductsCount;
-		if(_boxState.defectiveProductsCount == _settings->maxDefectiveProductsPerBox)
-			/* TODO : gérer la reprise (utiliser un modulo ?) */
+
+		/* The number of defective products can exceed
+		 * maximum, if user asked to continue after an error occured.
+		 * That's why we test the modulo, and not equality.
+		 */
+		if(_boxState.defectiveProductsCount%_settings->maxDefectiveProductsPerBox == 0)
 		{
 			boxData_t boxData;
 			
@@ -165,8 +175,10 @@ static void ProductInflowHandler ( )
 	}
 }
 
-
-static void EmergencyStopHandler ( )
+/* IT Handler for emergency stop.
+ * This function is not static for testing purpose.
+ */
+/*static*/ void EmergencyStopHandler ( )
 {
 	boxData_t boxData;
 	

@@ -3740,12 +3740,12 @@
         </mapAttribute>
     </attributes>
     <buildtargets>
-        <buildtarget buildtool="Linker" name="cmmai" passed="false" targetname="cmmai">
+        <buildtarget buildtool="Linker" name="simulation" passed="false" targetname="simulation">
             <contents>
-                <buildtargetreference name="/src/cmmai_partialImage"/>
+                <buildtargetreference name="/src/simulation_partialImage"/>
             </contents>
         </buildtarget>
-        <buildtarget buildtool="Partial Image Linker" name="cmmai_partialImage" passed="true" targetname="cmmai_partialImage">
+        <buildtarget buildtool="Partial Image Linker" name="simulation_partialImage" passed="true" targetname="simulation_partialImage">
             <contents>
                 <folder name="/src" recursive="true"/>
             </contents>

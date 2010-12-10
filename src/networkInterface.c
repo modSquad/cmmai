@@ -66,6 +66,7 @@ int getClientSocket(int port) {
 		return NETWORK_ERROR;
 	}
 
+	printf("Listening on port %d, fd = %d\n",port,fd);
 	/* create queue for client connection requests */
 	if (listen (fd, SERVER_MAX_CONNECTIONS) == ERROR)
 	{

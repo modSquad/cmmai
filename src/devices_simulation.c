@@ -12,6 +12,11 @@
 #include <time.h>
 #include "devices_simulation.h"
 
+/* ------------------------------------------------------------
+ * EXTERNAL FUNCTIONS (IT handlers to simulate)
+ * ------------------------------------------------------------ */
+ void EmergencyStopHandler ( );
+ void ProductInflowHandler ( );
 
 /* ------------------------------------------------------------
  * SIMULATION SETTINGS
@@ -50,10 +55,15 @@ Printer # |    1    |    2    \n\
 ----------+---------+---------\n\
 status    | %7s | %7s \n\
 ============================================================\n\
-Last product was defective:  %s\n\
 Last box was missing:        %s\n\
 ============================================================\n\
+Last product was defective:  %s\n\
+Product count: %5d\n\
+... defective:   %5d\n\
+... correct:     %5d\n\
+============================================================\n\
 "
+ 
 const char* COLOR_LABEL[] =
 {
 	"RED",
@@ -108,8 +118,11 @@ static BOOL _printerState[] =
 };
 
 static BOOL _lastProductDefect = FALSE;
-static BOOL _lastBoxMissing = FALSE;
+static int  _productCount =				0;
+static int  _correctProductCount =		0;
+static int  _defectiveProductCount =	0;
 
+static BOOL _lastBoxMissing = FALSE;
 
 /* ------------------------------------------------------------
  * INTERFACE METHODS
@@ -154,10 +167,12 @@ BOOL defectiveProduct(defectSensorName_t sensorName)
 	if (rand()%DEFECT_RATE == 0)
 	{
 		_lastProductDefect = TRUE;
+		++_correctProductCount;
 	}
 	else
 	{
 		_lastProductDefect = FALSE;
+		++_defectiveProductCount;
 	}
 	
 	return _lastProductDefect;
@@ -209,21 +224,28 @@ void refreshScreen ( )
 			PRINTER_STATE_LABEL[_printerState[PRINTR2]],
 			VALVE_STATE_LABEL[_valveState[INLET_VALVE]],
 			VALVE_STATE_LABEL[_valveState[OUTLET_VALVE]],
+			LAST_BOX_MISSING_LABEL[_lastBoxMissing],
 			LAST_PRODUCT_DEFECT_LABEL[_lastProductDefect],
-			LAST_BOX_MISSING_LABEL[_lastBoxMissing]);
+			_productCount, _correctProductCount, _defectiveProductCount
+			);
 }
 
 void simulate (int updatesCount)
 {
 	if (updatesCount%PRODUCT_INFLOW_STEP == 0)
 	{
-		/* TODO : déclencher l'arrivée de pièce */
+		++_productCount;
+		if (_valveState[INLET_VALVE] == OPEN)
+		{
+			ProductInflowHandler();
+		}
 	}
 	
 	/* TODO simuler l'arrêt d'urgence */
+	/*EmergencyStopHandler();*/
 }
 
-int devicesSimulator()
+int simulator()
 {
 	int updatesCount;
 	
