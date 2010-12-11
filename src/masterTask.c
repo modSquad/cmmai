@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <msgQLib.h>
 #include <taskLib.h>
+#include <sysLib.h>
 
 #include "masterTask.h"
 #include "boxingServer.h"
@@ -17,12 +18,24 @@
 #include "printManager.h"
 #include "logsManager.h"
 #include "eventToString.h"
+
 #ifdef SIMULATION
 #include "devices_simulation.h"
+#include "simulate.h"
+#define UPDATE_DELAY	0.05	/* In seconds */
+#define SCREEN_REFRESH_STEP	20
+	/* A screen refresh will occur every SCREEN_REFRESH_STEP updates */
+#define DEFECT_RATE			10
+	/* One in DEFECT_RATE products will be defective (randomly) */
+#define MISSING_BOX_RATE	100
+	/* One in MSSING_BOX_RATE boxes will be missing (randomly) */
+#define BROKEN_PRINTER_RATE	10
+	/* One in BROKEN_PRINTER_RATE print try will abort (randomly) */
 #endif
 
 /* Application constants */
 #define SERVER_PORT 4802
+#define CLOCK_RATE  4000
 /* Tasks priorities (relatives) */
 #define BASE_PRIORITY (100)
 #define NETWORK_LISTENER_PRIORITY (3)
@@ -59,6 +72,9 @@ int boxingServer()
 	int printManagerId;
 	int logsManagerId;
 
+	/* Settings */
+	sysClkRateSet(clockRate);
+
 	/* Creation of shared objects */
 	endSync = semBCreate(0,SEM_EMPTY);
 	boxHandlingRequest = semMCreate(SEM_Q_FIFO|SEM_DELETE_SAFE);
@@ -74,7 +90,10 @@ int boxingServer()
 	simulatorId = taskSpawn("simulatorTask",
 		BASE_PRIORITY+SIMULATOR_PRIORITY,
 		0, DEFAULT_STACK_SIZE, simulator,
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+		simulate,
+		UPDATE_DELAY, SCREEN_REFRESH_STEP,
+		DEFECT_RATE, MISSING_BOX_RATE, BROKEN_PRINTER_RATE,
+		0, 0, 0, 0
 	);
 #endif
 	
