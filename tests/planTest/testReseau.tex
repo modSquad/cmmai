@@ -1,31 +1,86 @@
-\Test{Réseau}{Recevoir une configuration depuis le client}
+\Test{Réseau~/~réception}{Recevoir une configuration depuis le client}
 {Lancer le programme, et envoyer une configuration depuis le client Windows.}
 {La configuration doit être reçue.}
 
-\Test{Réseau}{Recevoir un ordre de lancement}
+\Test{Réseau~/~réception}{Recevoir un ordre de lancement}
 {Lancer le programme, envoyer une configuration, puis envoyer un ordre de
 lancement depuis le client Windows.}
 {La configuration doit être reçu, et le système industriel doit se mettre en
 fonctionnement, selon la configuration reçue.}
 
-\Test{Réseau}{Dire à l'application de s'arrêter}
+\Test{Réseau~/~réception}{Dire à l'application de s'arrêter}
 {Lancer le programme, envoyer une configuration, envoyer un ordre de lancement,
 puis patienter jusqu'à la fin, et enfin, envoyer un ordre d'arrêt, juste
 avant le dernier carton.}
 {Le programme doit se fermer à la fin du dernier carton.}
 
-\Test{Réseau}{Tester la reprise sur erreur}
+\Test{Réseau~/~réception}{Tester la reprise sur erreur}
 {Lancer le programme, envoyer une configuration, envoyer un ordre de lancement,
 et appuyer sur le bouton d'arrêt d'urgence. Envoyer ensuite une commande de
     reprise depuis le client Windows.}
 {Le système industriel doit se remettre à fonctionner.}
 
-\Test{Réseau}{Envoyer une chaine non valide}
+\Test{Réseau~/~réception}{Message de reprise sur erreur alors que le système n'est pas
+    arrêté}
+{Lancer le programme, envoyer une configuration, envoyer un ordre de lancement.
+Envoyer ensuite un ordre de reprise sur erreur alors que le programme n'est pas
+en erreur.}
+{Le programme doit ignorer la commande.}
+
+\Test{Réseau~/~réception}{Envoyer une chaine non valide}
 {Lancer le programme, puis envoyer une chaine non valide par le réseau, à
     l'aider d'un utilitaire de type \kw{netcat}.}
 {Le système industriel doit ignorer la commande.}
 
-\Test{Réseau}{Envoyer un ordre de configuration avec des valeur non valides}
+\Test{Réseau~/~réception}{Envoyer un ordre de configuration avec des valeur non valides}
 {Lancer le programme, envoyer une configuration non valide depuis un utilitaire
     de type \kw{netcat}.}
 {Le système industriel doit ignorer la commande.}
+
+\Test{Réseau~/~émission}{Envoyer un message d'acceptation de pièce}
+{Lancer le programme, envoyer une configuration valide, et lancer le système.}
+{Pour chaque pièce sensée être acceptée par le système, un message doit être
+    envoyé par le système. Le message doit respecter le protocole.}
+
+\Test{Réseau~/~émission}{Envoyer un message comme quoi une pièce a été rejeté
+    du système}
+{Lancer le programme, envoyer une configuration valide, et lancer le système}
+{Pour chaque pièce sensée être rejetée par le système, un message doit être
+envoyé par le système. Le message doit respecter le protocole.}
+
+\Test{Réseau~/~émission}{Envoyer un message si trop de pièces sont
+    défectueuses}
+{Lancer le système, et attendre qu'il y ait trop de pièce défectueuse.}
+{Quand trop de pièces sont défectueuses, le système doit envoyer un message. Ce
+message doit respecter le protocole.}
+
+\Test{Réseau~/~émission}{Envoyer un message si la file d'attente pour
+    l'impression est vide}
+{Lancer le système, et attendre qu'il y ait trop de cartons dans la file
+    d'attente.}
+{Quand trop de cartons sont dans le file d'attente, le système doit envoyer un
+    message. Ce message doit respecter le protocole.}
+
+\Test{Réseau~/~émission}{Envoyer un message lors d'une famine de pièce}
+{Lancer le système, et attendre une famine de pièce (pas de pièce qui sort
+depuis $n$ secondes.}
+{Un message doit être envoyé, précisant qu'il y a famine. Ce message doit
+respecter le protocole.}
+
+\Test{Réseau~/~émission}{Envoyer un message lors d'une famine de cartons}
+{Lancer le système, et attendre une famine de cartons (pas de cartons alors
+qu'un carton est demandé).}
+{Un message doit être envoyé, précisant qu'il y a famine. Ce message doit
+respecter le protocole.}
+
+\Test{Réseau~/~émission}{Envoyer un message lorsqu'une imprimante est en
+panne}
+{Lancer le système, et attendre qu'une imprimante tombe en panne.}
+{La première fois qu'une imprimante est en panne et doit imprimer, un message
+doit être envoyé, précisant quelle imprimante est en panne. Ce message doit
+être conforme au protocole.}
+
+\Test{Réseau~/~émission}{Envoyer un message de journalisation}
+{Lancer le système, et attendre que quelques évènements surviennent.}
+{Pour chaque évènement, un message doit être envoyé. Ce message doit respecter
+le protocole.}
