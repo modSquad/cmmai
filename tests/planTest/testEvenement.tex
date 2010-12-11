@@ -1,0 +1,29 @@
+\Test{Évènements}{DEL / Arrêt d'urgence}
+{Lancer le système, provoquer un arrêt d'urgence}.
+{La DEL doit devenir rouge.}
+\Test{Évènements}{DEL / File d'attente carton pleine}
+{Lancer le système, attendre que la file d'attente soit pleine.}
+{La DEL doit devenir rouge.}
+\Test{Évènements}{DEL / Famine de pièces}
+{Lancer le système, attendre une famine de pièce.}
+{La DEL doit devenir rouge.}
+\Test{Évènements}{DEL / Famine de carton}
+{Lancer le système, attendre une famine de carton.}
+{La DEL doit devenir rouge.}
+\Test{Évènements}{DEL / Taux de pièce défectueuses atteint}
+{Lancer le système, attendre attendre que le taux de pièces défectueuse soit
+atteint.}
+{La DEL doit devenir rouge.}
+\Test{Évènements}{DEL / Anomalie sur une imprimante.}
+{Lancer le système, attendre qu'une imprimante tombe en panne.}
+{La DEL doit devenir orange.}
+\Test{Évènements}{DEL / Situation normale.}
+{Lancer le système, attendre une erreur, puis rétablir la situation.}
+{La DEL doit devenir rouge ou orange selon la gravité de l'erreur, puis
+redevenir verte quand le système est réparé.}
+\Test{Évènements}{Ajout d'une pièce acceptée}
+{Lancer le système, attendre qu'une pièce soit ajouté, et accepté par le système.}
+{Le compteur de pièces dans le carton doit être incrémenté.}
+\Test{Évènements}{Ajout d'une pièce refusé}
+{Lancer le système, attendre qu'une pièce soit ajouté, et rejeté par le système.}
+{Le compteur de pièces défectueuses doit être incrémenté.}
