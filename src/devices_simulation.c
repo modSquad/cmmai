@@ -2,85 +2,34 @@
 * @author H4203
 *
 * This file contains simulated device access procedures, and a task
-* managing the simulation.
+* managing the simulation update.
 */
 
 #include <stdio.h>
-#include <taskLib.h>
+#include <semLib.h>
 #include <sysLib.h>
 #include <time.h>
 #include "devices_simulation.h"
 
 /* ------------------------------------------------------------
- * SCREEN OUTPUT
+ * PRIVATE TYPES
  * ------------------------------------------------------------ */
-
-#define NEWPAGE "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
-
-#define SIMULATOR_PROMPT "\
-Simulator v1.0\n\
-\n\
-\n\
-============================================================\n\
-Light:         %s\n\
-============================================================\n\
-Valve     | Inlet  | Outlet \n\
-----------+--------+--------\n\
-status    | %6s | %6s \n\
-============================================================\n\
-Printer # |    1    |    2    \n\
-----------+---------+---------\n\
-status    | %7s | %7s \n\
-============================================================\n\
-Last box was missing:        %s\n\
-============================================================\n\
-Last product was defective:  %s\n\
-Product count: %5d\n\
-... correct:     %5d\n\
-... defective:   %5d\n\
-============================================================\n\
-"
-
-const char* COLOR_LABEL[] =
+typedef struct _products
 {
-	"RED",
-	"GREEN",
-	"ORANGE"
-};
-
-const char* VALVE_STATE_LABEL[] =
-{
-	"CLOSED",
-	"OPEN"
-};
-
-const char* PRINTER_STATE_LABEL[] =
-{
-	"BROKEN",
-	"OK"
-};
-
-const char* LAST_PRODUCT_DEFECT_LABEL[] =
-{
-	"NO",
-	"YES"
-};
-
-const char* LAST_BOX_MISSING_LABEL[] =
-{
-	"NO",
-	"YES"
-};
+	int amount;
+	BOOL correctOnes;
+	_products* next;
+} _products;
 
 
 /* ------------------------------------------------------------
  * STATIC VARIABLES
  * ------------------------------------------------------------ */
 
-/* Simulation config */
-static int _brokenPrinterRate =	1;
-static int _missingBoxRate =	1;
-static int _defectRate =		1;
+/* Upcoming products queue (linked list) */
+static _product* _nextProducts = NULL;
+static _product* _lastProducts = NULL;
+static SEM_ID _mutex = NULL;
 
 /* the light color */
 static color_t _lightColor = GREEN;
@@ -88,8 +37,8 @@ static color_t _lightColor = GREEN;
 /* the valves states */
 static valveState_t _valveState[] =
 {
-		FALSE, /* INLET_VALVE  */
-		FALSE  /* OUTLET_VALVE */
+		CLOSED, /* INLET_VALVE  */
+		CLOSED  /* OUTLET_VALVE */
 };
 
 /* the printers states */
@@ -99,12 +48,12 @@ static BOOL _printerState[] =
 		TRUE  /* PRINTR2 */
 };
 
-static BOOL _lastProductDefect = FALSE;
-static int  _productCount =				0;
-static int  _correctProductCount =		0;
-static int  _defectiveProductCount =	0;
+static BOOL _boxMissing = FALSE;
 
-static BOOL _lastBoxMissing = FALSE;
+static int _boxedCorrectProductsCount =		0;
+static int _boxedDefectiveProductsCount =	0;
+static int _droppedCorrectProductsCount =	0;
+static int _droppedDefectiveProductsCount =	0;
 
 /* ------------------------------------------------------------
  * INTERFACE METHODS
@@ -126,46 +75,30 @@ valveState_t valveState (valveName_t valveName)
 /* Interface for the sensors */
 BOOL presenceDetected(presenceSensorName_t sensorName)
 {
-	if (_missingBoxRate != 0 && rand()%_missingBoxRate == 0)
-	{
-		_lastBoxMissing = TRUE;
-	}
-	else
-	{
-		_lastBoxMissing = FALSE;
-	}
-
-	return !_lastBoxMissing;
+	return _boxMissing;
 }
 
 BOOL defectiveProduct(defectSensorName_t sensorName)
 {
-	if (_defectRate != 0 && rand()%_defectRate == 0)
-	{
-		_lastProductDefect = TRUE;
-		++_correctProductCount;
-	}
-	else
-	{
-		_lastProductDefect = FALSE;
-		++_defectiveProductCount;
-	}
+	/* We assume this will be called in a task calling a
+	 * handler to simulate it, and not in a real IT handler.
+	 * So blocking calls are allowed.
+	 */
+	BOOL result = FALSE;
 
-	return _lastProductDefect;
+	semTake(_mutex);
+	if (_nextProducts != NULL)
+	{
+		result = _nextProducts->correctOnes;
+	}
+	semGive(_mutex);
 }
 
 /* Interface for the printers */
 
 BOOL printerState(printerName_t printerName)
 {
-	if (_brokenPrinterRate != 0 && rand()%_brokenPrinterRate == 0)
-	{
-		_printerState[printerName] = FALSE;
-	}
-	else
-	{
-		_printerState[printerName] = TRUE;
-	}
+	return _printerState[printerName];
 }
 
 void print(printerName_t printerName, boxData_t boxData)
@@ -186,49 +119,168 @@ color_t getColor()
 
 
 /* ------------------------------------------------------------
- * SIMULATOR
+ * SIMULATION ACCESS FUNCTIONS
  * ------------------------------------------------------------ */
 
-void refreshScreen ( )
+void initDevicesSimulation ()
 {
-	printf(NEWPAGE);
-
-	printf(SIMULATOR_PROMPT,
-			COLOR_LABEL[_lightColor],
-			PRINTER_STATE_LABEL[_printerState[PRINTR1]],
-			PRINTER_STATE_LABEL[_printerState[PRINTR2]],
-			VALVE_STATE_LABEL[_valveState[INLET_VALVE]],
-			VALVE_STATE_LABEL[_valveState[OUTLET_VALVE]],
-			LAST_BOX_MISSING_LABEL[_lastBoxMissing],
-			LAST_PRODUCT_DEFECT_LABEL[_lastProductDefect],
-			_productCount, _correctProductCount, _defectiveProductCount
-			);
-}
-
-int simulator (
-		void (*simulationCallBack)(int),
-		int updateDelay, int screenRefreshStep,
-		int defectRate, int missingBoxRate, int brokenPrinterRate,
-		)
-{
-	int updatesCount;
-
-	_defectRate = defectRate;
-	_missingBoxRate = missingBoxRate;
-	_brokenPrinterRate = brokenPrinterRate;
-
 	srand(time(NULL));
 
-	for ( updatesCount = 0 ; ; ++updatesCount )
+	_mutex = semMCreate (SEM_Q_PRIORITY|SEM_DELETE_SAFE|SEM_INVERSION_SAFE);
+}
+
+void cleanDevicesSimulation ()
+{
+	_products* toDelete = NULL;
+
+	while (_nextProducts != NULL)
 	{
-		if (updatesCount%screenRefreshStep == 0)
+		toDelete = _nextProducts;
+		_nextProducts = _nextProducts->next;
+		free(toDelete);
+	}
+	_nextProducts = NULL;
+	_lastProducts = NULL;
+
+	semDelete(_mutex);
+	_mutex = NULL;
+}
+
+void addProducts (int amount, BOOL correctProducts)
+{
+	_products* current = NULL;
+
+	semTake(_mutex);
+
+	if (_nextProducts == NULL)
+	{
+		/* The list is empty, we have to add a new
+		 * element */
+		current = (_products*)malloc(sizeof(_products));
+		_nextProducts = current;
+		_lastProducts = current;
+		current->amount = 0;
+	}
+	else
+	{
+		if (_lastProducts->correctOnes == correctProducts)
 		{
-			refreshScreen();
+			/* We can just add the amount to the last products */
+			current = _lastProducts;
+		}
+		else
+		{
+			/* We have to add a new element to the tail */
+			current = (_products*)malloc(sizeof(_products));
+			_lastProducts = current;
+			current->amount = 0;
+		}
+	}
+
+	current->correctOnes = correctProducts;
+	current->amount += amount;
+
+	semGive(_mutex);
+}
+
+void takeProduct ()
+{
+	semTake(_mutex);
+
+	if (_nextProducts != NULL)
+	{
+		/* Update the counters */
+		if (_nextProducts->correctOnes)
+		{
+			if (_valveState[OUTLET_VALVE] == OPEN)
+				++_boxedCorrectProductCount;
+			else
+				++_droppedCorrectProductCount;
+		}
+		else
+		{
+			if (_valveState[OUTLET_VALVE] == OPEN)
+				++_boxedDefectiveProductCount;
+			else
+				++_droppedDefectiveProductCount;
 		}
 
-		simulationCallBack(updatesCount);
-
-		taskDelay((int)(updateDelay*sysClkRateGet()));
+		/* Update the list */
+		--_nextProducts->amount;
+		if (_nextProducts->amount == 0)
+		{
+			_products *toDelete = _nextProducts;
+			_nextProducts = _nextProducts->next;
+			if (_nextProducts->next == NULL)
+			{
+				_lastProducts = NULL;
+			}
+			free(toDelete);
+		}
 	}
+
+	semGive(_mutex);
 }
+
+void getProductsString (char buffer[], int bufferSize,
+		 char correctProductChar, char defectiveProductChar)
+{
+	_products *current = NULL;
+
+	--bufferSize; /* Handle the '\0' */
+
+	semTake(_mutex);
+
+	current = _nextProducts;
+
+	while (bufferSize > 0 && current != NULL)
+	{
+		int i;
+		for ( i = 0 ; bufferSize > 0 && i < current->amount ; ++i )
+		{
+			*buffer = (current->correctOnes ?
+					correctProductChar
+					: defectiveProductChar);
+			++buffer;
+			--bufferSize;
+		}
+		current = current->next;
+	}
+
+	semGive(_mutex);
+
+	*buffer = 0;
+}
+
+void setBoxMissing (BOOL boxMissing)
+{
+	_boxMissing = boxMissing;
+}
+
+BOOL boxMissing ()
+{
+	return _boxMissing;
+}
+
+void setPrinterState (printerName_t printerName, BOOL state)
+{
+	printerState[printerName] = state;
+}
+
+int boxedProductCount (BOOL correctOnes)
+{
+	if (correctOnes)
+		return _boxedCorrectProductsCount;
+	else
+		return _boxedDefectiveProductsCount;
+}
+
+int droppedProductCount (BOOL correctOnes)
+{
+	if (correctOnes)
+		return _droppedCorrectProductsCount;
+	else
+		return _droppedDefectiveProductsCount;
+}
+
 

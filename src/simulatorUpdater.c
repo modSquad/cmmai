@@ -1,33 +1,32 @@
 /* CIAI : DÃ©veloppement Multi-lots
 * @author H4203
 *
-* This file contains a simulation routine.
+* This file contains the task simulating product inflow.
 */
 
-#include "simulate.h"
+#include "simulationUpdater.h"
 
 /* ------------------------------------------------------------
  * EXTERNAL FUNCTIONS (IT handlers to simulate)
  * ------------------------------------------------------------ */
- void EmergencyStopHandler ( );
- void ProductInflowHandler ( );
-
+void ProductInflowHandler ( );
 
 /* ------------------------------------------------------------
- * SIMULATION ROUTINE
+ * TASK
  * ------------------------------------------------------------ */
-void simulate (int updatesCount)
+void simulatorUpdater (int productGenerationDelay)
 {
-	if (updatesCount%PRODUCT_INFLOW_STEP == 0)
+	BOOL productIsOK;
+
+	for ( ; ; )
 	{
-		++_productCount;
+		taskDelay((int)(productGenerationDelay*sysClkRateGet()));
+
 		if (valveState(INLET_VALVE) == OPEN)
 		{
 			ProductInflowHandler();
+			takeProduct();
 		}
 	}
-
-	/* TODO simuler l'arrêt d'urgence */
-	/*EmergencyStopHandler();*/
 }
 

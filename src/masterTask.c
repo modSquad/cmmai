@@ -21,16 +21,9 @@
 
 #ifdef SIMULATION
 #include "devices_simulation.h"
-#include "simulate.h"
+#include "simulatorControl.h"
+#include "simulatorUpdater.h"
 #define UPDATE_DELAY	0.05	/* In seconds */
-#define SCREEN_REFRESH_STEP	20
-	/* A screen refresh will occur every SCREEN_REFRESH_STEP updates */
-#define DEFECT_RATE			10
-	/* One in DEFECT_RATE products will be defective (randomly) */
-#define MISSING_BOX_RATE	100
-	/* One in MSSING_BOX_RATE boxes will be missing (randomly) */
-#define BROKEN_PRINTER_RATE	10
-	/* One in BROKEN_PRINTER_RATE print try will abort (randomly) */
 #endif
 
 /* Application constants */
@@ -48,11 +41,11 @@
 #endif
 
 /* Queues sizes */
-#define MAX_EVENTS_QUEUE_SIZE 	100
-#define MAX_LOGS_QUEUE_SIZE 	200
+#define MAX_EVENTS_QUEUE_SIZE	100
+#define MAX_LOGS_QUEUE_SIZE		200
 
 /* Stack size */
-#define DEFAULT_STACK_SIZE		10000	
+#define DEFAULT_STACK_SIZE		10000
 
 int boxingServer()
 {
@@ -87,30 +80,34 @@ int boxingServer()
 
 	/* Spawning tasks */
 #ifdef SIMULATION
-	simulatorId = taskSpawn("simulatorTask",
+	initDevicesSimulation();
+	simulatorControlId = taskSpawn("simulatorControlTask",
 		BASE_PRIORITY+SIMULATOR_PRIORITY,
-		0, DEFAULT_STACK_SIZE, simulator,
-		simulate,
-		UPDATE_DELAY, SCREEN_REFRESH_STEP,
-		DEFECT_RATE, MISSING_BOX_RATE, BROKEN_PRINTER_RATE,
-		0, 0, 0, 0
+		0, DEFAULT_STACK_SIZE, simulatorControl,
+		0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+	);
+	simulatorUpdaterId = taskSpawn("simulatorUpdaterTask",
+		BASE_PRIORITY+SIMULATOR_PRIORITY,
+		0, DEFAULT_STACK_SIZE, simulatorUpdater,
+		(int)(UPDATE_DELAY*sysClkRateGet()),
+		0, 0, 0, 0, 0, 0, 0, 0, 0
 	);
 #endif
-	
+
 	networkListenerId = taskSpawn("networkListenerTask",
 		BASE_PRIORITY+NETWORK_LISTENER_PRIORITY,
 		0, DEFAULT_STACK_SIZE, networkListener,
 		socket, (int) eventsQueue, (int) settings,
 		(int) boxHandlingRequest, 0, 0, 0, 0, 0, 0
 	);
-	
+
 	eventManagerId = taskSpawn("eventManagerTask",
 		BASE_PRIORITY+EVENT_MANAGER_PRIORITY,
 		0, DEFAULT_STACK_SIZE, eventManager,
 		socket, (int) eventsQueue, (int) logsEventQueue,
 		0, 0, 0, 0, 0, 0, 0
 	);
-		
+
 	boxManagerId = taskSpawn("boxManagerTask",
 		BASE_PRIORITY+BOX_MANAGER_PRIORITY,
 		0, DEFAULT_STACK_SIZE, boxManager,
@@ -144,7 +141,9 @@ int boxingServer()
 	taskDelete(eventManagerId);
 	taskDelete(networkListenerId);
 #ifdef SIMULATION
-	taskDelete(simulatorId);
+	taskDelete(simulatorUpdaterId);
+	taskDelete(simulatorControlId);
+	cleanDevicesSimulation();
 #endif
 
 	/* destruct resources */
