@@ -1,0 +1,24 @@
+Introduction
+
+    - éventuelles spécifications venant compléter le sujet
+    - LSG simplifé de l'application globale avec le découpage en 3 lots fonctionnels
+    - interface de communication entre modules
+    - IHM du poste distant
+
+Binôme 1
+    - LCG détaillé et complet en mode simulation
+    - justification des choix effectués pour la simulation    
+
+Binôme 2
+    - LCG détaillé et complet en mode simulation
+    - justification des choix effectués pour la simulation  
+
+Binôme 3
+    - LCG détaillé et complet en mode simulation
+    - justification des choix effectués pour la simulation  
+
+Pour l'équipe
+    - Intégration (démarche, plan, tests, resultats)
+    - démonstration de vos réalisations
+    - bilan du projet (auto-critique, améliorations possibles, points forts/faibles, difficultés rencontrées ...) 
+
