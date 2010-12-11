@@ -1,38 +1,15 @@
 /* CIAI : DÃ©veloppement Multi-lots
 * @author H4203
 *
-* This file contains simulated device access procedures.
-* 
+* This file contains simulated device access procedures, and a task
+* managing the simulation.
 */
-
 
 #include <stdio.h>
 #include <taskLib.h>
 #include <sysLib.h>
 #include <time.h>
 #include "devices_simulation.h"
-
-/* ------------------------------------------------------------
- * EXTERNAL FUNCTIONS (IT handlers to simulate)
- * ------------------------------------------------------------ */
- void EmergencyStopHandler ( );
- void ProductInflowHandler ( );
-
-/* ------------------------------------------------------------
- * SIMULATION SETTINGS
- * ------------------------------------------------------------ */
-
-#define CLOCK_RATE		4000
-#define UPDATE_DELAY	0.05	/* In seconds */
-#define SCREEN_REFRESH_STEP	20
-	/* A screen refresh will occur every SCREEN_REFRESH_STEP updates */
-#define PRODUCT_INFLOW_STEP 10
-	/* A product inflow will occur every PRODUCT_INFLOW_STEP updates */
-
-#define DEFECT_RATE			10	/* One in DEFECT_RATE products will be defective (randomly) */
-#define MISSING_BOX_RATE	100	/* One in DEFECT_RATE boxes will be missing */
-#define BROKEN_PRINTER_RATE	10	/* One in DEFECT_RATE print try will abort */
-
 
 /* ------------------------------------------------------------
  * SCREEN OUTPUT
@@ -59,11 +36,11 @@ Last box was missing:        %s\n\
 ============================================================\n\
 Last product was defective:  %s\n\
 Product count: %5d\n\
-... defective:   %5d\n\
 ... correct:     %5d\n\
+... defective:   %5d\n\
 ============================================================\n\
 "
- 
+
 const char* COLOR_LABEL[] =
 {
 	"RED",
@@ -100,6 +77,11 @@ const char* LAST_BOX_MISSING_LABEL[] =
  * STATIC VARIABLES
  * ------------------------------------------------------------ */
 
+/* Simulation config */
+static int _brokenPrinterRate =	1;
+static int _missingBoxRate =	1;
+static int _defectRate =		1;
+
 /* the light color */
 static color_t _lightColor = GREEN;
 
@@ -133,22 +115,18 @@ static BOOL _lastBoxMissing = FALSE;
 void setValveState(valveName_t valveName, valveState_t valveState)
 {
 	_valveState[valveName] = valveState;
-	printf("the valve state is set! \n");
 }
 
 valveState_t valveState (valveName_t valveName)
 /* returns TRUE if the valve is open and FALSE if not */
 {
-	printf( "returns the state of the valve - opened or closed \n");
 	return _valveState[valveName];
-} 
+}
 
 /* Interface for the sensors */
 BOOL presenceDetected(presenceSensorName_t sensorName)
 {
-	printf( "returns whether the sensor detected presence or not  \n");
-
-	if (rand()%DEFECT_RATE == 0)
+	if (_missingBoxRate != 0 && rand()%_missingBoxRate == 0)
 	{
 		_lastBoxMissing = TRUE;
 	}
@@ -156,15 +134,13 @@ BOOL presenceDetected(presenceSensorName_t sensorName)
 	{
 		_lastBoxMissing = FALSE;
 	}
-	
+
 	return !_lastBoxMissing;
 }
 
 BOOL defectiveProduct(defectSensorName_t sensorName)
 {
-	printf( "detects whether the product that passed in front of the sensor is defected or not  \n");
-
-	if (rand()%DEFECT_RATE == 0)
+	if (_defectRate != 0 && rand()%_defectRate == 0)
 	{
 		_lastProductDefect = TRUE;
 		++_correctProductCount;
@@ -174,15 +150,15 @@ BOOL defectiveProduct(defectSensorName_t sensorName)
 		_lastProductDefect = FALSE;
 		++_defectiveProductCount;
 	}
-	
+
 	return _lastProductDefect;
-} 
+}
 
 /* Interface for the printers */
 
-BOOL printerState(printerName_t printerName) 
+BOOL printerState(printerName_t printerName)
 {
-	if (rand()%BROKEN_PRINTER_RATE == 0)
+	if (_brokenPrinterRate != 0 && rand()%_brokenPrinterRate == 0)
 	{
 		_printerState[printerName] = FALSE;
 	}
@@ -190,19 +166,18 @@ BOOL printerState(printerName_t printerName)
 	{
 		_printerState[printerName] = TRUE;
 	}
-} 
+}
 
-void print(printerName_t printerName, boxData_t boxData) 
+void print(printerName_t printerName, boxData_t boxData)
 {
-	printf( "the box is being printed  \n");
-} 
+	/* TODO ? */
+}
 
 /* Interface for the lights */
 void setColor(color_t color)
 {
 	_lightColor = color;
-	printf( "the color is set  \n");
-} 
+}
 
 color_t getColor()
 {
@@ -230,39 +205,30 @@ void refreshScreen ( )
 			);
 }
 
-void simulate (int updatesCount)
-{
-	if (updatesCount%PRODUCT_INFLOW_STEP == 0)
-	{
-		++_productCount;
-		if (_valveState[INLET_VALVE] == OPEN)
-		{
-			ProductInflowHandler();
-		}
-	}
-	
-	/* TODO simuler l'arrêt d'urgence */
-	/*EmergencyStopHandler();*/
-}
-
-int simulator()
+int simulator (
+		void (*simulationCallBack)(int),
+		int updateDelay, int screenRefreshStep,
+		int defectRate, int missingBoxRate, int brokenPrinterRate,
+		)
 {
 	int updatesCount;
-	
+
+	_defectRate = defectRate;
+	_missingBoxRate = missingBoxRate;
+	_brokenPrinterRate = brokenPrinterRate;
+
 	srand(time(NULL));
-	sysClkRateSet(CLOCK_RATE);
-	
-	printf("\n");
+
 	for ( updatesCount = 0 ; ; ++updatesCount )
 	{
-		if (updatesCount%SCREEN_REFRESH_STEP == 0)
+		if (updatesCount%screenRefreshStep == 0)
 		{
 			refreshScreen();
 		}
-		
-		simulate(updatesCount);
-		
-		taskDelay((int)(UPDATE_DELAY*sysClkRateGet()));
+
+		simulationCallBack(updatesCount);
+
+		taskDelay((int)(updateDelay*sysClkRateGet()));
 	}
 }
 
