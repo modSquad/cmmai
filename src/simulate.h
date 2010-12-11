@@ -16,5 +16,4 @@
  */
 void simulate (int updatesCount);
 
-
 #endif // SIMULATE_H

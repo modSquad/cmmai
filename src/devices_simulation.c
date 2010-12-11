@@ -232,3 +232,18 @@ int simulator (
 	}
 }
 
+
+/* ------------------------------------------------------------
+ * ACCESS FUNCTIONS
+ * ------------------------------------------------------------ */
+
+int defectiveProductCount ()
+{
+	return _defectiveProductCount;
+}
+
+int correctProductCount ()
+{
+	return _correctProductCount;
+}
+

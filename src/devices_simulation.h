@@ -47,6 +47,24 @@ void simulator (
 		void (*simulationCallBack)(int),
 		double updateDelay, int screenRefreshStep,
 		int defectRate, int missingBoxRate, int brokenPrinterRate,
-		)
+		);
+
+/* Get the defective product count.
+ *
+ * @return The number of times a product has been declared defective.
+ *         This number can differ from the effective number of
+ *         generated defective products, if multiple call to defectiveProduct()
+ *         have been made for a single product, or if some product wasn't tested.
+ */
+int defectiveProductCount ();
+
+/* Get the defective product count.
+ *
+ * @return The number of times a product has been declared correct.
+ *         This number can differ from the effective number of
+ *         generated correct products, if multiple call to defectiveProduct()
+ *         have been made for a single product, or if some product wasn't tested.
+ */
+int correctProductCount ();
 
 #endif
