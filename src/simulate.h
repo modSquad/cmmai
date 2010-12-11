@@ -16,4 +16,11 @@
  */
 void simulate (int updatesCount);
 
+/* Get the count of generated products.
+ *
+ * @return The count of generated products so far.
+ */
+int generatedProductCount ();
+
 #endif // SIMULATE_H
+

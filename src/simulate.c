@@ -7,6 +7,12 @@
 #include "simulate.h"
 
 /* ------------------------------------------------------------
+ * PRIVATE VARIABLES
+ * ------------------------------------------------------------ */
+static int _productCount = 0;
+
+
+/* ------------------------------------------------------------
  * EXTERNAL FUNCTIONS (IT handlers to simulate)
  * ------------------------------------------------------------ */
  void EmergencyStopHandler ( );
@@ -31,3 +37,11 @@ void simulate (int updatesCount)
 	/*EmergencyStopHandler();*/
 }
 
+
+/* ------------------------------------------------------------
+ * ACCESS FUNCTIONS
+ * ------------------------------------------------------------ */
+int generatedProductCount ()
+{
+	return _productCount;
+}

@@ -35,7 +35,7 @@ status    | %7s | %7s \n\
 Last box was missing:        %s\n\
 ============================================================\n\
 Last product was defective:  %s\n\
-Product count: %5d\n\
+Product count:\
 ... correct:     %5d\n\
 ... defective:   %5d\n\
 ============================================================\n\
@@ -100,7 +100,6 @@ static BOOL _printerState[] =
 };
 
 static BOOL _lastProductDefect = FALSE;
-static int  _productCount =				0;
 static int  _correctProductCount =		0;
 static int  _defectiveProductCount =	0;
 
@@ -201,7 +200,7 @@ void refreshScreen ( )
 			VALVE_STATE_LABEL[_valveState[OUTLET_VALVE]],
 			LAST_BOX_MISSING_LABEL[_lastBoxMissing],
 			LAST_PRODUCT_DEFECT_LABEL[_lastProductDefect],
-			_productCount, _correctProductCount, _defectiveProductCount
+			_correctProductCount, _defectiveProductCount
 			);
 }
 
