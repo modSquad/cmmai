@@ -1,0 +1,170 @@
+\Test{Carton}{Lancement et fin}
+{
+\begin{enumerate}
+	\item Créer les objets nécessaires au fonctionnement de \kw{BoxManager}
+	\item Initialiser la mémoire \kw{settings}
+	\item Lancer la tâche \kw{BoxManager}
+	\item Positionner le booléen \kw{ApplicationEndRequest} des paramètres à \kw{TRUE}.
+	\item Mettre un jeton dans le sémaphore boxHandlingRequest
+\end{enumerate}
+}
+{
+\begin{itemize}
+	\item Le dernier message doit être reçu dans la boîte aux lettres modélisant la file de cartons. Il devrait être présent dans cette boîte après un temps raisonnable après la demande de fin, par ex. 5s sur un système non chargé.
+	\item Le clapet doit être fermé à la réception de ce message.
+	\item Aucun autre message ne doit avoir été reçu dans cette boîte.
+	\item L'évènement \kw{EVT\_END\_FILLING} doit avoir été déclenché.
+\end{itemize}
+}
+
+\Test{Carton}{Cas nominal}
+{
+\begin{enumerate}
+	\item Créer les objets nécessaires au fonctionnement de \kw{BoxManager}
+	\item Initialiser la mémoire \kw{settings}
+	\item Lancer la tâche \kw{BoxManager}
+	\item Configurer l'application (donner des valeurs correctes à la mémoire \kw{settings})
+	\item Mettre un jeton dans le sémaphore boxHandlingRequest
+	\item Simuler l'arrivée d'assez de pièces pour remplir quelques carton (moins de 5 cartons, aucune pièce défectueuse), espacées les unes des autres par 10ms.
+	\item Positionner le booléen \kw{ApplicationEndRequest} des paramètres à \kw{TRUE}.
+	\item Mettre un jeton dans le sémaphore boxHandlingRequest
+\end{enumerate}
+}
+{
+\begin{itemize}
+	\item Des cartons (pleins) doivent avoir été reçus dans la boîte aux lettres modélisant la file de cartons.
+	\item Le nombre cumulé de pièces contenues dans ces cartons doit correspondre au nombre de pièces correctes générées, moins celles restantes dans le dernier carton entamé.
+	\item Le nombre cumulté de pièces defectueuses associées à ces cartons doit correspondre au nombre de pièces défectueueses générées, moins celles générées pour le dernier carton entamé.
+	\item Le dernier message doit être reçu dans la boîte aux lettres modélisant la file de cartons. Il devrait être présent dans cette boîte après un temps raisonnable après la demande de fin, par ex. 5s sur un système non chargé.
+	\item Le clapet doit être fermé à la réception de ce message.
+	\item L'évènement \kw{EVT\_END\_FILLING} doit avoir été déclenché.
+\end{itemize}
+}
+
+\Test{Carton}{Surcharge de la file d'attente}
+{
+\begin{enumerate}
+	\item Créer les objets nécessaires au fonctionnement de \kw{BoxManager}
+	\item Initialiser la mémoire \kw{settings}
+	\item Lancer la tâche \kw{BoxManager}
+	\item Configurer l'application (donner des valeurs correctes à la mémoire \kw{settings})
+	\item Mettre un jeton dans le sémaphore boxHandlingRequest
+	\item Simuler l'arrivée d'assez de pièces pour remplir quelques carton (plus de 5 cartons, aucune pièce défectueuse), espacées les unes des autres par 10ms.
+	\item Si un événement \kw{ERR\_FULL\_QUEUE} est reçu dans un temps raisonnable (par ex. 1s après la dernière pièce sur un système non chargé)
+		\begin{enumerate}
+			\item Retirer un carton de la file
+			\item Mettre un jeton dans le sémaphore boxHandlingRequest
+			\item Poursuivre l'alimentation en pièces pour plusieurs cartons
+			\item Positionner le booléen \kw{ApplicationEndRequest} des paramètres à \kw{TRUE}.
+			\item Mettre un jeton dans le sémaphore boxHandlingRequest
+		\end{enumerate}
+	\item Sinon, abandonner (échec du test)
+\end{enumerate}
+}
+{
+\begin{itemize}
+	\item Des cartons (pleins) doivent avoir été reçus dans la boîte aux lettres modélisant la file de cartons.
+	\item Des cartons (pleins) doivent également avoir été reçus après la reprise suivant l'erreur.
+	\item Le clapet doit être fermé à la réception de l'événement associé à l'erreur.
+	\item Le nombre cumulé de pièces contenues dans ces cartons doit correspondre au nombre de pièces correctes générées, moins celles restantes dans le dernier carton entamé.
+	\item Le nombre cumulté de pièces defectueuses associées à ces cartons doit correspondre au nombre de pièces défectueueses générées, moins celles générées pour le dernier carton entamé.
+	\item Le dernier message doit être reçu dans la boîte aux lettres modélisant la file de cartons. Il devrait être présent dans cette boîte après un temps raisonnable après la demande de fin, par ex. 5s sur un système non chargé.
+	\item Le clapet doit être fermé à la réception de ce message.
+	\item L'évènement \kw{EVT\_END\_FILLING} doit avoir été déclenché.
+\end{itemize}
+}
+
+\Test{Carton}{Famine de pièce}
+{
+\begin{enumerate}
+	\item Créer les objets nécessaires au fonctionnement de \kw{BoxManager}
+	\item Initialiser la mémoire \kw{settings}
+	\item Lancer la tâche \kw{BoxManager}
+	\item Configurer l'application (donner des valeurs correctes à la mémoire \kw{settings})
+	\item Mettre un jeton dans le sémaphore boxHandlingRequest
+	\item Simuler l'arrivée de quelques pièces, mais pas assez pour remplir un carton (aucune pièce défectueuse), espacées les unes des autres par 10ms.
+	\item Si un événement \kw{EVT\_ERR\_PRODUCT\_STARVATION} est reçu dans un temps raisonnable (par ex. 15s après la dernière pièce sur un système non chargé)
+		\begin{enumerate}
+			\item Mettre un jeton dans le sémaphore boxHandlingRequest
+			\item Poursuivre l'alimentation en pièces pour plusieurs cartons
+			\item Positionner le booléen \kw{ApplicationEndRequest} des paramètres à \kw{TRUE}.
+			\item Mettre un jeton dans le sémaphore boxHandlingRequest
+		\end{enumerate}
+	\item Sinon, abandonner (échec du test)
+\end{enumerate}
+}
+{
+\begin{itemize}
+	\item Des cartons (pleins) doivent avoir été reçus dans la boîte aux lettres modélisant la file de cartons.
+	\item Des cartons (pleins) doivent également avoir été reçus après la reprise suivant l'erreur.
+	\item Le clapet doit être fermé à la réception de l'événement associé à l'erreur.
+	\item Le nombre cumulé de pièces contenues dans ces cartons doit correspondre au nombre de pièces correctes générées, moins celles restantes dans le dernier carton entamé.
+	\item Le nombre cumulté de pièces defectueuses associées à ces cartons doit correspondre au nombre de pièces défectueueses générées, moins celles générées pour le dernier carton entamé.
+	\item Le dernier message doit être reçu dans la boîte aux lettres modélisant la file de cartons. Il devrait être présent dans cette boîte après un temps raisonnable après la demande de fin, par ex. 5s sur un système non chargé.
+	\item Le clapet doit être fermé à la réception de ce message.
+	\item L'évènement \kw{EVT\_END\_FILLING} doit avoir été déclenché.
+\end{itemize}
+}
+
+\Test{Carton}{Absence de carton}
+{
+\begin{enumerate}
+	\item Créer les objets nécessaires au fonctionnement de \kw{BoxManager}
+	\item Initialiser la mémoire \kw{settings}
+	\item Lancer la tâche \kw{BoxManager}
+	\item Configurer l'application (donner des valeurs correctes à la mémoire \kw{settings})
+	\item Simuler l'absence d'un carton
+	\item Si un événement \kw{EVT\_ERR\_BOX\_STARVATION} est reçu dans un temps raisonnable (par ex. 1s après l'ajout du jeton)
+		\begin{enumerate}
+			\item Simuler la présence d'un carton
+			\item Mettre un jeton dans le sémaphore boxHandlingRequest
+			\item Poursuivre l'alimentation en pièces pour plusieurs cartons
+			\item Positionner le booléen \kw{ApplicationEndRequest} des paramètres à \kw{TRUE}.
+			\item Mettre un jeton dans le sémaphore boxHandlingRequest
+		\end{enumerate}
+	\item Sinon, abandonner (échec du test)
+\end{enumerate}
+}
+{
+\begin{itemize}
+	\item Des cartons (pleins) doivent avoir été reçus dans la boîte aux lettres modélisant la file de cartons.
+	\item Des cartons (pleins) doivent également avoir été reçus après la reprise suivant l'erreur.
+	\item Le clapet doit être fermé à la réception de l'événement associé à l'erreur.
+	\item Le nombre cumulé de pièces contenues dans ces cartons doit correspondre au nombre de pièces correctes générées, moins celles restantes dans le dernier carton entamé.
+	\item Le nombre cumulté de pièces defectueuses associées à ces cartons doit correspondre au nombre de pièces défectueueses générées, moins celles générées pour le dernier carton entamé.
+	\item Le dernier message doit être reçu dans la boîte aux lettres modélisant la file de cartons. Il devrait être présent dans cette boîte après un temps raisonnable après la demande de fin, par ex. 5s sur un système non chargé.
+	\item Le clapet doit être fermé à la réception de ce message.
+	\item L'évènement \kw{EVT\_END\_FILLING} doit avoir été déclenché.
+\end{itemize}
+}
+
+\Test{Carton}{Arrêt d'urgence}
+{
+\begin{enumerate}
+	\item Créer les objets nécessaires au fonctionnement de \kw{BoxManager}
+	\item Initialiser la mémoire \kw{settings}
+	\item Lancer la tâche \kw{BoxManager}
+	\item Configurer l'application (donner des valeurs correctes à la mémoire \kw{settings})
+	\item Simuler un arrêt d'urgence
+	\item Si un événement \kw{EVT\_EMERGENCY\_STOP} est reçu dans un temps raisonnable (par ex. 100ms après l'arrêt d'urgence)
+		\begin{enumerate}
+			\item Mettre un jeton dans le sémaphore boxHandlingRequest
+			\item Poursuivre l'alimentation en pièces pour plusieurs cartons
+			\item Positionner le booléen \kw{ApplicationEndRequest} des paramètres à \kw{TRUE}.
+			\item Mettre un jeton dans le sémaphore boxHandlingRequest
+		\end{enumerate}
+	\item Sinon, abandonner (échec du test)
+\end{enumerate}
+}
+{
+\begin{itemize}
+	\item Des cartons (pleins) doivent avoir été reçus dans la boîte aux lettres modélisant la file de cartons.
+	\item Des cartons (pleins) doivent également avoir été reçus après la reprise suivant l'arrêt d'urgence.
+	\item Le clapet doit être fermé à la réception de l'événement associé à l'arrêt d'urgence.
+	\item Le nombre cumulé de pièces contenues dans ces cartons doit correspondre au nombre de pièces correctes générées, moins celles restantes dans le dernier carton entamé.
+	\item Le nombre cumulté de pièces defectueuses associées à ces cartons doit correspondre au nombre de pièces défectueueses générées, moins celles générées pour le dernier carton entamé.
+	\item Le dernier message doit être reçu dans la boîte aux lettres modélisant la file de cartons. Il devrait être présent dans cette boîte après un temps raisonnable après la demande de fin, par ex. 5s sur un système non chargé.
+	\item Le clapet doit être fermé à la réception de ce message.
+	\item L'évènement \kw{EVT\_END\_FILLING} doit avoir été déclenché.
+\end{itemize}
+}

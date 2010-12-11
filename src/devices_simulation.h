@@ -10,61 +10,83 @@
 
 #include "devices.h"
 
-/**
- * Simulate a production environment.
- *
- * The simulator will set up the configuration for all environment variables
- * (sensor values, product inflow rate, ...) and then trigger periodically
- * a callback function (<simulateCallBack(int)>) and give a periodical
- * screen output of the current state of the environment.
- * In order to work properly, this task has to have a
- * higher priority than all the application tasks.
- *
- * @param[in] simulationCallBack A callback function that will be called
- *                               periodically. It's given one arguments :
- *                               the number of previous calls.
- *                               Must be non-NULL. (no check)
- * @param[in] updateDelay Delay between two callbacks (in seconds).
- *                        The system clock rate must have been set accordingly.
- *                        Must be higher than 0. (no check)
- * @param[in] screenRefreshStep Number of updates (callbacks) between
- *                              two screen refreshes.
- *                              Must be higher than 0. (no check)
- * @param[in] defectRate At each call to <defectiveProduct>, we'll have
- *                       one in <defectRate> chance to answer TRUE.
- *                       If null, no product will ever be defective.
- *                       Must be higher than 0 or null. (no check)
- * @param[in] missingBoxRate At each call to <presenceDetected>, we'll have
- *                           one in <defectRate> chance to answer FALSE.
- *                           If null, no box will ever be missing.
- *                           Must be higher than 0 or null. (no check)
- * @param[in] brokenPrinterRate At each call to <printerState>, we'll have
- *                              one in <brokenPrinterRate> chance to answer BROKEN.
- *                              If null, no printer will ever be broken.
- *                              Must be higher than 0 or null. (no check)
+/** Initialize the devices simulation.
  */
-void simulator (
-		void (*simulationCallBack)(int),
-		double updateDelay, int screenRefreshStep,
-		int defectRate, int missingBoxRate, int brokenPrinterRate,
-		);
+void initDevicesSimulation ();
 
-/* Get the defective product count.
- *
- * @return The number of times a product has been declared defective.
- *         This number can differ from the effective number of
- *         generated defective products, if multiple call to defectiveProduct()
- *         have been made for a single product, or if some product wasn't tested.
+/** Clean evereything that was done by the devices simulation.
  */
-int defectiveProductCount ();
+void cleanDevicesSimulation ();
 
-/* Get the defective product count.
+/** Add products to the upcoming ones.
+ * The products will be given to the system when all
+ * those already added will have been taken.
  *
- * @return The number of times a product has been declared correct.
- *         This number can differ from the effective number of
- *         generated correct products, if multiple call to defectiveProduct()
- *         have been made for a single product, or if some product wasn't tested.
+ * @param[in] amount The amount of products to add.
+ * @param[in] correctProducts If FALSE, the added products
+ *                            will be defective.
  */
-int correctProductCount ();
+void addProducts (int amount, BOOL correctProducts);
+
+/** Take a product from the upcoming ones.
+ */
+void takeProduct ();
+
+/** Get a string representation of upcomming products.
+ * For example, if 2 correct products are coming, then a
+ * defective one, then a correct one, then a defective one,
+ * the following call:
+ *  getProductsString(buffer, 10, 'O', 'X')
+ * will result in the following string ('\0' included):
+ *  "OOXOX"
+ *
+ * @param[in] buffer The buffer where the string will be stored.
+ * @param[in] bufferSize The buffer size. Only the <bufferSize-1>
+ *                       first product will be written. Must be
+ *                       higher than 0 (not checked).
+ * @param[in] correctProductChar The character that will represent
+ *                               a correct product.
+ * @param[in] defectiveProductChar The character that will represent
+ *                                 a defective product.
+ */
+void getProductsString (char buffer[], int bufferSize,
+		 char correctProductChar, char defectiveProductChar);
+
+/** Set the state of the simulated box.
+ * @param[in] boxMissing If TRUE, the subsequent calls
+ *                       to presenceDetected will return FALSE
+ */
+void setBoxMissing (BOOL boxMissing);
+
+/** Get the state of the simulated box.
+ * @return The last value set by setBoxMissing.
+ */
+BOOL boxMissing ();
+
+/** Set the printers states.
+ * @param[in] printerName Excusively PRINTR1 or PRINTR2 (not checked)
+ * @param[in] state The printer state.
+ */
+void setPrinterState (printerName_t printerName, BOOL state);
+
+/** Get the boxed product count.
+ *
+ * @param[in] correctOnes Select the count that will be returned :
+ *                        correct (correctOnes = TRUE) products count or
+ *                        defective (correctOnes = FALSE) products count
+ *
+ * @return The asked product count.
+ */
+int boxedProductCount (BOOL correctOnes);
+
+/** Get the dropped product count.
+ *
+ * @param[in] correctOnes Select the count that will be returned :
+ *                        correct (correctOnes = TRUE) products count or
+ *                        defective (correctOnes = FALSE) products count
+ *
+ * @return The asked product count.
+ */
+int droppedProductCount (BOOL correctOnes);
 
 #endif
