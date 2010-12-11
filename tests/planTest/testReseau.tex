@@ -1,3 +1,31 @@
-\Test{Réseau}{Test à la con} {Ce test à la con test un truc débile, que personne ne pourra jamais foirer. Il ne sert par conséquent à rien.}
-{Comme c'est un test à la con, on a qu'a dire que s'il ne se passe rien, il
-    passe. Bien à vous, Paul.}
+\Test{Réseau}{Recevoir une configuration depuis le client}
+{Lancer le programme, et envoyer une configuration depuis le client Windows.}
+{La configuration doit être reçue.}
+
+\Test{Réseau}{Recevoir un ordre de lancement}
+{Lancer le programme, envoyer une configuration, puis envoyer un ordre de
+lancement depuis le client Windows.}
+{La configuration doit être reçu, et le système industriel doit se mettre en
+fonctionnement, selon la configuration reçue.}
+
+\Test{Réseau}{Dire à l'application de s'arrêter}
+{Lancer le programme, envoyer une configuration, envoyer un ordre de lancement,
+puis patienter jusqu'à la fin, et enfin, envoyer un ordre d'arrêt, juste
+avant le dernier carton.}
+{Le programme doit se fermer à la fin du dernier carton.}
+
+\Test{Réseau}{Tester la reprise sur erreur}
+{Lancer le programme, envoyer une configuration, envoyer un ordre de lancement,
+et appuyer sur le bouton d'arrêt d'urgence. Envoyer ensuite une commande de
+    reprise depuis le client Windows.}
+{Le système industriel doit se remettre à fonctionner.}
+
+\Test{Réseau}{Envoyer une chaine non valide}
+{Lancer le programme, puis envoyer une chaine non valide par le réseau, à
+    l'aider d'un utilitaire de type \kw{netcat}.}
+{Le système industriel doit ignorer la commande.}
+
+\Test{Réseau}{Envoyer un ordre de configuration avec des valeur non valides}
+{Lancer le programme, envoyer une configuration non valide depuis un utilitaire
+    de type \kw{netcat}.}
+{Le système industriel doit ignorer la commande.}

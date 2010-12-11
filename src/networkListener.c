@@ -42,8 +42,18 @@ static int handleRequest(const char* const buffer, int size, MSG_Q_ID eventsQueu
 	sscanf (buffer,"%s ", header); /* Fetch the request header */
 
 	if(strcmp(header, "CONFIG") == 0) {
+		/* opCode is not used here. Please consider its removal */
 		int opCode, threshold, ref, boxes, partPerBox;
 		sscanf (buffer,"%*s %d %d %d %d %d", &opCode, &threshold, &ref, &boxes, &partPerBox );		
+
+		/* We actually need some testing here
+		 * We assume that ref can have any valude (including negative
+		 * numbers). The threshold, the number of element in each box,
+		 * and the number of boxes cannot be negative. Moreover, the
+		 * number of element in each box cannot be zero. */
+		if(threshold < 0) {return ERROR;}
+		if(partPerBox <= 0) {return ERROR;}
+		if(batchBoxesAsked < 0) {return ERROR;}
 
 		settings->batchID = ref;
 		settings->maxDefectiveProductsPerBox = threshold;
