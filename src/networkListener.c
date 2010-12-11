@@ -87,11 +87,13 @@ int networkListener(int socketOutput, MSG_Q_ID eventsQueue,	settings_t* settings
 
 	if (readBytes == ERROR){ 
 		close(socketOutput);
+		free(clientRequest);
 		return NETWORK_ERROR;
 	}
 
 	/* Disconnection */
 	close(socketOutput);
+	free(clientRequest);
 	return NETWORK_SUCCESS;
 }
 
