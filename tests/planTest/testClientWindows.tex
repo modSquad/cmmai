@@ -1,0 +1,70 @@
+\Test{Client Windows}
+    {Connection à un serveur}
+    {Entrer l'adresse et le port du serveur, cliquer sur le bouton "connecter".}
+    {Le client doit se connecter.
+    Le bouton connecter laisse place à un bouton déconnecter.
+    Les différents widgets se dégrisent pour permettre d'agir sur le server.\\
+    Remarque : Si une mauvaise addresse, ou une adresse suivant un mauvait format est rentré, le comportement est incertain.}
+
+Les tests suivant impliquent que le client soit connecté à un serveur.
+
+\Test{Client Windows}
+    {Déconnection d'un server}
+    {Cliquer sur le bouton "deconnecter".}
+    {Le client doit se déconnecter.
+    Le bouton déconnecter laisse place à un bouton connecter.
+    Les différents widgets se grisent empechant l'utilisateur d'agir hors connection.}
+
+\Test{Client Windows}
+{Reception d'un message de log}
+    {A l'aide d'un serveur, ou d'un socket serveur, envoyer un message de log.}
+    {Le message doit s'inscrire dans la liste des méssages de log.}
+
+\Test{Client Windows}
+{Reception d'un message d'acceptation de pièces}
+    {A l'aide d'un serveur, ou d'un socket serveur, envoyer un message d'acceptation de pièces.}
+    {L'indication du nombre de pièces acceptés indiqué doit s'incrémenter de la valeur envoyes dans le méssage.}
+
+\Test{Client Windows}
+{Reception d'un message de rejet de pièces}
+    {A l'aide d'un serveur, ou d'un socket serveur, envoyer un message de rejet de pièces.}
+    {L'indication du nombre de pièces rejetés doit s'incrémenter de la valeur envoyé dans le méssage, ainsi que la barre de progression indiquant l'atteinte du seuil de pièces rejeté.\\
+    Remarque : Le client n'est pas responsable d'avertir l'utilisateur du dépassement de ce seuil. Il s'agit d'un message d'erreur envoyé par le serveur.}
+
+\Test{Client Windows} % TODO : est ce le bon comportement ?
+{Reception d'un avertissement (warning)}
+    {A l'aide d'un serveur, ou d'un socket serveur, envoyer un avertissement.}
+    {Une boite de dialogue modale doit apparaitre permettant à l'utilisateur de faire le choix entre continuer la production}
+
+\Test{Client Windows}
+{Reception d'un message d'erreur}
+	{A l'aide d'un serveur, ou d'un socket serveur, envoyer un message d'erreur.}
+	{Une boite de dialogue modale doit apparaitre permettant à l'utilisateur de de faire le choix de continuer ou de stopper la production.}
+
+\Test{Client Windows}
+{Envoi de la commande Launch}
+	{CLiquer sur le bouton Launch}
+	{Un serveur ou une socket serveur doit recevoir un message Launch.
+    Le bouton Launch doit se griser, tandis que le bouton Stop doit se dégriser.}
+
+\Test{Client Windows}
+{Envoi de la commande Resume}
+	{Cliquer sur le bouton Resume}
+	{Un serveur ou une socket serveur doit recevoir un message Resume.
+    Le bouton Resume doit se griser tandis que le bouton Stop doit se dégriser.}
+
+\Test{Client Windows}
+{Envoi de la commande Resume}
+	{Cliquer sur le bouton Stop}
+	{Un serveur ou une socket serveur doit recevoir un message Stop.
+    Le bouton Stop doit se griser tandis que les bouton Launch et Resume doivent se dégriser.}
+
+\Test{Client Windows}
+{Envoi d'une configuration}
+	{Remplir les champs de configuration}
+	{Un serveur ou une socket serveur doit recevoir un message de configuration comportant les bonnes valeurs des champs de configuration.
+    Le seuil d'acceptation de pièces rejetés doit s'actualiser avec la valeur envoyé dans le message de configuration.    
+    \\Remarque : si aucune valeur n'est rentré, le comportement est incertain.}
+
+    
+

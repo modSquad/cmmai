@@ -33,6 +33,11 @@ int logsManager(MSG_Q_ID logsEventsQueue, SEM_ID endSync)
 		{
 			eventToString(event_buffer.event, &event_buffer.boxData, logEntry);
 			write(log_fd, logEntry, strlen(logEntry));
+			/* We must ensure that the data have been written to the
+			 * disk : in case of critical error, this is the only
+			 * way to know what happened in the system. */
+			// TODO : Find VxWorks equivalent
+			sync(log_fd);
 		}	
 	}
 }
