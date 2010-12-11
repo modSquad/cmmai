@@ -1,0 +1,3 @@
+
+
+void logsManager_tests();

@@ -1,0 +1,45 @@
+% kw, pour keyword : permet de mettre en chasse fixe, pour par exemple
+% écrire le nom d'une fonction ou d'un nom de variable, etc.
+\newcommand{\kw}[1]{\texttt{#1}}
+
+% Fonte qui sera utilisé pour le titre d'un test
+\newcommand{\fontptitle}[1]{%
+    {\huge{\texttt{\textbf{#1}}}}
+}
+
+% Largeur du titre (le texte)
+\newlength{\largeurtitre}
+% Largeur de la ligne (
+\newlength{\largeurligne}
+% Permet de faire une ligne à droite d'un texte, pour effectuer une
+% séparation visuelle plus nette.
+\newcommand{\lignedroite}[1]{%
+    \setlength{\largeurtitre}{0pt}
+    \setlength{\largeurligne}{0pt}
+    \settowidth{\largeurtitre}{\fontptitle{#1}}
+    \addtolength{\largeurligne}{\textwidth}
+    \addtolength{\largeurligne}{-\largeurtitre}
+    % On ajoute quand même une petite séparation.
+    \addtolength{\largeurligne}{-4pt}
+    \bigskip
+    #1 \raisebox{0.3em}{\vrule depth 0pt height 0.2ex width \largeurligne}
+}
+
+% Commande pour écrire un test
+% $1 : Nom du module
+% $2 : Nom du test
+% $3 : Description du test
+% $4 : Résultats attendus
+\newcommand{\Test}[4]
+{%
+	\addtocounter{testno}{1}
+	\begin{minipage}{\linewidth}
+	\lignedroite{\textbf{\large{Module #1 -- \kw{Test \thetestno}~-- #2}}}\\
+	\textbf{\large{Description}}\\
+	#3 \\
+	\textbf{\large{Résultat attendu}}\\
+	#4 
+	\end{minipage}
+	\vspace{1cm}
+}
+
