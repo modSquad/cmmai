@@ -1,0 +1,103 @@
+\chapter{Notice d'intégration}
+
+Ce chapitre présente les différents éléments constituant l'application qui sont
+partagés entre les lots de travail, les conventions à respecter lors de la
+réalisation du projet afin de faciliter l'intégration et l'organisation de
+l'étape d'intégration.
+
+\section{Découpage en lots}
+
+\begin{itemize}
+	\item \textbf{Lot n°1} : Communication (serveur sockets, journal
+d'événements) (Maxime, paul),
+	\item \textbf{Lot n°2} : Gestion du conditionnement et de l'impression
+(Yoann, Monica),
+	\item \textbf{Lot n°3} : Tâche mère, IHM (client windows), gestion de
+l'arrêt d'urgence (Martin, Etienne).
+\end{itemize}
+
+\section{Ressources partagées}
+
+Nous avons pris la décision de donner la responsabilité des ressources
+partagées entre différentes tâches à la tâche mère $masterTask$.
+
+Les ressources partagées sont les suivantes :
+
+\begin{itemize}
+	\item $endSync$ sémaphore de synchronisation notifiant la fin de
+l'application,
+	\item $boxHandlingRequest$ sémaphore de synchronisation indiquant à la
+tache $boxManager$ qu'elle doit activer le traitement du conditionnement,
+	\item $boxesQueue$ file d'attente des cartons pleins prêt à être étiquetés
+par la tache $printManager$,
+	\item $eventsQueue$ file d'attente des événements survenus lors de
+l'exploitation,
+	\item $logsEventQueue$ file d'attente des messages à écrire dans le journal
+des événements,
+	\item $socket$ socket réseau permettant la communication entre le client
+(opérateur manipulant l'application windows) et le serveur sur l'application en
+temps réel.
+\end{itemize}
+
+\section{Types et données partagées}
+
+Les données, structures et type de données partagées sont regroupés dans un
+fichier d'en-tête générique $boxingServer.h$, en voici les principaux :
+
+\begin{itemize}
+	\item les structures de données manipulées par les files d'attente
+($event_msg_t$ et $boxesQueueMsg_t$),
+	\item les structures des mémoires partagées ($boxData_t$ et $settings_t$),
+	\item les événements survenant lors de l'exploitation sont représentés par
+une valeur constante, dont la valeur numérique peut être définie manuellement
+lorsque l'événement est transmis sur le réseau à destination du client Windows.
+\end{itemize}
+
+\section{Guide de style}
+
+Nous avons mis en place des recommandations de développement pour nous assurer
+que le code produit par les trois équipe soit cohérent et que les conflits
+seront limités. Ainsi, un guide de style a été rédigé pour mettre l'accent sur
+la nomenclature des symbôles utilisés dans le code, l'encapsulation des
+opérations internes des tâches, et le respect de conventions facilitant les
+échanges entre les taches.
+
+\section{Interfaces}
+
+Nous avons également mis en place des interface permettant d'abstraire la
+manipulation des périphériques (capteurs, imprimantes, clapets) dans l'optique
+de simplifier les tests et la simulation de l'application. On supposera que
+pour passer l'application en production, il nous suffira d'utiliser une
+implémentation de ces interfaces contrôlant les périphériques, en utilisant,
+par exemple, des règles de compilation différentes dans le $Makefile$ de
+l'application.
+
+\section{Processus d'intégration}
+
+Le processus d'intégration a lui-même été découpé en plusieurs \textit{lots} de
+manière à répartir le travail. La mise en place en amont du guide de style et
+des conventions à respecter simplifie grandement l'opération, qui devient
+essentiellement une tâche de câblage (réaliser les liaisons entre les
+différentes tâches) et de correction du code.
+
+Ainsi, les opérations suivantes ont pu être traitées simultanément :
+
+\begin{itemize}
+	\item Rédaction du plan de test d'intégration et élaboration des tests,
+	\item câblage des modules,
+	\item construction du simulateur,
+	\item préparation du déploiement de l'application.
+\end{itemize}
+
+\section{Déploiement}
+
+Le déploiement de l'application à nécessité la configuration de l'environnement
+de travail \textit{Windriver Workbench} pour utiliser correctement le
+simulateur \textit{VxWorks}.
+
+[configuration VxWorks].
+
+Le client windows a été réalisé à l'aide du Framework Qt pour C++. Nous avons
+donc choisi une stratégie de déploiement adaptée à des postes n'ayant pas les pré-requis (bibliothèques Qt) disponibles.
+
+[configuration du/des PC qui n'ont pas Qt pour faire tourner le programme Qt, ou compilation statique, blabla]
