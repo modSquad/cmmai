@@ -1,0 +1,36 @@
+\Test{Tache Mère}{Lancement}
+{
+\begin{enumerate}
+	\item Créer les objets partagés (sémaphores, boîtes aux lettres, socket)
+	\item Lancer les taches \textit{filles}
+\end{enumerate}
+}
+{
+\begin{itemize}
+	\item L'affichage de la liste des IPC du système montre que les deux
+sémaphores et trois boîtes aux lettres ont été créés
+	\item Il est possible d'ouvrir une connexion au socket créé
+	\item L'affichage de la liste des taches du système montre que les cinq
+taches filles ont été créées et sont en attente.
+\end{itemize}
+}
+
+\Test{Tache Mère}{Terminaison}
+{
+\begin{enumerate}
+	\item Attendre le sémaphore de synchronisation de fin ($endSync$)
+	\item Détruire les tâches
+	\item Détruire les objets partagés
+	\item Quitter l'application
+\end{enumerate}
+}
+{
+\begin{itemize}
+	\item La tache attend un jeton dans le sémaphore $endSync$
+	\item Les cinq taches \textit{filles} ont été supprimées
+	\item La connexion au socket a été interrompue par le serveur
+	\item L'affichage de la liste des IPC montre que les deux sémaphores et
+trois boîtes aux lettres n'existent pas
+	\item La tache $masterTask$ a retourné un code de fin
+\end{itemize}
+}

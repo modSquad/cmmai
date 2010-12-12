@@ -147,7 +147,7 @@ int boxingServer()
 #endif
 
 	/* destruct resources */
-	/* TODO : close(socket); */
+	close(socket);
 	msgQDelete(logsEventQueue);
 	msgQDelete(eventsQueue);
 	msgQDelete(boxesQueue);
