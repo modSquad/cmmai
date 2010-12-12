@@ -67,7 +67,7 @@ void setValveState(valveName_t valveName, valveState_t valveState)
 }
 
 valveState_t valveState (valveName_t valveName)
-/* returns TRUE if the valve is open and FALSE if not */
+/* returns TRUE if the valve is open and FALSE otherwise */
 {
 	return _valveState[valveName];
 }
@@ -84,14 +84,16 @@ BOOL defectiveProduct(defectSensorName_t sensorName)
 	 * handler to simulate it, and not in a real IT handler.
 	 * So blocking calls are allowed.
 	 */
-	BOOL result = FALSE;
+	BOOL result = TRUE;
 
 	semTake(_mutex);
 	if (_nextProducts != NULL)
 	{
-		result = _nextProducts->correctOnes;
+		result = !_nextProducts->correctOnes;
 	}
 	semGive(_mutex);
+
+	return result;
 }
 
 /* Interface for the printers */
@@ -181,6 +183,11 @@ void addProducts (int amount, BOOL correctProducts)
 	current->amount += amount;
 
 	semGive(_mutex);
+}
+
+BOOL upcomingProducts ()
+{
+	return _nextProducts != NULL;
 }
 
 void takeProduct ()
