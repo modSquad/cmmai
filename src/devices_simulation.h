@@ -8,6 +8,7 @@
 #ifndef DEVICES_SIMULATION_H
 #define DEVICES_SIMULATION_H
 
+#include "boxingServer.h"
 #include "devices.h"
 
 /** Initialize the devices simulation.
@@ -27,6 +28,12 @@ void cleanDevicesSimulation ();
  *                            will be defective.
  */
 void addProducts (int amount, BOOL correctProducts);
+
+/** Test if there is upcoming products.
+ * @return TRUE if there is at least one upcoming product,
+ *         FALSE otherwise.
+ */
+BOOL upcomingProducts ();
 
 /** Take a product from the upcoming ones.
  */

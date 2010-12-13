@@ -22,7 +22,7 @@ void simulatorUpdater (int productGenerationDelay)
 	{
 		taskDelay((int)(productGenerationDelay*sysClkRateGet()));
 
-		if (valveState(INLET_VALVE) == OPEN)
+		if (upcomingProducts() && valveState(INLET_VALVE) == OPEN)
 		{
 			ProductInflowHandler();
 			takeProduct();
