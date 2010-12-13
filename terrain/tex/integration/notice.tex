@@ -8,11 +8,11 @@ l'étape d'intégration.
 \section{Découpage en lots}
 
 \begin{itemize}
-	\item \textbf{Lot n°1} : Communication (serveur sockets, journal
+	\item \textbf{Lot n$\degree{}$1} : Communication (serveur sockets, journal
 d'événements) (Maxime, paul),
-	\item \textbf{Lot n°2} : Gestion du conditionnement et de l'impression
+	\item \textbf{Lot n$\degree{}$2} : Gestion du conditionnement et de l'impression
 (Yoann, Monica),
-	\item \textbf{Lot n°3} : Tâche mère, IHM (client windows), gestion de
+	\item \textbf{Lot n$\degree{}$3} : Tâche mère, IHM (client windows), gestion de
 l'arrêt d'urgence (Martin, Etienne).
 \end{itemize}
 
@@ -95,9 +95,59 @@ Le déploiement de l'application à nécessité la configuration de l'environnem
 de travail \textit{Windriver Workbench} pour utiliser correctement le
 simulateur \textit{VxWorks}.
 
-[configuration VxWorks].
+Il faut installer une carte réseau virtuelle \kw{WRTAP}, pour avoir la possibilité de communiquer entre l'hôte et
+la cible (à savoir la machine virtuelle VxWorks). 
+On doit donner à la carte réseau virtuelle l'adresse \kw{192.168.200.254}.
+Il faut ensuite installer le service \kw{vxsimnetd}. Pour cela, il s'agit
+d'utiliser l'exécutable \kw{vxsimnetds\_inst}, qui se trouve dans le répertoire
+d'installation de Windriver Workbench.
 
-Le client windows a été réalisé à l'aide du Framework Qt pour C++. Nous avons
+Ensuite, pour configurer le simulateur, placer l'IDE Workbench dans la vue
+Remote Systems (en haut à droite de la fenêtre). Sélectionner le simulateur
+\kw{vxsirn0}. Dans le menu contextuel qui est proposé lors d'un clic droit sur
+cette machine virtuelle, choisir l'option \emph{propriété}. Dans le premier
+onglet, choisir \kw{Advanced Boot Parameters}. Sélectionner \kw{simnet} dans la
+liste déroulante \kw{Boot device}. Fixer l'adresse IP de la machine virtuelle à
+\kw{192.168.200.1}. Valider et lancer le simulateur, qui dispose alors de l'IP
+locale ainsi définie.
+
+Il s'agit alors de tester la configuration mise en place. La commande \kw{ping
+192.168.200.1} doit répondre, sur une intallation de Windows standard,
+quatre lignes, avec des temps très faible, puisque le roundtrip mesuré est effectué
+sur la boucle locale.
+
+Le client Windows a été réalisé à l'aide du Framework Qt pour C++. Nous avons
 donc choisi une stratégie de déploiement adaptée à des postes n'ayant pas les pré-requis (bibliothèques Qt) disponibles.
 
-[configuration du/des PC qui n'ont pas Qt pour faire tourner le programme Qt, ou compilation statique, blabla]
+\subsection{Installation de la bibliothèque Qt}
+
+Qt est une bibliothèque multi-plateforme, disponible pour Windows, MacOS,
+GNU/Linux, proposant, entre autre, un ensemble de composants graphiques et réseaux. Notre
+application utilise cette bibliothèque, afin de simplifier et de rendre portable
+les parties réseau et interface graphique. Le guide ci-dessous permet d'installer, à partir d'une
+installation vierge de Windows (toute version), la bibliothèque Qt, son
+environnement de développement, et l'application permettant de contrôler le
+système à distance.
+
+\begin{itemize}
+    \item Télécharger Qt pour Windows à l'adresse :\\ \kw{http://qt.nokia.com/downloads/sdk-windows-cpp}.
+    \item Double-cliquer sur le fichier téléchargé, et suivre les étapes
+    d'installation (pour une machine x86, sur un Windows XP, Vista ou Seven,
+	    cette procédure consiste à cliquer sur suivant à chaque écran, et à
+	    accepter la licence LGPL proposée).
+    \item Si l'on désire compiler le programme à partir des sources, ouvrir le
+    fichier d'extension \kw{.pro} dans QtCreator, l'IDE de Qt, et cliquer sur
+    la flèche verte en bas à droite de l'écran. Cela compile et lance le
+    programme. Ceci est la méthode recommandée pour utiliser ou tester le
+    programme de contrôle, puisqu'il installe de fait correctement
+    l'environnement Qt.
+    \item Si l'on désire exécuter le programme sans l'avoir compilé
+    préalablement, il faut s'assurer qu'il a été compilé pour la bonne
+    architecture, et pour le bon type de système. Il s'agit, comme un programme
+    Windows classique, de double cliquer sur l'exécutable généré par la
+    compilation. Il est impératif que les bibliothèques Qt soient installées
+    dans le système, et soient dans le chemin de recherche des bibliothèques
+    partagées. De nombreuses entreprises d'informatique embarquée
+    utilisent Qt, ce point ne devrait donc pas trop poser de problème.
+\end{itemize}
+
