@@ -37,7 +37,7 @@ int logsManager(MSG_Q_ID logsEventsQueue, SEM_ID endSync)
 			 * disk : in case of critical error, this is the only
 			 * way to know what happened in the system. */
 			/* TODO : Find VxWorks equivalent for fflush */
-			
+			/* fflush(log_fd); */
 		}	
 	}
 }
