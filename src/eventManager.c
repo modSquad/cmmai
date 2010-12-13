@@ -82,11 +82,10 @@ int eventManager (int socketInput, MSG_Q_ID eventsQueue, MSG_Q_ID logsEventQueue
 			continue;
 		}
 
-		if(msgQSend(logsEventQueue, (char*)&eventMsg, sizeof(event_msg_t),
-				WAIT_FOREVER, MSG_PRI_NORMAL ) == ERROR )
-		{
-			// send to log error
-		}
+		/* Send the message to the task that handle the file on disk. */
+		msgQSend(logsEventQueue, (char*)&eventMsg, sizeof(event_msg_t),
+				WAIT_FOREVER, MSG_PRI_NORMAL );
+		
 
 		
 		if(eventMsg.event == EVT_BOX_PROCESSED)

@@ -71,7 +71,10 @@ void MainWindow::addAccepted(int number)
 void MainWindow::addRejected(int number)
 {
     ui->RejectedNumber->setText( QString::number(ui->RejectedNumber->text().toInt() + number));
-    ui->RejectedBar->setValue(ui->RejectedBar->value()+number);
+    if(number + ui->RejectedBar->value() > ui->RejectedBar->maximum())
+        ui->RejectedBar->setValue(ui->RejectedBar->maximum());
+    else
+        ui->RejectedBar->setValue(ui->RejectedBar->value()+number);
 }
 
 
@@ -222,6 +225,8 @@ void MainWindow::launch()
 void MainWindow::resume()
 {
     connection->Resume();
+    // When we resume the connection, reset the rejected count.
+    ui->RejectedBar->setValue(0);
     ui->launchButton->setDisabled(true);
     ui->resumeButton->setDisabled(true);
     ui->stopButton->setEnabled(true);
