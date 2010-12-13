@@ -22,6 +22,12 @@
 #include "eventToString.h"
 #include "networkInterface.h"
 
+#define COMMAND_FORMAT	"%s\n"
+#define CONFIG_FORMAT	"%*s %d %d %d %d %d"
+/*
+ * "%*s\n%d\n%d\n%d\n%d\n%d\n"
+ */
+
 
 /*  
  * @brief handleClient request such as : CONFIG - Write new configuration to shared memory block.
@@ -35,16 +41,19 @@
  * @param [in] boxHandlingRequest : Mutex identifier for stop or restart all tasks
  * @return : NETWORK_SUCCESS if data were sent without error. NETWORK_ERROR otherwise.
  */
-static int handleRequest(const char* const buffer, int size, MSG_Q_ID eventsQueue,	settings_t* settings, SEM_ID boxHandlingRequest) {
+static int handleRequest(const char* const buffer, int size, MSG_Q_ID eventsQueue,
+		settings_t* settings, SEM_ID boxHandlingRequest) {
 	char* header = (char*)calloc(size, sizeof(char)); 
 	int i  = 0;
 
-	sscanf (buffer,"%s ", header); /* Fetch the request header */
+	sscanf (buffer,COMMAND_FORMAT, header); /* Fetch the request header */
 
 	if(strcmp(header, "CONFIG") == 0) {
 		/* opCode is not used here. Please consider its removal */
-		int opCode, threshold, ref, boxes, partPerBox;
-		sscanf (buffer,"%*s %d %d %d %d %d", &opCode, &threshold, &ref, &boxes, &partPerBox );		
+		int opCode = -1, threshold = -1, ref = -1,
+			boxes = -1, partPerBox = -1;
+		sscanf (buffer,CONFIG_FORMAT, &opCode, &threshold, &ref,
+				&boxes, &partPerBox );
 
 		/* We actually need some testing here
 		 * We assume that ref can have any valude (including negative
@@ -53,12 +62,20 @@ static int handleRequest(const char* const buffer, int size, MSG_Q_ID eventsQueu
 		 * number of element in each box cannot be zero. */
 		if(threshold < 0) {return ERROR;}
 		if(partPerBox <= 0) {return ERROR;}
-		if(batchBoxesAsked < 0) {return ERROR;}
-
+		if(boxes < 0) {return ERROR;}
+		
 		settings->batchID = ref;
 		settings->maxDefectiveProductsPerBox = threshold;
 		settings->productsPerBox = partPerBox;
 		settings->batchBoxesAsked = boxes;
+		settings->applicationEndRequest = FALSE;
+		settings->batchBoxesCount = 0;
+		
+		printf("NET- Per box: %d, treshold: %d, asked: %d, count: %d",
+				settings->productsPerBox,
+				settings->maxDefectiveProductsPerBox,
+				settings->batchBoxesAsked,
+				settings->batchBoxesCount);
 	}
 	else if(strcmp(header, "LAUNCH") == 0) {
 		event_msg_t msg; 
@@ -90,6 +107,7 @@ int networkListener(int socketOutput, MSG_Q_ID eventsQueue,	settings_t* settings
 	char* clientRequest = (char*)calloc(MIN_EVENT_STRING_BUFFER_SIZE, sizeof(char));
 	int readBytes = -1;
 
+	/*
 	while ((readBytes = read (socketOutput, clientRequest, MIN_EVENT_STRING_BUFFER_SIZE)) > 0)
 	{
 		handleRequest(clientRequest, readBytes, eventsQueue, settings,  boxHandlingRequest);		
@@ -99,10 +117,23 @@ int networkListener(int socketOutput, MSG_Q_ID eventsQueue,	settings_t* settings
 		close(socketOutput);
 		free(clientRequest);
 		return NETWORK_ERROR;
+	}*/
+	
+#define CONFIG_STRING "CONFIG\n42\n5\n544875\n100\n5\n\n"
+#define LAUNCH_STRING "LAUNCH\n\n"
+	if (handleRequest(CONFIG_STRING, strlen(CONFIG_STRING),
+			eventsQueue, settings,  boxHandlingRequest) == ERROR)
+	{
+		printf("ERROR config");
+	}
+	else if (handleRequest(LAUNCH_STRING, strlen(LAUNCH_STRING),
+	eventsQueue, settings,  boxHandlingRequest) == ERROR)
+	{
+		printf("ERROR launch");
 	}
 
 	/* Disconnection */
-	close(socketOutput);
+	/*close(socketOutput);*/
 	free(clientRequest);
 	return NETWORK_SUCCESS;
 }

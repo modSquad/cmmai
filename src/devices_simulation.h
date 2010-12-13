@@ -72,9 +72,15 @@ BOOL boxMissing ();
 
 /** Set the printers states.
  * @param[in] printerName Excusively PRINTR1 or PRINTR2 (not checked)
- * @param[in] state The printer state.
+ * @param[in] state The <printerName> printer state.
  */
 void setPrinterState (printerName_t printerName, BOOL state);
+
+/** Accessor to the print count.
+ * @param[in] printerName Excusively PRINTR1 or PRINTR2 (not checked)
+ * @return The number of times a print has occured on the printer <printerName>.
+ */
+int printCount (printerName_t printerName);
 
 /** Get the boxed product count.
  *

@@ -24,6 +24,6 @@
  * The commands this task will understand are those
  * defined upper in this file.
  */
-void simulatorInput ( );
+int simulatorControl ( );
 
 #endif // SIMULATORCONTROL_H

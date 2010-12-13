@@ -7,7 +7,7 @@
 #include "boxManager.h"
 #include "devices.h"
 
-#define PRODUCT_STARVATION_DELAY 5
+#define PRODUCT_STARVATION_DELAY 10
 	/* Time, in seconds, after which an error is triggered if no
 	 * product was dropped to the machine
 	 */
@@ -19,7 +19,7 @@ static MSG_Q_ID		_eventsQueue = NULL;
 static settings_t	*_settings = NULL;
 static SEM_ID		_boxHandlingRequest = NULL;
 
-static void ProductStarvationHandler();
+static int ProductStarvationHandler(int);
 
 /*--------------------------------------------------*/
 /* Private functions */
@@ -46,6 +46,9 @@ static STATUS sendEvent(boxingEvent_t event, const boxData_t* boxData,
 			timeout, MSG_PRI_NORMAL);
 }
 
+/** Send a box to the print queue
+ * @return TRUE if the box was sent, FALSE otherwise.
+ */
 static BOOL sendBox ( )
 {
 	boxData_t boxData;
@@ -80,9 +83,14 @@ static void startBoxFilling ( )
 	if (presenceDetected(BOX_PRESENCE_SENSOR))
 	{
 		_boxState.filling = TRUE;
-		wdStart(_productStarvationHandlerID,
+		
+		if (wdStart(_productStarvationHandlerID,
 				PRODUCT_STARVATION_DELAY*sysClkRateGet(),
-				(FUNCPTR)ProductStarvationHandler, 0);
+				ProductStarvationHandler, 0/*DUMMY*/) == ERROR)
+		{
+			perror("Product starvation error: ");
+		}
+		
 		setValveState(INLET_VALVE,OPEN);
 	}
 	else
@@ -101,31 +109,17 @@ static void stopBoxFilling ( )
 	/* TODO ajouter & dÃ©tailler l'Ã©criture dans BoxState dans la conception */
 }
 
-static void endTask ( )
-{
-	boxData_t boxData;
-	boxesQueueMsg_t boxMsg;
-	getCurrentBoxData(&boxMsg.boxData);
-
-	boxMsg.lastMessage = FALSE;
-	getCurrentBoxData(&boxMsg.boxData);
-	
-	sendEvent(EVT_END_FILLING,&boxData,WAIT_FOREVER);
-	msgQSend(_boxesQueue, (char*)&boxMsg, sizeof(boxMsg),
-			WAIT_FOREVER, MSG_PRI_NORMAL);
-
-	taskSuspend(taskIdSelf());
-}
-
 /*--------------------------------------------------*/
 /* IT and alarm handlers */
 
 /* Alarm handler for product starvation
  * 
  */
-static void ProductStarvationHandler ( )
+static int ProductStarvationHandler ( int DUMMY )
 {
 	boxData_t boxData;
+	
+	DUMMY=0; /* Unused, we fool the compiler */
 	
 	/* A product starvation occured ; we stop the box filling */
 	stopBoxFilling();
@@ -140,13 +134,19 @@ static void ProductStarvationHandler ( )
  */
 /*static*/ void ProductInflowHandler ( )
 {
-	if(defectiveProduct(PRODUCT_DEFECT_SENSOR))
+	BOOL defect = defectiveProduct(PRODUCT_DEFECT_SENSOR);
+
+	wdStart(_productStarvationHandlerID, PRODUCT_STARVATION_DELAY*sysClkRateGet(),
+			ProductStarvationHandler, 0/*DUMMY*/);
+	
+	if(!defect)
 	{
-		/* The box is full */
-		setValveState(OUTLET_VALVE, CLOSED); /* TODO : modifier le schéma de conception en conséquence */
+		setValveState(OUTLET_VALVE, CLOSED);
 		_boxState.boxedProductsCount++;
+		
 		if(_boxState.boxedProductsCount == _settings->productsPerBox)
 		{
+			/* The box is full */
 			stopBoxFilling();
 			if(semGive(_boxHandlingRequest) == ERROR)
 			{
@@ -163,7 +163,8 @@ static void ProductStarvationHandler ( )
 		 * maximum, if user asked to continue after an error occured.
 		 * That's why we test the modulo, and not equality.
 		 */
-		if(_boxState.defectiveProductsCount%_settings->maxDefectiveProductsPerBox == 0)
+		if((_boxState.defectiveProductsCount%_settings->maxDefectiveProductsPerBox)
+				== 0)
 		{
 			boxData_t boxData;
 			
@@ -173,6 +174,7 @@ static void ProductStarvationHandler ( )
 			sendEvent(EVT_ERR_DEFECTIVE_TRESHOLD_REACHED, &boxData, NO_WAIT);
 		}
 	}
+	
 }
 
 /* IT Handler for emergency stop.
@@ -198,6 +200,8 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 		settings_t* settings, SEM_ID boxHandlingRequest)
 {
 	/* INIT */
+	boxData_t boxData; /* Used only at the end */
+	boxesQueueMsg_t boxMsg; /* Used only at the end */
 	_boxesQueue = boxesQueue;
 	_eventsQueue = eventsQueue;
 	_settings = settings;
@@ -208,6 +212,7 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 	_boxState.defectiveProductsCount = 0;
 	_boxState.filling = FALSE;
 
+	_productStarvationHandlerID = wdCreate();
 	setValveState(INLET_VALVE, CLOSED);
 
 	/* JOB */
@@ -227,7 +232,7 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 					_settings->productsPerBox)
 			{
 				/* We have a full box. Let's try to send it to the printers */
-				boxError = sendBox();
+				boxError = !sendBox();
 			}
 
 			if (!boxError)
@@ -248,7 +253,18 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 	}
 
 	/* END */
-	endTask();
+	getCurrentBoxData(&boxMsg.boxData);
+
+	boxMsg.lastMessage = FALSE;
+	getCurrentBoxData(&boxMsg.boxData);
+	
+	sendEvent(EVT_END_FILLING,&boxData,WAIT_FOREVER);
+	msgQSend(_boxesQueue, (char*)&boxMsg, sizeof(boxMsg),
+			WAIT_FOREVER, MSG_PRI_NORMAL);
+	
+	wdDelete(_productStarvationHandlerID);
+
+	taskSuspend(taskIdSelf());
 
 	return 0;
 }

@@ -20,7 +20,7 @@
  *
  * @param[in] ticksStep Number of system clock ticks between two products.
  */
-void simulatorUpdater (int ticksStep);
+int simulatorUpdater (int ticksStep);
 
 #endif // SIMULATORUPDATER_H
 
