@@ -58,24 +58,51 @@ erreur \/ warning
 \end{frame}
 
 \begin{frame}
-
-\end{frame}
-
-\begin{frame}
-    \frametitle{LCG : Réseau, en entrée}
-     
-\end{frame}
-
-% Pas exactement de choix pour notre partie : on communique juste nos choix en
-% ce qui concerne le protocole.
-\begin{frame}
 \frametitle{Protocole}
     \begin{block}{Choix}
 	\begin{itemize}
 	    \item Protocole \texttt{plain text}.
 	    \item Séparateur : retour chariot.
+	    \item 9 commandes différentes dans les deux sens.
 	\end{itemize}
     \end{block}
+\end{frame}
+
+\begin{frame}
+\frametitle{Protocole en entrée}
+\begin{enumerate}
+		\item \texttt{RESUME} : reprise sur erreur.
+		\item \texttt{STOP} : arrêt du système après les cartons courants.
+		\item \texttt{CONFIG} : 5 valeurs chiffrées pour configurer le système.
+		\item \texttt{LAUNCH} : lancer le système.
+\end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{LCG : Réseau, en entrée}
+    \includegraphics[width=\textwidth]{../SchemasLCG/NetworkListener-run.pdf}
+\end{frame}
+
+\begin{frame}
+\frametitle{Protocole en sortie}
+    \begin{enumerate}
+		\item \texttt{REJECTED} : nombre de pièces ayant un défaut.
+		\item \texttt{ACCEPTED} : un carton a été accepté par le système. Un argument pour indiquer le nombre de pièces.
+		\item \texttt{LOG} : l'argument est un message à afficher.
+		\item \texttt{ERROR} : erreur critique nécessitant une intervention. Un argument pour le code d'erreur.
+		\item \texttt{WARNING} : erreur non critique (panne d'imprimante).
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}
+    \frametitle{LCG : EventManager : réseau en sortie}
+    \includegraphics[width=\textwidth]{../SchemasLCG/src/EventsManager.pdf}
+\end{frame}
+
+
+\begin{frame}
+    \frametitle{LCG : Journalisation sur disque}
+    \includegraphics[width=\textwidth]{../SchemasLCG/LogsManager.pdf}
 \end{frame}
 
 \begin{frame}
