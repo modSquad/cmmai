@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1008</width>
-    <height>749</height>
+    <height>751</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,7 +63,7 @@
      <x>0</x>
      <y>0</y>
      <width>1008</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -115,7 +115,7 @@
               </property>
               <property name="font">
                <font>
-                <pointsize>30</pointsize>
+                <pointsize>20</pointsize>
                </font>
               </property>
               <property name="text">
@@ -154,7 +154,7 @@
              <widget class="QLabel" name="RejectedNumber">
               <property name="font">
                <font>
-                <pointsize>30</pointsize>
+                <pointsize>20</pointsize>
                </font>
               </property>
               <property name="text">
@@ -197,6 +197,31 @@
            </widget>
           </item>
          </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="ratio">
+          <property name="font">
+           <font>
+            <pointsize>35</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>0</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="ratioLabel">
+          <property name="text">
+           <string>Ratio</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
