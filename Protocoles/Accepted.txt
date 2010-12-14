@@ -1,5 +1,5 @@
 [SERVEUR] -> [CLIENT]
-Signifie qu'une pièce est rentré dans un des cartons du lot
+Signifie que [N] pièces sont rentrées dans le dernier carton traité.
 
-L1: ACCEPTED\n
+L1: ACCEPTED N\n
 L2: \n

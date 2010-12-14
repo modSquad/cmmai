@@ -1,5 +1,5 @@
 [SERVEUR] -> [CLIENT]
-Signifie qu'une pièce a été rejecté
+Signifie que [N] pièces ont été rejetée du dernier carton traité. 
 
-L1: REJECTED\n
+L1: REJECTED N\n
 L2: \n
