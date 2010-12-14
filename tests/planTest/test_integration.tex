@@ -4,6 +4,28 @@
 {Un ordre de lancement est envoyé au système sans qu'aucune configuration n'ai précédemment été envoyé}
 {L'ordre doit être ignoré et le système rester dans un état d'attente.}
 
+\Test{Général}{Interface opérateur}
+{L'application Windows est lancée}
+{L'interface de l'application doit présenter :
+\begin{itemize}
+	\item L'heure
+	\item Le numéro de carton en traitement
+	\item Le taux de pièce défectueuse
+\end{itemize}
+}
+
+\Test{Général}{Erreur}
+{Une erreur est lancée}
+{Le clapet se ferme immédiatement et un dialogue est entamé avec l'opérateur}
+
+\Test{Général}{Famine de pièces}
+{Le système est en marche mais plus aucune pièce n'est disponible}
+{Une erreur est lancée et une entrée dans le journal est ajoutée.}
+
+\Test{Général}{Connexion}
+{L'application Windows vient de démarrer}
+{La connexion avec le serveur VxWorks est établie. En cas d'erreur, un message est affiché sur le client Windows est l'opérateur est en charge de trouver le problème.}
+
 \section{Rebut}
 \Test{Rebut}{Visualiser le taux de pièces acceptées}
 {Lancer le programme, et envoyer une configuration depuis le client Windows, envoyer un ordre de lancement}
@@ -84,3 +106,5 @@ Enfin un dialogue est entrepris avec l'opérateur. De plus, si cela est possible
 \Test{Paramétrage}{Cas nominal}
 {Un ordre de paramétrage valide à été envoyé. Un ordre de lancement est lancé}
 {Le système démarre avec les informations fournies lors de la dernière configuration.}
+
+
