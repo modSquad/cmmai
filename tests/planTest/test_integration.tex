@@ -60,5 +60,27 @@ et attendre que le seuil soit dépassé.}
 
 \section{Arrêt d'urgence}
 \Test{Arrêt d'urgence}{Cas nominal}
-{}
-{}
+{Un signal d'arrêt d'urgence est reçu par le système.}
+{Le clapet se ferme immédiatement, le système s'arrête , puis une erreur est générée et journalisée. Les informations concernant les cartons et la configuration du lot sont conservée.
+Enfin un dialogue est entrepris avec l'opérateur. De plus, si cela est possible, les cartons dans le file d'impression sont traités.}
+
+\Test{Arrêt d'urgence}{Dialogue}
+{Le dialogue avec l'opérateur a abouti à une reprise.}
+{Le système reprend le traitement (sélection des pièces, impression, etc.) normalement comme si aucune erreur n'était survenue.}
+
+\Test{Arrêt d'urgence}{Dialogue}
+{Le dialogue avec l'opérateur a abouti à un arrêt.}
+{Le système termine l'impression des boîtes dans la fil d'attente (sans en accepter de nouvelles) et s'arrête.}
+
+\section{Paramétrage}
+\Test{Paramétrage}{Cas nominal}
+{L'opérateur lance un ordre de paramétrage.}
+{L'ordre de paramétrage est pris en compte et une entrée est ajoutée au journal.}
+
+\Test{Paramétrage}{Cas nominal}
+{L'opérateur lance un ordre de paramétrage en précisant que ce lot est le dernier.}
+{L'ordre de paramétrage est pris en compte et une entrée est ajoutée au journal. Une fois le lot traité, le système s'arrête et une entrée est ajoutée dans le journal.}
+
+\Test{Paramétrage}{Cas nominal}
+{Un ordre de paramétrage valide à été envoyé. Un ordre de lancement est lancé}
+{Le système démarre avec les informations fournies lors de la dernière configuration.}
