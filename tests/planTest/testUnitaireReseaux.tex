@@ -1,0 +1,95 @@
+\Test{Réseau~/~réception}{Réception du message configuration, nominal}
+{Comportement lorsqu'un message de configuration est reçu.} 
+{Le système reçoit un message qui correspond au protocole :\\
+\kw{CONFIG\\ a\\ b\\ c\\ d\\ e\\}
+Les valeurs dans le segment de mémoire partagée \kw{settings} sont mises à jour.
+Un message doit être envoyé dans la boit aux lettre des évènements.}
+
+\Test{Réseau~/~réception}{Réception du message configuration, erreur}
+{Comportement lorsqu'un message de configuration erroné est reçu. Il peu s'agit
+    d'un nombre de paramètre trop peu important, ou de paramètres avec des
+	valeurs non valides.}
+{Le message est ignoré. Un message doit être ajouté à la boite aux lettres de
+    évènements, précisant l'erreur.}
+
+\Test{Réseau~/~réception}{Réception du message de lancement, nominal}
+{Comportement lorsqu'un message de lancement de l'application est reçu, après
+    avoir reçu une configuration valide précédemment.}
+{Le sémaphore \kw{boxHandlingRequest}, contrôlant la synchronisation de la
+    chaine de production doit être libéré. Un message doit être ajouté à la
+	boite aux lettre des évènements.}
+
+\Test{Réseau~/~réception}{Réception du message de lancement, erreur}
+{Comportement lorsqu'un message de lancement de l'application est reçu, sans
+    avoir reçu au préalable une configuration valide.}
+{Le message est ignoré. Un message doit être ajouté à la boite aux lettres des
+    évènements, précisant l'erreur.}
+
+\Test{Réseau~/~réception}{Réception du message d'arrêt de l'application, nominal}
+{Comportement lorsque le message d'arrêt de l'application est reçu, alors que
+    l'application est en fonctionnement.}
+{Une valeur doit être ajouté dans le segment de mémoire partagé \kw{settings},
+    indiquant la fin de l'application.}
+
+\Test{Réseau / réception}{Réception du message d'arrêt de l'application, erreur}
+{Comportement lorsque le message d'arrêt de l'application est reçu, alors que
+    l'application est en arrêt (par exemple avant le lancement, ou après une
+	    erreur et avant la reprise).}
+{Le message est ignoré. Un message doit être ajouté à la boite aux lettres des
+    évènements, précisant l'erreur.}
+
+\Test{Réseau~/~réception}{Réception du message de reprise, nominal}
+{Comportement lorsque le message d'arrêt de l'application est reçu, alors que
+    l'application est en arrêt (après une erreur).}
+{Un jeton est mis dans le sémaphore de synchronisation de la chaine de
+    production (\kw{boxHandlingRequest}). Un message est envoyé dans la boite
+	aux lettres des évènements.}
+
+\Test{Réseau / réception}{Réception du message de reprise, erreur}
+{Comportement lorsque le message d'arrêt de l'application est reçu, alors que
+    l'application est en fonctionnement normal, ou avant qu'une configuration
+	valide ait été reçue.}
+{Le message est ignoré. Un message doit être ajouté à la boite aux lettres des
+    évènements, précisant l'erreur.}
+
+\Test{Réseau~/~réception}{Réception d'un message non défini dans le protocole}
+{Comportement lorsqu'un message non spécifié dans le protocole est reçu.}
+{Le message est ignoré. Un message doit être ajouté à la boite aux lettres des
+    évènements, précisant l'erreur.}
+
+\Test{Réseau~/~émission}{Envoi un message d'acceptation de pièce}
+{Comportement lorsqu'un message est reçu comme quoi un carton a été accepté par le système.}
+{Un message est envoyé, précisant le nombre de pièces acceptées, et le nombre de
+    pièces mises au rebut pour le remplissage de ce carton.}
+
+\Test{Réseau~/~émission}{Envoi d'un message d'alerte pour le nombre de pièces
+    défectueuses}
+{Comportement lorsqu'un évènement est reçu comme quoi un trop grand nombre de
+    pièce défectueuses a été traité par le système}
+{Un message est envoyé, précisant que le système est stoppé en raison d'un trop
+    grand nombre de pièces défectueuses.}
+
+\Test{Réseau~/~émission}{Envoi d'un message d'alerte quand la file d'attente est
+pleine.}
+{Comportement lorsqu'un évènements est reçu comme quoi la file d'attente
+    d'impression est pleine.}
+{Un message est envoyé, précisant que la file d'attente d'impression est vide.}
+
+\Test{Réseau~/~émission}{Envoi d'un message d'alerte lors d'une famine de
+    pièces.}
+{Comportement lorsqu'un évènement est reçu comme quoi il y a une famine de
+    pièce.}
+{Un message est envoyé, précisant qu'une famine de pièce est survenu.}
+
+\Test{Réseau~/~émission}{Envoi d'un message d'alerte lors d'une famine de
+    carton.}
+{Comportement lorsqu'un évènement est reçu comme quoi il y a une famine de
+    carton.}
+{Un message est envoyé, précisant qu'une famine de carton est survenu.}
+
+
+\Test{Réseau~/~émission}{Envoie d'un message lors d'une panne imprimante}
+{Comportement lorsqu'un évènement est reçu comme quoi une imprimante est en
+    panne.}
+{Un message est envoyé, précisant qu'une imprimante est en panne.}
+

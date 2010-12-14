@@ -239,6 +239,8 @@ void MainWindow::launch()
 void MainWindow::resume()
 {
     connection->Resume();
+    // When we resume the connection, reset the rejected count.
+    ui->RejectedBar->setValue(0);
     ui->launchButton->setDisabled(true);
     ui->resumeButton->setDisabled(true);
     ui->stopButton->setEnabled(true);

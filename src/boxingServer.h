@@ -17,6 +17,13 @@ typedef unsigned long batchID_t;
 typedef unsigned long boxID_t;
 typedef unsigned int productsCount_t;
 typedef unsigned int boxCount_t;
+typedef enum
+{
+	NO_PRINTER,
+	PRINTR1,
+	PRINTR2
+} printerName_t;
+
 
 /**
  * Data allowing box tracing
@@ -29,7 +36,16 @@ typedef struct
 		/* Count of correct products currently boxed */
 	productsCount_t defectiveProducts;
 		/* Count of defective products received when filling this box */
+	printerName_t printer;
 } boxData_t;
+const boxData_t BOX_DATA_DEFAULT =
+{
+		-1,
+		-1,
+		0,
+		0,
+		NO_PRINTER
+};
 
 /**
  * Application settings data structure
@@ -48,6 +64,7 @@ typedef struct
 		/* Number of products to put in each box. */
 	productsCount_t maxDefectiveProductsPerBox;
 		/* Number of admitted defective products for each box. */
+	
 } settings_t;
 
 /**
@@ -72,7 +89,7 @@ typedef enum
 	/* Sent by BoxManager when a box is filled and sent to the printer queue */
 	EVT_BOX_PROCESSED, 
 	/* Sent by PrintManager when a box has been printed */
-	EVT_BOX_PRINTED, 
+	EVT_BOX_PRINTED,
 	/* Sent by PrintManager when a printer doesn't work */
 	EVT_ANOMALY_PRINTER1 = 201, 
 	EVT_ANOMALY_PRINTER2 = 202,

@@ -28,11 +28,6 @@ typedef enum {
 } defectSensorName_t;
 
 typedef enum {
-	PRINTR1,
-	PRINTR2
-} printerName_t;
-
-typedef enum {
 	RED,
 	GREEN,
 	ORANGE
@@ -52,7 +47,7 @@ BOOL defectiveProduct(defectSensorName_t sensorName); /* detects whether the pro
 
 /* Interface for the printers */
 BOOL printerState(printerName_t printerName); /* returns whether a printer is ready to print or not */
-void print(printerName_t printerName, boxData_t boxData); /* sends the print command to the printer, the printer is unavailable while printing */
+void print(printerName_t printerName, const boxData_t *boxData); /* sends the print command to the printer, the printer is unavailable while printing */
 
 /* Interface for the lights */
 void setColor(color_t color); /* Sets the color of the light device*/

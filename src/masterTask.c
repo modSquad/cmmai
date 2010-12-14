@@ -87,7 +87,7 @@ int boxingServer()
 	eventsQueue = msgQCreate(MAX_EVENTS_QUEUE_SIZE, sizeof(event_msg_t), MSG_Q_FIFO);
 	logsEventQueue = msgQCreate(MAX_LOGS_QUEUE_SIZE, sizeof(event_msg_t), MSG_Q_FIFO);
 
-	/*socket = getClientSocket(SERVER_PORT);*/
+	socket = getClientSocket(SERVER_PORT);
 
 	/* Spawning tasks */
 #ifdef SIMULATION
@@ -111,14 +111,14 @@ int boxingServer()
 		socket, (int) eventsQueue, (int) settings,
 		(int) boxHandlingRequest, 0, 0, 0, 0, 0, 0
 	);
-/*
+
 	eventManagerId = taskSpawn("eventManagerTask",
 		BASE_PRIORITY+EVENT_MANAGER_PRIORITY,
 		0, DEFAULT_STACK_SIZE, eventManager,
 		socket, (int) eventsQueue, (int) logsEventQueue,
 		0, 0, 0, 0, 0, 0, 0
 	);
-*/
+
 	boxManagerId = taskSpawn("boxManagerTask",
 		BASE_PRIORITY+BOX_MANAGER_PRIORITY,
 		0, DEFAULT_STACK_SIZE, boxManager,
@@ -133,12 +133,12 @@ int boxingServer()
 		0, 0, 0, 0, 0, 0, 0, 0
 	);
 
-/*	logsManagerId = taskSpawn("logsManagerTask",
+	logsManagerId = taskSpawn("logsManagerTask",
 		BASE_PRIORITY+LOGS_MANAGER_PRIORITY,
 		0, DEFAULT_STACK_SIZE, logsManager,
 		(int) logsEventQueue, (int) endSync,
 		0, 0, 0, 0, 0, 0, 0, 0
-	);*/
+	);
 
 	/* Waiting for synchronization semaphore */
 	if(semTake(endSync, WAIT_FOREVER) == ERROR) {
@@ -146,10 +146,10 @@ int boxingServer()
 	}
 
 	/* delete tasks */
-/*	taskDelete(logsManagerId);*/
+	taskDelete(logsManagerId);
 	taskDelete(printManagerId);
 	taskDelete(boxManagerId);
-/*	taskDelete(eventManagerId);*/
+	taskDelete(eventManagerId);
 	taskDelete(networkListenerId);
 #ifdef SIMULATION
 	taskDelete(simulatorUpdaterId);

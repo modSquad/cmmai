@@ -31,6 +31,7 @@ static void getCurrentBoxData (boxData_t* buffer)
 	buffer->boxID = _boxState.boxID;
 	buffer->boxedProducts = _boxState.boxedProductsCount;
 	buffer->defectiveProducts = _boxState.defectiveProductsCount;
+	buffer->printer = NO_PRINTER;
 }
 
 /* Send an event to the events queue */

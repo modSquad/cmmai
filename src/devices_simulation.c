@@ -45,12 +45,14 @@ static valveState_t _valveState[] =
 /* the printers states */
 static BOOL _printerState[] =
 {
+		TRUE, /* NO_PRINTER */
 		TRUE, /* PRINTR1 */
 		TRUE  /* PRINTR2 */
 };
 /* the print counters */
 static int _printCount[] =
 {
+		0, /* NO_PRINTER */
 		0, /* PRINTR1 */
 		0  /* PRINTR2 */
 };
@@ -110,7 +112,7 @@ BOOL printerState(printerName_t printerName)
 	return _printerState[printerName];
 }
 
-void print(printerName_t printerName, boxData_t boxData)
+void print(printerName_t printerName, const boxData_t* boxData)
 {
 	++_printCount[printerName];
 }

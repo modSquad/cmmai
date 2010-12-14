@@ -58,7 +58,7 @@ void Socket::SendConfig(int operatorCode, int threshold, int bundleReference, in
     QString config( "CONFIG\n" + QString::number(operatorCode) + "\n"
                                 + QString::number(threshold) + "\n"
                                 + QString::number(bundleReference) + "\n"
-                                + QString::number(boxCount) + "\n["
+                                + QString::number(boxCount) + "\n"
                                 + QString::number(piecesPerBox) + "\n\n"
                                 );
 
