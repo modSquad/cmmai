@@ -42,12 +42,6 @@ en erreur.}
 {Pour chaque pièce sensée être acceptée par le système, un message doit être
     envoyé par le système. Le message doit respecter le protocole.}
 
-\Test{Réseau~/~émission}{Envoyer un message comme quoi une pièce a été rejeté
-    du système}
-{Lancer le programme, envoyer une configuration valide, et lancer le système}
-{Pour chaque pièce sensée être rejetée par le système, un message doit être
-envoyé par le système. Le message doit respecter le protocole.}
-
 \Test{Réseau~/~émission}{Envoyer un message si trop de pièces sont
     défectueuses}
 {Lancer le système, et attendre qu'il y ait trop de pièce défectueuse.}
@@ -55,7 +49,7 @@ envoyé par le système. Le message doit respecter le protocole.}
 message doit respecter le protocole.}
 
 \Test{Réseau~/~émission}{Envoyer un message si la file d'attente pour
-    l'impression est vide}
+    l'impression est pleine}
 {Lancer le système, et attendre qu'il y ait trop de cartons dans la file
     d'attente.}
 {Quand trop de cartons sont dans le file d'attente, le système doit envoyer un
