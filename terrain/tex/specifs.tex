@@ -73,6 +73,11 @@ reprise d'activité ou terminaison de l'application.
 
 \section{Traitement des anomalies}
 
+\begin{enumerate}
+	\item Allumer le voyant orange de l'atelier
+	\item Génération d'un message destiné au superviseur
+	\item Écriture du message dans les journaux d'exploitation
+\end{enumerate}
 
 \section{Transactions sur le réseau}
 Le protocole retenu repose sur des messages de type texte, afin de s'abstraire
@@ -80,4 +85,24 @@ des problèmatiques d'architecture materielle entre les différents systèmes : 
 serveur sous \textit{VxWorks} (architecture \textit{16 bits}) et le client sous
 Windows (architecture \textit{intel 32 ou 64 bits}).
 
-[Description du protocole réseau]
+Liste des types de messages du protocole :\\
+
+\begin{itemize}
+	\item Client vers serveur
+	\begin{description}
+		\item[Configuration] décrit la configuration du traitement d'un lot,
+		\item[Launch] indique le lancement du traitement d'un lot, 
+		\item[Stop] demande la fin de l'application à la fin du traitement du
+		lot courrant,
+		\item[Resume] demande la reprise de l'application (après une erreur).
+	\end{description}
+
+	\item Serveur vers client
+	\begin{description}
+		\item[Log] envoie un message du journal d'exploitation,
+		\item[Warnings] envoie un code d'alerte décrivant une anomalie,
+		\item[Error] envoie un code décrivant une erreur,
+		\item[Accepted] envoie le nombre de pièces acceptées dans le lot,
+		\item[Rejected] envoie le nombre de pièces rejetées dans le lot.
+	\end{description}
+\end{itemize}
