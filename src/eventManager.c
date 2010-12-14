@@ -159,6 +159,7 @@ int eventManager (int socketInput, MSG_Q_ID eventsQueue, MSG_Q_ID logsEventQueue
 	{
 	    case EVT_CLOSE_APPLICATION :
 		endOfTask = TRUE;
+		/* We don't need to propagate the message, it is done above */
 		break;
 
 	    case EVT_BOX_PROCESSED :
