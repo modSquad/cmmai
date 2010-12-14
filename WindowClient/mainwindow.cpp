@@ -66,7 +66,7 @@ void MainWindow::addAccepted(int number)
     qreal acc = ui->AcceptedNumber->text().toInt();
     qreal rej = ui->RejectedNumber->text().toInt();
 
-    ui->ratio->setText(QString::number(rej/(acc+rej), 'f', 2));
+    ui->ratio->setText(QString::number(acc/(acc+rej), 'f', 2));
 }
 
 
@@ -81,7 +81,7 @@ void MainWindow::addRejected(int number)
     qreal acc = ui->AcceptedNumber->text().toInt();
     qreal rej = ui->RejectedNumber->text().toInt();
 
-    ui->ratio->setText(QString::number(rej/(acc+rej), 'f', 2));
+    ui->ratio->setText(QString::number(acc/(acc+rej), 'f', 2));
 }
 
 
