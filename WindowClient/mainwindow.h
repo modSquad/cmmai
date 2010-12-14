@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
 
 #include "socket.h"
 
@@ -80,9 +81,15 @@ public slots:
       */
     void stop();
 
+    /** displayTime()
+      * Display local system time.
+      */
+    void displayTime();
+
 private:
     Ui::MainWindow *ui;
     Socket *connection;
+    QTimer timer;
 };
 
 #endif // MAINWINDOW_H

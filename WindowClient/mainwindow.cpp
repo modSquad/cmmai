@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include <QErrorMessage>
 #include <QPushButton>
+#include <QTimer>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -53,6 +54,12 @@ MainWindow::MainWindow(Socket *connection, QWidget *parent) :
     connect(ui->launchButton, SIGNAL(clicked()), this, SLOT(launch()));
     connect(ui->resumeButton, SIGNAL(clicked()), this, SLOT(resume()));
     connect(ui->stopButton, SIGNAL(clicked()), this, SLOT(stop()));
+
+    /* Refresh time display
+     */
+    connect(&timer, SIGNAL(timeout()), this, SLOT(displayTime()));
+
+    timer.start(50);
 }
 
 
@@ -246,6 +253,11 @@ void MainWindow::stop()
     ui->launchButton->setEnabled(true);
     ui->resumeButton->setEnabled(true);
     ui->stopButton->setDisabled(true);
+}
+
+void MainWindow::displayTime()
+{
+    ui->time->setText(QDateTime(QDateTime::currentDateTime()).toString(QString("hh:mm:ss")));
 }
 
 MainWindow::~MainWindow()
