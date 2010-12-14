@@ -1,0 +1,112 @@
+\chapter{Complément de spécifications}
+
+Ce chapitre décrit les éléments de spécifications qui ne sont pas indiqués dans
+le cahier des charges. Ce complément à pour objectif de préciser le
+comportement de l'application et a donc une influence directe sur la
+réalisation du projet.
+
+Dans l'atelier, les lampes des trois couleurs (rouge, orange et verte) sont
+reliées à un contrôleur tricolore auquel on demande d'allumer l'une des lampes
+(une seule lampe n'est allumée à la fois).
+
+Le serveur sera hébergé sur le poste \textit{VxWorks}.
+
+\section{Impression des étiquettes}
+
+\begin{itemize}
+	\item Les imprimantes sont sollicitées en tour à tour, ceci permet
+d'équilibrer la charge sur les imprimantes et de répartir l'usure.
+	\item L'état de fonctionnement de l'imprimante est testé lors de
+l'impression d'une étiquette. Si l'impression s'est révélée impossible, alors
+la seconde imprimante sera sollicitée.
+\end{itemize}
+
+\section{Journaux d'exploitatation}
+
+Les éléments enregistrés dans les journaux d'exploitation sont les suivants :
+
+\begin{itemize}
+	\item 
+\end{itemize}
+
+L'enregistrement d'un message dans les journaux d'exploitation s'effectue
+suffisament rapidement pour considérer la date d'enregistrement du message
+comme la date d'un événement (imprecision inférieuse à une seconde, tandis que
+l'horloge est précise à la seconde).
+
+\section{Client windows}
+
+Le superviseur, qui accède à l'application à partir du logiciel client sous
+windows doit indiquer les paramètres de configuration suivants :
+
+Au lancement de l'application :\\
+\begin{itemize}
+	\item Le seuil de pièces deffectueuses acceptées
+\end{itemize}
+
+Pour chaque nouveau lot à traiter :\\
+\begin{itemize}
+	\item Le code opérateur (permet d'identifier le superviseur),
+	\item la référence du lot (permet d'identifier le lot traité),
+	\item le nombre de cartons du lot,
+	\item le nombre de pièces par carton.
+\end{itemize}
+
+\section{Liste des erreurs et anomalies émises par le serveur}
+
+\begin{itermize}
+	\item Le seuil des pièces deffectueuses est atteint,
+	\item La file de cartons est pleine,
+	\item Il n'y a plus de cartons disponible,
+	\item Il n'y a plus de pièce disponible,
+	\item Une imprimante est en panne (\textit{anomalie}).
+\end{itemize}
+
+\section{Traitement des erreurs}
+
+Le processus de gestion des erreurs est le suivant :
+
+\begin{enumerate}
+	\item Fermeture du clapet
+	\item Allumer le voyant rouge de l'atelier
+	\item Génération d'un message destiné au superviseur
+	\item Écriture du message dans les journaux d'exploitation
+	\item Passage en mode interactif (mode dialogue) côté client : demande de
+reprise d'activité ou terminaison de l'application. 
+\end{enumerate}
+
+\section{Traitement des anomalies}
+
+\begin{enumerate}
+	\item Allumer le voyant orange de l'atelier
+	\item Génération d'un message destiné au superviseur
+	\item Écriture du message dans les journaux d'exploitation
+\end{enumerate}
+
+\section{Transactions sur le réseau}
+Le protocole retenu repose sur des messages de type texte, afin de s'abstraire
+des problèmatiques d'architecture materielle entre les différents systèmes : le
+serveur sous \textit{VxWorks} (architecture \textit{16 bits}) et le client sous
+Windows (architecture \textit{intel 32 ou 64 bits}).
+
+Liste des types de messages du protocole :\\
+
+\begin{itemize}
+	\item Client vers serveur
+	\begin{description}
+		\item[Configuration] décrit la configuration du traitement d'un lot,
+		\item[Launch] indique le lancement du traitement d'un lot, 
+		\item[Stop] demande la fin de l'application à la fin du traitement du
+		lot courrant,
+		\item[Resume] demande la reprise de l'application (après une erreur).
+	\end{description}
+
+	\item Serveur vers client
+	\begin{description}
+		\item[Log] envoie un message du journal d'exploitation,
+		\item[Warnings] envoie un code d'alerte décrivant une anomalie,
+		\item[Error] envoie un code décrivant une erreur,
+		\item[Accepted] envoie le nombre de pièces acceptées dans le lot,
+		\item[Rejected] envoie le nombre de pièces rejetées dans le lot.
+	\end{description}
+\end{itemize}
