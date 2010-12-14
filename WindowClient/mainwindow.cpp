@@ -61,12 +61,12 @@ MainWindow::MainWindow(Socket *connection, QWidget *parent) :
   */
 void MainWindow::addAccepted(int number)
 {
-    ui->AcceptedNumber->setText( QString::number(ui->AcceptedNumber->text().toInt() + number));
+    ui->AcceptedNumber->setText(QString::number(number));
 
     qreal acc = ui->AcceptedNumber->text().toInt();
     qreal rej = ui->RejectedNumber->text().toInt();
 
-    ui->ratio->setText(QString::number(acc/(acc+rej), 'f', 2));
+    ui->ratio->setText(QString::number(acc/(acc+rej)*100, 'f', 0));
 }
 
 
@@ -75,13 +75,13 @@ void MainWindow::addAccepted(int number)
   */
 void MainWindow::addRejected(int number)
 {
-    ui->RejectedNumber->setText( QString::number(ui->RejectedNumber->text().toInt() + number));
+    ui->RejectedNumber->setText(QString::number(number));
     ui->RejectedBar->setValue(ui->RejectedBar->value()+number);
 
     qreal acc = ui->AcceptedNumber->text().toInt();
     qreal rej = ui->RejectedNumber->text().toInt();
 
-    ui->ratio->setText(QString::number(acc/(acc+rej), 'f', 2));
+    ui->ratio->setText(QString::number(acc/(acc+rej)*100, 'f', 0));
 }
 
 
@@ -166,7 +166,7 @@ void MainWindow::errorNotify(int errCode)
 {
 
     QMessageBox msgBox;
-    msgBox.setText(QString("Error ") + QString::number(errCode) + QString("."));
+    msgBox.setText(QString("Error"));
 
     switch(errCode)
     {
@@ -206,10 +206,10 @@ void MainWindow::warningNotify(int errCode)
     switch(errCode)
     {
     case 201 : // EVT_ANOMALY_PRINTER1
-        msgBox.setText(QString("Warning ") + QString::number(errCode) + QString("\nThe printer 1 presents anomaly."));
+        msgBox.setText(QString("Warning\nThe printer 1 presents anomaly."));
         break;
     case 202 : // EVT_ANOMALY_PRINTER2
-        msgBox.setText(QString("Warning ") + QString::number(errCode) + QString("\nThe printer 2 presents anomaly."));
+        msgBox.setText(QString("Warning\nThe printer 2 presents anomaly."));
         break;
     }
     msgBox.exec();
