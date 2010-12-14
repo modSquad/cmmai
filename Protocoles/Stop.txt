@@ -1,5 +1,5 @@
 [CLIENT] -> [SERVEUR]
-Ordonne l'arrêt du processus
+Ordonne l'arrêt du processus.
 
 L1: STOP\n
 L@: \n
