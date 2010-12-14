@@ -23,7 +23,7 @@
 #include "devices_simulation.h"
 #include "simulatorControl.h"
 #include "simulatorUpdater.h"
-#define UPDATE_DELAY	0.05	/* In seconds */
+#define PRODUCT_GENERATION_DELAY	0.5	/* In seconds */
 #endif
 
 /* Application constants */
@@ -57,26 +57,37 @@ int boxingServer()
 	MSG_Q_ID logsEventQueue;
 	int socket;
 #ifdef SIMULATION
-	int simulatorId;
+	int simulatorControlId;
+	int simulatorUpdaterId;
 #endif
 	int networkListenerId;
 	int eventManagerId;
 	int boxManagerId;
 	int printManagerId;
 	int logsManagerId;
+	
+	/* Secure environment */
+	setValveState(INLET_VALVE,CLOSED);
+	setValveState(OUTLET_VALVE,CLOSED);
 
 	/* Settings */
-	sysClkRateSet(clockRate);
+	sysClkRateSet(CLOCK_RATE);
 
 	/* Creation of shared objects */
 	endSync = semBCreate(0,SEM_EMPTY);
-	boxHandlingRequest = semMCreate(SEM_Q_FIFO|SEM_DELETE_SAFE);
+	boxHandlingRequest = semBCreate(0,SEM_EMPTY);
 	settings = (settings_t*) malloc(sizeof(settings_t));
+	settings->batchID = 0;
+	settings->maxDefectiveProductsPerBox = 0;
+	settings->productsPerBox = 0;
+	settings->batchBoxesAsked = 0;
+	settings->applicationEndRequest = FALSE;
+	settings->batchBoxesCount = 0;
 	boxesQueue = msgQCreate(MAX_BOXES_QUEUE_SIZE, sizeof(boxesQueueMsg_t), MSG_Q_FIFO);
 	eventsQueue = msgQCreate(MAX_EVENTS_QUEUE_SIZE, sizeof(event_msg_t), MSG_Q_FIFO);
 	logsEventQueue = msgQCreate(MAX_LOGS_QUEUE_SIZE, sizeof(event_msg_t), MSG_Q_FIFO);
 
-	socket = getClientSocket(SERVER_PORT);
+	/*socket = getClientSocket(SERVER_PORT);*/
 
 	/* Spawning tasks */
 #ifdef SIMULATION
@@ -89,7 +100,7 @@ int boxingServer()
 	simulatorUpdaterId = taskSpawn("simulatorUpdaterTask",
 		BASE_PRIORITY+SIMULATOR_PRIORITY,
 		0, DEFAULT_STACK_SIZE, simulatorUpdater,
-		(int)(UPDATE_DELAY*sysClkRateGet()),
+		(int)(PRODUCT_GENERATION_DELAY*sysClkRateGet()),
 		0, 0, 0, 0, 0, 0, 0, 0, 0
 	);
 #endif
@@ -100,14 +111,14 @@ int boxingServer()
 		socket, (int) eventsQueue, (int) settings,
 		(int) boxHandlingRequest, 0, 0, 0, 0, 0, 0
 	);
-
+/*
 	eventManagerId = taskSpawn("eventManagerTask",
 		BASE_PRIORITY+EVENT_MANAGER_PRIORITY,
 		0, DEFAULT_STACK_SIZE, eventManager,
 		socket, (int) eventsQueue, (int) logsEventQueue,
 		0, 0, 0, 0, 0, 0, 0
 	);
-
+*/
 	boxManagerId = taskSpawn("boxManagerTask",
 		BASE_PRIORITY+BOX_MANAGER_PRIORITY,
 		0, DEFAULT_STACK_SIZE, boxManager,
@@ -118,16 +129,16 @@ int boxingServer()
 	printManagerId = taskSpawn("printManagerTask",
 		BASE_PRIORITY+PRINT_MANAGER_PRIORITY,
 		0, DEFAULT_STACK_SIZE, printManager,
-		(int) eventsQueue, (int) boxesQueue,
+		(int) boxesQueue, (int) eventsQueue,
 		0, 0, 0, 0, 0, 0, 0, 0
 	);
 
-	logsManagerId = taskSpawn("logsManagerTask",
+/*	logsManagerId = taskSpawn("logsManagerTask",
 		BASE_PRIORITY+LOGS_MANAGER_PRIORITY,
 		0, DEFAULT_STACK_SIZE, logsManager,
 		(int) logsEventQueue, (int) endSync,
 		0, 0, 0, 0, 0, 0, 0, 0
-	);
+	);*/
 
 	/* Waiting for synchronization semaphore */
 	if(semTake(endSync, WAIT_FOREVER) == ERROR) {
@@ -135,10 +146,10 @@ int boxingServer()
 	}
 
 	/* delete tasks */
-	taskDelete(logsManagerId);
+/*	taskDelete(logsManagerId);*/
 	taskDelete(printManagerId);
 	taskDelete(boxManagerId);
-	taskDelete(eventManagerId);
+/*	taskDelete(eventManagerId);*/
 	taskDelete(networkListenerId);
 #ifdef SIMULATION
 	taskDelete(simulatorUpdaterId);
@@ -147,7 +158,7 @@ int boxingServer()
 #endif
 
 	/* destruct resources */
-	close(socket);
+	/* TODO close(socket); */
 	msgQDelete(logsEventQueue);
 	msgQDelete(eventsQueue);
 	msgQDelete(boxesQueue);
@@ -155,6 +166,10 @@ int boxingServer()
 	semDelete(boxHandlingRequest);
 	semDelete(endSync);
 
+	/* Secure environment */
+	setValveState(INLET_VALVE,CLOSED);
+	setValveState(OUTLET_VALVE,CLOSED);
+	
 	/* End of the application */
 	return 0;
 }

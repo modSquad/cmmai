@@ -1,24 +1,33 @@
 Introduction
 
     - éventuelles spécifications venant compléter le sujet
+        TODO
     - LSG simplifé de l'application globale avec le découpage en 3 lots fonctionnels
+        Schema LSG TODO
     - interface de communication entre modules
+        TODO
     - IHM du poste distant
+        connection
+        configuration
+        log
+        erreur / warning
 
-Binôme 1
+Binôme 1 TODO
     - LCG détaillé et complet en mode simulation
     - justification des choix effectués pour la simulation    
 
-Binôme 2
+Binôme 2 TODO
     - LCG détaillé et complet en mode simulation
     - justification des choix effectués pour la simulation  
 
-Binôme 3
+Binôme 3 TODO
     - LCG détaillé et complet en mode simulation
     - justification des choix effectués pour la simulation  
 
 Pour l'équipe
     - Intégration (démarche, plan, tests, resultats)
+        TODO
     - démonstration de vos réalisations
+        démonstration externe au slides ?
     - bilan du projet (auto-critique, améliorations possibles, points forts/faibles, difficultés rencontrées ...) 
-
+        TODO

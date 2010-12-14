@@ -4,7 +4,10 @@
 * This file contains the task simulating product inflow.
 */
 
-#include "simulationUpdater.h"
+#include <taskLib.h>
+#include <sysLib.h>
+#include "simulatorUpdater.h"
+#include "devices_simulation.h"
 
 /* ------------------------------------------------------------
  * EXTERNAL FUNCTIONS (IT handlers to simulate)
@@ -14,13 +17,13 @@ void ProductInflowHandler ( );
 /* ------------------------------------------------------------
  * TASK
  * ------------------------------------------------------------ */
-void simulatorUpdater (int productGenerationDelay)
+int simulatorUpdater (int productGenerationDelay)
 {
 	BOOL productIsOK;
 
 	for ( ; ; )
 	{
-		taskDelay((int)(productGenerationDelay*sysClkRateGet()));
+		taskDelay(productGenerationDelay);
 
 		if (upcomingProducts() && valveState(INLET_VALVE) == OPEN)
 		{
@@ -28,5 +31,7 @@ void simulatorUpdater (int productGenerationDelay)
 			takeProduct();
 		}
 	}
+	
+	return 0;
 }
 

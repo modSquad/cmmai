@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <semLib.h>
 #include <sysLib.h>
+#include <stdlib.h>
 #include <time.h>
 #include "devices_simulation.h"
 
@@ -18,7 +19,7 @@ typedef struct _products
 {
 	int amount;
 	BOOL correctOnes;
-	_products* next;
+	struct _products* next;
 } _products;
 
 
@@ -27,8 +28,8 @@ typedef struct _products
  * ------------------------------------------------------------ */
 
 /* Upcoming products queue (linked list) */
-static _product* _nextProducts = NULL;
-static _product* _lastProducts = NULL;
+static _products* _nextProducts = NULL;
+static _products* _lastProducts = NULL;
 static SEM_ID _mutex = NULL;
 
 /* the light color */
@@ -47,6 +48,12 @@ static BOOL _printerState[] =
 		TRUE, /* PRINTR1 */
 		TRUE  /* PRINTR2 */
 };
+/* the print counters */
+static int _printCount[] =
+{
+		0, /* PRINTR1 */
+		0  /* PRINTR2 */
+};
 
 static BOOL _boxMissing = FALSE;
 
@@ -54,6 +61,7 @@ static int _boxedCorrectProductsCount =		0;
 static int _boxedDefectiveProductsCount =	0;
 static int _droppedCorrectProductsCount =	0;
 static int _droppedDefectiveProductsCount =	0;
+
 
 /* ------------------------------------------------------------
  * INTERFACE METHODS
@@ -67,7 +75,6 @@ void setValveState(valveName_t valveName, valveState_t valveState)
 }
 
 valveState_t valveState (valveName_t valveName)
-/* returns TRUE if the valve is open and FALSE otherwise */
 {
 	return _valveState[valveName];
 }
@@ -75,7 +82,7 @@ valveState_t valveState (valveName_t valveName)
 /* Interface for the sensors */
 BOOL presenceDetected(presenceSensorName_t sensorName)
 {
-	return _boxMissing;
+	return !_boxMissing;
 }
 
 BOOL defectiveProduct(defectSensorName_t sensorName)
@@ -86,7 +93,7 @@ BOOL defectiveProduct(defectSensorName_t sensorName)
 	 */
 	BOOL result = TRUE;
 
-	semTake(_mutex);
+	semTake(_mutex, WAIT_FOREVER);
 	if (_nextProducts != NULL)
 	{
 		result = !_nextProducts->correctOnes;
@@ -105,7 +112,7 @@ BOOL printerState(printerName_t printerName)
 
 void print(printerName_t printerName, boxData_t boxData)
 {
-	/* TODO ? */
+	++_printCount[printerName];
 }
 
 /* Interface for the lights */
@@ -152,7 +159,7 @@ void addProducts (int amount, BOOL correctProducts)
 {
 	_products* current = NULL;
 
-	semTake(_mutex);
+	semTake(_mutex, WAIT_FOREVER);
 
 	if (_nextProducts == NULL)
 	{
@@ -161,7 +168,9 @@ void addProducts (int amount, BOOL correctProducts)
 		current = (_products*)malloc(sizeof(_products));
 		_nextProducts = current;
 		_lastProducts = current;
+		current->correctOnes = correctProducts;
 		current->amount = 0;
+		current->next = NULL;
 	}
 	else
 	{
@@ -174,12 +183,14 @@ void addProducts (int amount, BOOL correctProducts)
 		{
 			/* We have to add a new element to the tail */
 			current = (_products*)malloc(sizeof(_products));
+			_lastProducts->next = current;
 			_lastProducts = current;
+			current->correctOnes = correctProducts;
 			current->amount = 0;
+			current->next = NULL;
 		}
 	}
 
-	current->correctOnes = correctProducts;
 	current->amount += amount;
 
 	semGive(_mutex);
@@ -192,7 +203,7 @@ BOOL upcomingProducts ()
 
 void takeProduct ()
 {
-	semTake(_mutex);
+	semTake(_mutex, WAIT_FOREVER);
 
 	if (_nextProducts != NULL)
 	{
@@ -200,16 +211,16 @@ void takeProduct ()
 		if (_nextProducts->correctOnes)
 		{
 			if (_valveState[OUTLET_VALVE] == OPEN)
-				++_boxedCorrectProductCount;
+				++_droppedCorrectProductsCount;
 			else
-				++_droppedCorrectProductCount;
+				++_boxedCorrectProductsCount;
 		}
 		else
 		{
 			if (_valveState[OUTLET_VALVE] == OPEN)
-				++_boxedDefectiveProductCount;
+				++_droppedDefectiveProductsCount;
 			else
-				++_droppedDefectiveProductCount;
+				++_boxedDefectiveProductsCount;
 		}
 
 		/* Update the list */
@@ -218,7 +229,7 @@ void takeProduct ()
 		{
 			_products *toDelete = _nextProducts;
 			_nextProducts = _nextProducts->next;
-			if (_nextProducts->next == NULL)
+			if (_nextProducts == NULL)
 			{
 				_lastProducts = NULL;
 			}
@@ -236,7 +247,7 @@ void getProductsString (char buffer[], int bufferSize,
 
 	--bufferSize; /* Handle the '\0' */
 
-	semTake(_mutex);
+	semTake(_mutex, WAIT_FOREVER);
 
 	current = _nextProducts;
 
@@ -271,7 +282,12 @@ BOOL boxMissing ()
 
 void setPrinterState (printerName_t printerName, BOOL state)
 {
-	printerState[printerName] = state;
+	_printerState[printerName] = state;
+}
+
+int printCount (printerName_t printerName)
+{
+	return _printCount[printerName];
 }
 
 int boxedProductCount (BOOL correctOnes)

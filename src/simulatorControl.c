@@ -4,6 +4,7 @@
 * This file contains a task managing the simulator input.
 */
 
+#include <stdio.h>
 #include "simulatorControl.h"
 #include "devices_simulation.h"
 
@@ -18,8 +19,13 @@ void EmergencyStopHandler ( );
  * SCREEN OUTPUT CONSTANTS
  * ------------------------------------------------------------ */
 
+#define PRODUCTS_STRING_LENGTH	30
+#define CORRECT_PRODUCT_CHAR	'O'
+#define DEFECTIVE_PRODUCT_CHAR	'X'
+#define NONE_STRING				"None"
+
 #define SIMULATOR_PROMPT "\
-\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
+\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 Simulator v1.0\n\
 \n\
 \n\
@@ -28,15 +34,17 @@ Light:         %s\n\
 ============================================================\n\
 Valve     | Inlet  | Outlet \n\
 ----------+--------+--------\n\
-status    | %6s | %6s \n\
+Status    | %6s | %6s \n\
 ============================================================\n\
-Printer # |    1    |    2    \n\
-----------+---------+---------\n\
-status    | %7s | %7s \n\
+Printer #   |    1    |    2    \n\
+------------+---------+---------\n\
+Status      | %7s | %7s \n\
+------------+---------+---------\n\
+Print count | %7d | %7d \n\
 ============================================================\n\
 Boxes will be missing:        %s\n\
 ============================================================\n\
-Upcomming products:  %s\n\
+Upcoming products:  %s\n\
 \n\
 Product count | Boxed  | Dropped | Total\n\
 --------------+--------+---------+-------\n\
@@ -46,7 +54,7 @@ Defective     | %6d | %7d | %6d \n\
 --------------+--------+---------+-------\n\
 Total         | %6d | %7d | %6d \n\
 ============================================================\n\
-Please enter a command and press <RETURN> : 
+Please enter a command and press <RETURN> : \
 "
 
 const char* COLOR_LABEL[] =
@@ -88,22 +96,24 @@ const char* LAST_BOX_MISSING_LABEL[] =
 void refreshScreen ( )
 {
 	char productsString[PRODUCTS_STRING_LENGTH + 1];
-	int boxedCorrectProductCount = getBoxedProductCount(TRUE);
-	int boxedDefectiveProductCount = getBoxedProductCount(FALSE);
-	int droppedCorrectProductCount = getDroppedProductCount(TRUE);
-	int droppedDefectiveProductCount = getDroppedProductCount(FALSE);
+	int boxedCorrectProductCount = boxedProductCount(TRUE);
+	int boxedDefectiveProductCount = boxedProductCount(FALSE);
+	int droppedCorrectProductCount = droppedProductCount(TRUE);
+	int droppedDefectiveProductCount = droppedProductCount(FALSE);
 
 	getProductsString(productsString, PRODUCTS_STRING_LENGTH+1,
 			CORRECT_PRODUCT_CHAR, DEFECTIVE_PRODUCT_CHAR);
 
 	printf(SIMULATOR_PROMPT,
 			COLOR_LABEL[getColor()],
-			PRINTER_STATE_LABEL[printerState(PRINTR1)],
-			PRINTER_STATE_LABEL[printerState(PRINTR2)],
 			VALVE_STATE_LABEL[valveState(INLET_VALVE)],
 			VALVE_STATE_LABEL[valveState(OUTLET_VALVE)],
-			LAST_BOX_MISSING_LABEL[_lastBoxMissing],
-			productsString,
+			PRINTER_STATE_LABEL[printerState(PRINTR1)],
+			PRINTER_STATE_LABEL[printerState(PRINTR2)],
+			printCount(PRINTR1),
+			printCount(PRINTR2),
+			LAST_BOX_MISSING_LABEL[boxMissing()],
+			(productsString[0] == 0 ? NONE_STRING : productsString),
 
 			/*-- Product count table --*/
 			/* 1st row */
@@ -127,12 +137,19 @@ void refreshScreen ( )
  * TASK
  * ------------------------------------------------------------ */
 
-void simulatorInput ( )
+int simulatorControl ( )
 {
 	char inputChar;
-	for ( ; ; )
+
+	refreshScreen();
+	
+	inputChar = getchar();
+	while (inputChar != EOF)
 	{
-		scanf("%c",&inputChar);
+		/*if (scanf("%c",&inputChar) < 0)
+		{
+			perror("Simulator input error:");
+		}*/
 
 		switch(inputChar)
 		{
@@ -143,10 +160,10 @@ void simulatorInput ( )
 				addProducts(MANY_MEANING, TRUE);
 				break;
 			case ADD_ONE_DEFECTIVE_PRODUCT :
-				addProducts(1, TRUE);
+				addProducts(1, FALSE);
 				break;
 			case ADD_MANY_DEFECTIVE_PRODUCTS :
-				addProducts(MANY_MEANING, TRUE);
+				addProducts(MANY_MEANING, FALSE);
 				break;
 			case EMERGENCY_STOP :
 				EmergencyStopHandler();
@@ -164,21 +181,21 @@ void simulatorInput ( )
 			case TOGGLE_PRINTR1_BROKEN :
 				if (printerState(PRINTR1))
 				{
-					setPrinterState(FALSE);
+					setPrinterState(PRINTR1,FALSE);
 				}
 				else
 				{
-					setPrinterState(TRUE);
+					setPrinterState(PRINTR1,TRUE);
 				}
 				break;
 			case TOGGLE_PRINTR2_BROKEN :
-				if (printerState(PRINTR1))
+				if (printerState(PRINTR2))
 				{
-					setPrinterState(FALSE);
+					setPrinterState(PRINTR2,FALSE);
 				}
 				else
 				{
-					setPrinterState(TRUE);
+					setPrinterState(PRINTR2,TRUE);
 				}
 				break;
 			case REFRESH :
@@ -187,6 +204,10 @@ void simulatorInput ( )
 		}
 
 		refreshScreen();
+		
+		inputChar = getchar();
 	}
+	
+	return 0;
 }
 
