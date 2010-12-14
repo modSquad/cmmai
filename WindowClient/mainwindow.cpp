@@ -38,7 +38,7 @@ MainWindow::MainWindow(Socket *connection, QWidget *parent) :
     /* Received Error / Warning
      */
     connect(connection, SIGNAL(gotError(int)), this, SLOT(errorNotify(int)));
-    connect(connection, SIGNAL(gotWarning(int)), this, SLOT(warningNotify(int)));
+    //connect(connection, SIGNAL(gotWarning(int)), this, SLOT(warningNotify(int)));
 
     /* Connection button
      */
