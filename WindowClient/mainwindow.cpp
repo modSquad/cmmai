@@ -38,7 +38,7 @@ MainWindow::MainWindow(Socket *connection, QWidget *parent) :
     /* Received Error / Warning
      */
     connect(connection, SIGNAL(gotError(int)), this, SLOT(errorNotify(int)));
-    connect(connection, SIGNAL(gotWarning(int)), this, SLOT(warningNotify(int)));
+    //connect(connection, SIGNAL(gotWarning(int)), this, SLOT(warningNotify(int)));
 
     /* Connection button
      */
@@ -62,6 +62,11 @@ MainWindow::MainWindow(Socket *connection, QWidget *parent) :
 void MainWindow::addAccepted(int number)
 {
     ui->AcceptedNumber->setText( QString::number(ui->AcceptedNumber->text().toInt() + number));
+
+    qreal acc = ui->AcceptedNumber->text().toInt();
+    qreal rej = ui->RejectedNumber->text().toInt();
+
+    ui->ratio->setText(QString::number(acc/(acc+rej), 'f', 2));
 }
 
 
@@ -71,10 +76,12 @@ void MainWindow::addAccepted(int number)
 void MainWindow::addRejected(int number)
 {
     ui->RejectedNumber->setText( QString::number(ui->RejectedNumber->text().toInt() + number));
-    if(number + ui->RejectedBar->value() > ui->RejectedBar->maximum())
-        ui->RejectedBar->setValue(ui->RejectedBar->maximum());
-    else
-        ui->RejectedBar->setValue(ui->RejectedBar->value()+number);
+    ui->RejectedBar->setValue(ui->RejectedBar->value()+number);
+
+    qreal acc = ui->AcceptedNumber->text().toInt();
+    qreal rej = ui->RejectedNumber->text().toInt();
+
+    ui->ratio->setText(QString::number(acc/(acc+rej), 'f', 2));
 }
 
 

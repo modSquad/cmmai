@@ -17,24 +17,25 @@ static printerName_t printer2 = PRINTR2;
 /* Private functions */
 /*--------------------------------------------------*/
 
-static BOOL printBox(printerName_t printerName, boxData_t boxData)
+static BOOL printBox(printerName_t printerName, boxData_t* boxData)
 {
 	/* initialization */
-	printerName_t _printerName = printerName;
-	boxData_t _boxData = boxData;
-	
-	event_msg_t eventMsg; /* TODO - question */
+	event_msg_t eventMsg;
 	
 	/* cheking printer */
-	if ( printerState(_printerName) == TRUE )
-		{
-			/* print the box */
-			print(_printerName, _boxData);
-			eventMsg.event = EVT_BOX_PRINTED;
-			msgQSend(_eventsQueue, (char*)&eventMsg, sizeof(eventMsg),
-					WAIT_FOREVER, MSG_PRI_NORMAL);
-			return TRUE;
-		}
+	if ( boxData != NULL && printerState(printerName) == TRUE )
+	{
+		/* print the box */
+		boxData->printer = printerName;
+		
+		print(printerName, boxData);
+		
+		eventMsg.event = EVT_BOX_PRINTED;
+		eventMsg.boxData = *boxData;
+		msgQSend(_eventsQueue, (char*)&eventMsg, sizeof(eventMsg),
+				WAIT_FOREVER, MSG_PRI_NORMAL);
+		return TRUE;
+	}
 	else 
 	{
 		return FALSE;
@@ -67,8 +68,6 @@ BOOL printManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue)
 	_boxesQueue = boxesQueue;
 	_eventsQueue = eventsQueue;
 	
-	
-	
 	for ( ; ; )
 	{
 		alternatePrinter();
@@ -78,7 +77,7 @@ BOOL printManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue)
 		if(currentBox.lastMessage == TRUE)
 		{
 			/* The message that the application is at its end is transmitted */
-			eventMsg.event = EVT_APPLICATION_STOP;
+			eventMsg.event = EVT_CLOSE_APPLICATION;
 			msgQSend(_eventsQueue, (char*)&eventMsg, sizeof(eventMsg),
 					WAIT_FOREVER, MSG_PRI_NORMAL);
 			taskSuspend(taskIdSelf());
@@ -86,26 +85,28 @@ BOOL printManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue)
 		else
 		{
 			/* trying to print using PRINTER1 */
-			if ( printBox(printer1, currentBox.boxData) == FALSE )
+			if ( !printBox(printer1, &(currentBox.boxData)) )
 			{
 				/* PRINTER1 doesn't work, we report the anomaly */
-				eventMsg.event = EVT_ANOMALY_PRINTER1;
+				eventMsg.event = (printer1 == PRINTR1 ? EVT_ANOMALY_PRINTER1
+						: EVT_ANOMALY_PRINTER2);
 				msgQSend(_eventsQueue, (char*)&eventMsg, sizeof(eventMsg),
 						WAIT_FOREVER, MSG_PRI_NORMAL);
 				
 				/* attempting to print using PRINTER2 */			
-				if ( printBox(printer2, currentBox.boxData) == FALSE )
+				if ( !printBox(printer2, &(currentBox.boxData)) )
 				{
 					/* PRINTER2 doesn't work, we report the anomaly */
-					eventMsg.event = EVT_ANOMALY_PRINTER2;
+					eventMsg.event = (printer2 == PRINTR1 ? EVT_ANOMALY_PRINTER1
+							: EVT_ANOMALY_PRINTER2);
 					msgQSend(_eventsQueue, (char*)&eventMsg, sizeof(eventMsg),
 							WAIT_FOREVER, MSG_PRI_NORMAL);
 							
 					/* we wait for one printer to be fixed */
 					while (
-							!printBox(printer1, currentBox.boxData)
+							!printBox(printer1, &(currentBox.boxData))
 							&&
-							!printBox(printer2, currentBox.boxData)
+							!printBox(printer2, &(currentBox.boxData))
 						)
 					{
 						alternatePrinter();

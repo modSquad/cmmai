@@ -22,13 +22,19 @@
 \newcounter{testno}
 \maketitle
 \tableofcontents
-\section{Tests fonctionnels}
-\input{testCarton.tex}
-\input{testReseau.tex}
-\input{testEvenement.tex}
-\input{testLogs.tex}
+
 \section{Tests unitaires}
 \input{testUnitaireReseaux.tex}
 \input{testUnitairesEvenements.tex}
 \input{testUnitairesLogs.tex}
+
+\newpage
+\part{Tests fonctionnels}
+\setcounter{testno}{0}
+\input{test_integration}
+\input{testCarton.tex}
+\input{testReseau.tex}
+\input{testEvenement.tex}
+\input{testLogs.tex}
+
 \end{document}

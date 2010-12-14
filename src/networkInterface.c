@@ -66,7 +66,6 @@ int getClientSocket(int port) {
 		return NETWORK_ERROR;
 	}
 
-	printf("Listening on port %d, fd = %d\n",port,fd);
 	/* create queue for client connection requests */
 	if (listen (fd, SERVER_MAX_CONNECTIONS) == ERROR)
 	{
@@ -84,6 +83,8 @@ int getClientSocket(int port) {
 
 		return NETWORK_ERROR;
 	}
+	
+	printf("Accept OK\n");
 
 	return newFd;
 }
@@ -110,6 +111,7 @@ int sendError(int fd, int errCode) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result, msgLen;
 	msgLen = sprintf(msg, "ERROR\n%d\n\n", errCode);
+	printf("|%s|\§n", msg);
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;

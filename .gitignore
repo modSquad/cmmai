@@ -7,4 +7,6 @@
 *.log
 *.toc
 *.aux
+*.nav
+*.snm
 SIMNTdiab

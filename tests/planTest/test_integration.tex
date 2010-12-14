@@ -1,0 +1,110 @@
+\section{Général}
+
+\Test{Général}{Ordre de lancement}
+{Un ordre de lancement est envoyé au système sans qu'aucune configuration n'ai précédemment été envoyé}
+{L'ordre doit être ignoré et le système rester dans un état d'attente.}
+
+\Test{Général}{Interface opérateur}
+{L'application Windows est lancée}
+{L'interface de l'application doit présenter :
+\begin{itemize}
+	\item L'heure
+	\item Le numéro de carton en traitement
+	\item Le taux de pièce défectueuse
+\end{itemize}
+}
+
+\Test{Général}{Erreur}
+{Une erreur est lancée}
+{Le clapet se ferme immédiatement et un dialogue est entamé avec l'opérateur}
+
+\Test{Général}{Famine de pièces}
+{Le système est en marche mais plus aucune pièce n'est disponible}
+{Une erreur est lancée et une entrée dans le journal est ajoutée.}
+
+\Test{Général}{Connexion}
+{L'application Windows vient de démarrer}
+{La connexion avec le serveur VxWorks est établie. En cas d'erreur, un message est affiché sur le client Windows est l'opérateur est en charge de trouver le problème.}
+
+\section{Rebut}
+\Test{Rebut}{Visualiser le taux de pièces acceptées}
+{Lancer le programme, et envoyer une configuration depuis le client Windows, envoyer un ordre de lancement}
+{À chaque carton traité, le taux de pièces acceptées doit être mis à jour dans l'interface de l'application Windows.}
+TODO : AJOUTER au LOG
+
+\Test{Rebut}{Rebuter une pièce si elle est défectueuse}
+{Lancer le programme, envoyer une configuration depuis le client Windows et envoyer l'ordre de lancement}
+{Lorsqu'une pièce défectueuse est détectée le clapet de rebut doit s'ouvrir, rejeter la pièce et ajouter une entrée dans le log}
+TODO : AJOUTER au LOG
+
+\Test{Rebut}{Rebuter une pièce si elle est défectueuse}
+{Lancer le programme, envoyer une configuration depuis le client Windows et envoyer l'ordre de lancement}
+{Lorsqu'une pièce correcte est détectée le clapet de rebut doit rester fermé, accepter la pièce et ajouter une entrée dans le log}
+TODO : AJOUTER au LOG
+
+\Test{Rebut}{Seuil maximal de pièce défectueuse dépassé}
+{Lancer le programme, et envoyer une configuration depuis le client Windows, envoyer un ordre de lancement
+et attendre que le seuil soit dépassé.}
+{Le clapet doit être fermée et une erreur lancée.}
+
+\section{Impression}
+\Test{Impression}{Cas nominal}
+{Un carton est rempli.}
+{L'impression d'une étiquette contenant toutes les information du carton doit être réalisée par l'une des deux imprimante}
+
+\Test{Impression}{Imprimante en panne}
+{Le système détecte qu'une imprimante est tombée en panne.}
+{une anomalie est générée et le voyant d'anomalie est allumé.}
+
+\Test{Impression}{Une seule imprimante en panne}
+{Un carton est rempli, une des deux imprimante est en panne.}
+{L'impression d'une étiquette contenant toutes les informations du carton doit être réalisée par l'imprimante fonctionnelle. }
+
+\Test{Impression}{File pleine}
+{La file d'attente de carton en attente d'impression est pleine (5 cartons dans la file).}
+{Une erreur est générée, et le clapet d'arrivé est fermé.}
+
+\section{Journalisation}
+\Test{Journalisation}{Cas nominal}
+{Un évènement générant une entrée dans le fichier de journalisation à été lancé}
+{Le journal doit être lisible sur le disque et contenir :
+\begin{itemize}
+	\item La date d'ajout au fichier 
+	\item L'heure d'ajout au fichier
+	\item Les caractéristiques du lot : Nombre de pièces, le nombre de pièces défectueuses, code défaut, code opération, code opérateur
+\end{itemize}
+}
+
+\Test{Journalisation}{Cas nominal}
+{Toute erreur ou anomalie doit être signalée dans les journaux.}
+{Lancer l'application dans un fonctionnement pouvant générer des erreurs et des anomalies}
+{Le journal doit contenir la trace de chacune des erreurs et des anomalies survenues.}
+
+\section{Arrêt d'urgence}
+\Test{Arrêt d'urgence}{Cas nominal}
+{Un signal d'arrêt d'urgence est reçu par le système.}
+{Le clapet se ferme immédiatement, le système s'arrête , puis une erreur est générée et journalisée. Les informations concernant les cartons et la configuration du lot sont conservée.
+Enfin un dialogue est entrepris avec l'opérateur. De plus, si cela est possible, les cartons dans le file d'impression sont traités.}
+
+\Test{Arrêt d'urgence}{Dialogue}
+{Le dialogue avec l'opérateur a abouti à une reprise.}
+{Le système reprend le traitement (sélection des pièces, impression, etc.) normalement comme si aucune erreur n'était survenue.}
+
+\Test{Arrêt d'urgence}{Dialogue}
+{Le dialogue avec l'opérateur a abouti à un arrêt.}
+{Le système termine l'impression des boîtes dans la fil d'attente (sans en accepter de nouvelles) et s'arrête.}
+
+\section{Paramétrage}
+\Test{Paramétrage}{Cas nominal}
+{L'opérateur lance un ordre de paramétrage.}
+{L'ordre de paramétrage est pris en compte et une entrée est ajoutée au journal.}
+
+\Test{Paramétrage}{Cas nominal}
+{L'opérateur lance un ordre de paramétrage en précisant que ce lot est le dernier.}
+{L'ordre de paramétrage est pris en compte et une entrée est ajoutée au journal. Une fois le lot traité, le système s'arrête et une entrée est ajoutée dans le journal.}
+
+\Test{Paramétrage}{Cas nominal}
+{Un ordre de paramétrage valide à été envoyé. Un ordre de lancement est lancé}
+{Le système démarre avec les informations fournies lors de la dernière configuration.}
+
+
