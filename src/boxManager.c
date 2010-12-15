@@ -52,7 +52,6 @@ static STATUS sendEvent(boxingEvent_t event, const boxData_t* boxData,
  */
 static BOOL sendBox ( )
 {
-	boxData_t boxData;
 	boxesQueueMsg_t boxMsg;
 
 	boxMsg.lastMessage = FALSE;
@@ -61,7 +60,7 @@ static BOOL sendBox ( )
 	if ( msgQSend(_boxesQueue, (char*)&boxMsg, sizeof(boxMsg),
 				NO_WAIT, MSG_PRI_NORMAL) == OK )
 	{
-		sendEvent(EVT_BOX_PROCESSED,&boxData,WAIT_FOREVER);
+		sendEvent(EVT_BOX_PROCESSED,&boxMsg.boxData,WAIT_FOREVER);
 
 		++_settings->batchBoxesCount;
 		++_boxState.boxID;
@@ -73,7 +72,7 @@ static BOOL sendBox ( )
 	}
 	else
 	{
-		sendEvent(EVT_ERR_FULL_QUEUE,&boxData,WAIT_FOREVER);
+		sendEvent(EVT_ERR_FULL_QUEUE,&boxMsg.boxData,WAIT_FOREVER);
 		return FALSE;
 	}
 }
@@ -257,7 +256,7 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 	boxMsg.lastMessage = FALSE;
 	getCurrentBoxData(&boxMsg.boxData);
 
-	sendEvent(EVT_END_FILLING,&boxData,WAIT_FOREVER);
+	sendEvent(EVT_END_FILLING,&boxMsg.boxData,WAIT_FOREVER);
 	msgQSend(_boxesQueue, (char*)&boxMsg, sizeof(boxMsg),
 			WAIT_FOREVER, MSG_PRI_NORMAL);
 

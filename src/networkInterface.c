@@ -31,6 +31,7 @@
  */
 static int sendData(const int fd, char* buffer,const int len){ /* PRIVATE */
 	int sent = write(fd, buffer, len);
+	printf("write done\n");
 	return (sent == len) ? len : NETWORK_ERROR;
 }
 
@@ -40,6 +41,7 @@ int getClientSocket(int port) {
 	int sockAddrSize; /* size of socket address structure */ 
 	int fd; /* socket file descriptor */
 	int newFd = -1;
+	int optval = 1;
 	struct sockaddr_in clientAddr; /* client's socket address */
 
 	/* set up the local address */
@@ -56,7 +58,13 @@ int getClientSocket(int port) {
 		perror ("socket");
 		return NETWORK_ERROR;
 	}
-
+	
+	/*if (setsockopt (fd, IPPROTO_TCP, TCP_NODELAY, &optval, sizeof (optval)))
+	{
+		perror ("socket");
+		return NETWORK_ERROR;
+	}*/
+	
 	/* bind socket to local address */
 	if (bind (fd, (struct sockaddr *) &serverAddr, sockAddrSize) == ERROR)
 	{
@@ -93,6 +101,7 @@ int partAccepted(int fd, int n) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result, msgLen;
 	msgLen = sprintf(msg, "ACCEPTED\n%d\n\n", n);
+	printf("acc :\n|%s|", msg);
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
@@ -102,6 +111,7 @@ int partRejected(int fd, int n) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result, msgLen;
 	msgLen = sprintf(msg, "REJECTED\n%d\n\n", n);
+	printf("rej :\n|%s|", msg);
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
@@ -111,7 +121,7 @@ int sendError(int fd, int errCode) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result, msgLen;
 	msgLen = sprintf(msg, "ERROR\n%d\n\n", errCode);
-	printf("|%s|\§n", msg);
+	printf("err :\n|%s|", msg);
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
@@ -120,7 +130,8 @@ int sendError(int fd, int errCode) {
 int sendWarning(int fd, int errCode) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result, msgLen;
-	msgLen = sprintf(msg, "WARNING\n%d\n\n", errCode);
+	msgLen = sprintf(msg, "WARNINGS\n%d\n\n", errCode);
+	printf("war :\n|%s|", msg);
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
@@ -129,9 +140,10 @@ int sendWarning(int fd, int errCode) {
 int sendLog(int fd, char* logMessage, int len) {
 	char msg[MIN_EVENT_STRING_BUFFER_SIZE + 9];
 	int result, msgLen;
-	msgLen = sprintf(msg, "ERROR\n%s\n\n", logMessage);
+	msgLen = sprintf(msg, "LOG\n%s\n\n", logMessage);
+	printf("log :\n|%s|", msg);
 	result = sendData(fd, msg, msgLen);
-
+	
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
 }
 
