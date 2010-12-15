@@ -38,7 +38,7 @@ typedef struct
 		/* Count of defective products received when filling this box */
 	printerName_t printer;
 } boxData_t;
-const boxData_t BOX_DATA_DEFAULT =
+static const boxData_t BOX_DATA_DEFAULT =
 {
 		-1,
 		-1,

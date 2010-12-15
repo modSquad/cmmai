@@ -1,9 +1,11 @@
 \documentclass{beamer}
+\usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
 \usetheme{Berlin}
 
-\title{Conception et développement multi-lots /  multi-équipes\\ \emph{application à la supervision à distance d'une ligne de conditionnement temps réel}}
-\author{Hexanôme 4203\\Etienne \textsc{Brodu} Martin \textsc{Richard} Maxime \textsc{Gaudin} Monica \textsc{Golumbeanu} Paul \textsc{Adenot} Yoann \textsc{Rodière}}
+\title{Conception et développement multi-lots / multi-équipes\\ \emph{Application à la supervision à distance d'une ligne de conditionnement temps réel}}
+\author{Hexanôme 4203\\ Etienne \textsc{Brodu} Martin \textsc{Richard} Maxime \textsc{Gaudin}\\ Monica \textsc{Golumbeanu} Paul \textsc{Adenot} Yoann \textsc{Rodière}}
 
 \begin{document}
 
@@ -14,7 +16,7 @@
 \section{Introduction}
 	\begin{frame}
 		\begin{itemize}	
-			\item Lampes
+			\item Voyants
 			\item Impression des étiquettes %Charge des imprimantes
 			\item Journal d'exploitation
 			\item Client Windows
@@ -49,16 +51,52 @@
 		erreur \/ warning
 	\end{frame}
 
-\section{Binôme 1}
+\section{Binôme 1 (Monica, Yoann)}
 	\begin{frame}
-		LCG détaillé et complet en mode simulation
+	\begin{center}
+		\huge Lot 1 : partie métier
+		\includegraphics[height=0.8\textheight]{../../SchemasLCG/schemaGlobal.png}
+	\end{center}
+	\end{frame}
+
+\subsection{Gestion du remplissage}
+	\begin{frame}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.9\textwidth]{../../SchemasLCG/ProductInflowHandler.png}
+	\end{figure}
 	\end{frame}
 
 	\begin{frame}
-		justification des choix effectués pour la simulation 
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{../../SchemasLCG/BoxManager.pdf}
+	\end{figure}
 	\end{frame}
 
-\section{Binôme 2}
+	\begin{frame}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.7\textwidth]{../../SchemasLCG/ProductStarvationHandler.png}
+	\end{figure}
+	\end{frame}
+
+\subsection{Gestion de l'impression}
+	\begin{frame}
+	\begin{figure}
+		\centering
+		\includegraphics[width=0.85\textwidth]{../../SchemasLCG/PrintManager.png}
+	\end{figure}
+	\end{frame}
+
+\section{Binôme 2 (Paul, Maxime)}
+	\begin{frame}
+	\begin{center}
+		\huge Lot 2 : TODO décrire
+		\includegraphics[height=0.8\textheight]{../../SchemasLCG/schemaGlobal.png}
+	\end{center}
+	\end{frame}
+
 	\begin{frame}
 
 	\frametitle{Lot 2 : réseau, journalisation, gestion des évènements.}
@@ -197,7 +235,14 @@
 
 	\end{frame}
 
-\section{Binôme 3}
+\section{Binôme 3 (Martin, Etienne)}
+	\begin{frame}
+	\begin{center}
+		\huge Lot 3 : TODO décrire
+		\includegraphics[height=0.8\textheight]{../../SchemasLCG/schemaGlobal.png}
+	\end{center}
+	\end{frame}
+
 	\begin{frame}
 		LCG détaillé et complet en mode simulation
 	\end{frame}

@@ -3,9 +3,9 @@
 
 #define BOX_DATA_STRING_SIZE 100
 static const char BOX_DATA_FORMAT_PRINTED[] =
-	"[batch #%d / box #%d, %d products boxed / %d defective products]";
-static const char BOX_DATA_FORMAT_NOT_PRINTED[] =
 	"[batch #%d / box #%d, %d products boxed / %d defective products, printed on %s]";
+static const char BOX_DATA_FORMAT_NOT_PRINTED[] =
+	"[batch #%d / box #%d, %d products boxed / %d defective products]";
 
 static const char* PRINTER_LABEL[] =
 {
@@ -14,6 +14,8 @@ static const char* PRINTER_LABEL[] =
 		"Printer #2"  /* PRINTR2 */
 };
 
+static const char MSG_APPLICATION_START[] =
+	"Application start requested.";
 static const char MSG_APPLICATION_STOP[] =
 	"Application end requested.";
 static const char MSG_END_FILLING[] =
@@ -45,7 +47,7 @@ void eventToString (boxingEvent_t eventType, const boxData_t* boxData,
 	char boxDataString[BOX_DATA_STRING_SIZE];
 	boxDataString[0] = '\0';
 	eventString[0] = '\0';
-
+	
 	if (boxData != NULL)
 	{
 		if (boxData->printer == NO_PRINTER)
@@ -53,7 +55,6 @@ void eventToString (boxingEvent_t eventType, const boxData_t* boxData,
 					boxData->batchID,
 					boxData->boxID,
 					boxData->boxedProducts,
-					boxData->defectiveProducts,
 					boxData->defectiveProducts
 				   );
 		else
@@ -62,13 +63,16 @@ void eventToString (boxingEvent_t eventType, const boxData_t* boxData,
 					boxData->boxID,
 					boxData->boxedProducts,
 					boxData->defectiveProducts,
-					boxData->defectiveProducts,
 					PRINTER_LABEL[boxData->printer]
 				   );
 	}
 
 	switch (eventType)
 	{
+		case EVT_APPLICATION_START :
+			sprintf(eventString, MSG_APPLICATION_START,
+					boxDataString);
+			break;
 		case EVT_APPLICATION_STOP :
 			sprintf(eventString, MSG_APPLICATION_STOP,
 					boxDataString);
@@ -118,6 +122,9 @@ void eventToString (boxingEvent_t eventType, const boxData_t* boxData,
 					boxDataString);
 			break;
 		default :
+			fprintf(stderr, "RUNTIME ERROR: Unhandled event: %d\n", eventType);
 			break;
 	}
+	
+	//sprintf(eventString, "%s : %s", eventString, ctime());
 }
