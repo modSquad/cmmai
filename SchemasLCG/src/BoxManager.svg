@@ -250,13 +250,13 @@
    guidetolerance="10"
    inkscape:pageopacity="0"
    inkscape:pageshadow="2"
-   inkscape:window-width="1680"
-   inkscape:window-height="977"
+   inkscape:window-width="1366"
+   inkscape:window-height="695"
    id="namedview101"
    showgrid="false"
-   inkscape:zoom="1.1125146"
-   inkscape:cx="516.62151"
-   inkscape:cy="302.66276"
+   inkscape:zoom="0.78666662"
+   inkscape:cx="465.28621"
+   inkscape:cy="266.07555"
    inkscape:window-x="0"
    inkscape:window-y="25"
    inkscape:window-maximized="1"
@@ -541,6 +541,7 @@
 
 
 
+
 <circle
    d="m 705.83699,85.790001 c 0,5.597958 -4.53804,10.136 -10.136,10.136 -5.59796,0 -10.136,-4.538042 -10.136,-10.136 0,-5.597958 4.53804,-10.136 10.136,-10.136 5.59796,0 10.136,4.538042 10.136,10.136 z"
    style="fill:none;stroke:#000000;stroke-width:1"
@@ -620,6 +621,7 @@
 
 
 
+
 <text
    xml:space="preserve"
    style="font-size:12.00000286px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -631,6 +633,7 @@
      id="tspan4905-6-6-7"
      x="346.34009"
      y="28.473492">1</tspan></text>
+
 
 
 
@@ -652,6 +655,7 @@
 
 
 
+
 <text
    xml:space="preserve"
    style="font-size:12.00000191px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -663,6 +667,7 @@
      id="tspan4905-70-1"
      x="40.29628"
      y="91.30471">End of app, no box data</tspan></text>
+
 
 
 
@@ -680,6 +685,7 @@
      y="18.748034">BoxManager</tspan></text>
 
 
+
 <text
    xml:space="preserve"
    style="font-size:12.00000095px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -691,6 +697,7 @@
      x="526.87781"
      y="19.646898"
      id="tspan5144">100</tspan></text>
+
 
 
 
@@ -710,6 +717,7 @@
      x="459.5463"
      y="162.85429"
      id="tspan3328">filling</tspan></text>
+
 
 
 
@@ -766,6 +774,7 @@
      x="28.92845"
      y="138.59851">BoxesQueue</tspan></text>
 
+
 <text
    xml:space="preserve"
    style="font-size:12.00000381px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -777,6 +786,7 @@
      id="tspan4905-6-6-7-6"
      x="224.98851"
      y="137.51187">5</tspan></text>
+
 
 <g
    id="g3850-2"
@@ -826,6 +836,7 @@
      x="18.725756"
      y="377.25949">EventsQueue</tspan></text>
 
+
 <text
    xml:space="preserve"
    style="font-size:12.00000381px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -837,6 +848,7 @@
      id="tspan4905-6-6-7-1"
      x="218.78581"
      y="376.17288">100</tspan></text>
+
 
 <g
    id="g2965-9"
@@ -859,6 +871,7 @@
      x="346.87537"
      y="88.788498">0</tspan></text>
 
+
 <rect
    x="855.64264"
    y="111.10751"
@@ -877,6 +890,7 @@
      x="849.78278"
      y="178.59564">Settings</tspan></text>
 
+
 <rect
    x="733.64258"
    y="170.21768"
@@ -886,14 +900,15 @@
    id="rect21-0" /><text
    xml:space="preserve"
    style="font-size:12.00000095px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
-   x="972.41833"
-   y="119.4855"
+   x="932.37598"
+   y="165.24821"
    id="text4903-3"
    sodipodi:linespacing="125%"><tspan
      sodipodi:role="line"
      id="tspan4905-700"
-     x="972.41833"
-     y="119.4855">BoxState</tspan></text>
+     x="932.37598"
+     y="165.24821">BoxState</tspan></text>
+
 
 <g
    id="g3570-4"
@@ -921,6 +936,7 @@
      x="409.34857"
      y="216.1282"
      id="tspan3328-9">queue was full</tspan></text>
+
 
 <path
    style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
@@ -986,6 +1002,7 @@
      y="186.537"
      id="tspan3328-7">not full</tspan></text>
 
+
 <g
    id="g3570-4-7"
    transform="matrix(-1,0,0,1,1253.5183,153.21634)"><rect
@@ -1012,6 +1029,7 @@
      x="409.11829"
      y="290.75601"
      id="tspan3328-9-0">queue was full</tspan></text>
+
 
 <g
    id="g3570-4-7-9"
@@ -1044,6 +1062,7 @@
      y="323.23984"
      id="tspan3534">requested</tspan></text>
 
+
 <g
    id="g3570-4-7-9-3"
    transform="matrix(-1,0,0,1,1253.5441,198.78301)"><rect
@@ -1071,6 +1090,7 @@
      y="344.98502"
      id="tspan3534-8">end of batch</tspan></text>
 
+
 <g
    id="g3570-4-7-9-3-3"
    transform="matrix(-1,0,0,1,1253.5441,217.65917)"><rect
@@ -1097,6 +1117,7 @@
      x="508.237"
      y="364.05893"
      id="tspan3534-8-7">no box</tspan></text>
+
 <path
    style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
    d="m 500.95841,201.15176 -258.42906,0 0,-84.67169 -32.35364,0 0,57.07791"
@@ -1104,7 +1125,7 @@
    inkscape:connector-curvature="0"
    sodipodi:nodetypes="ccccc" /><path
    style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="m 441.63335,422.43991 -149.21154,0 0,73.36103 -281.92181,0 0,-388.30951 135.40688,0 0,66.51598"
+   d="m 441.63335,434.51618 -200.6946,0 0,61.28476 -230.43875,0 0,-388.30951 135.40688,0 0,66.51598"
    id="path3253"
    inkscape:connector-curvature="0"
    sodipodi:nodetypes="ccccccc" /><path
@@ -1133,21 +1154,23 @@
    transform="matrix(0,1,-1,0,779.73747,383.80796)" /><g
    id="g2995-1"
    transform="translate(664.45005,158.20383)"><text
-     y="353.24786"
-     x="66.935738"
-     id="text75-8-8-5"
-     style="font-size:12.00000095px;font-family:MyriadPro-Regular">D</text>
+   y="353.24786"
+   x="66.935738"
+   id="text75-8-8-5"
+   style="font-size:12.00000095px;font-family:MyriadPro-Regular">D</text>
+
 <text
-     y="353.25433"
-     x="88.406219"
-     id="text75-8-8-0-6"
-     style="font-size:12.00000191px;font-family:MyriadPro-Regular">O</text>
+   y="353.25433"
+   x="88.406219"
+   id="text75-8-8-0-6"
+   style="font-size:12.00000191px;font-family:MyriadPro-Regular">O</text>
+
 <path
-     inkscape:connector-curvature="0"
-     transform="translate(0,-1.895777e-5)"
-     id="path2993-5"
-     d="m 40.360171,332.2369 -17.71716,17.71716 17.581178,17.58118 84.669881,-0.38948 17.47882,-17.58894 -17.31992,-17.31992 -84.692799,0 z"
-     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" /></g><text
+   inkscape:connector-curvature="0"
+   transform="translate(0,-1.895777e-5)"
+   id="path2993-5"
+   d="m 40.360171,332.2369 -17.71716,17.71716 17.581178,17.58118 84.669881,-0.38948 17.47882,-17.58894 -17.31992,-17.31992 -84.692799,0 z"
+   style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" /></g><text
    xml:space="preserve"
    style="font-size:12.00000191px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
    x="731.67297"
@@ -1158,24 +1181,27 @@
      id="tspan4905-1-0"
      x="731.67297"
      y="485.99295">InletValve</tspan></text>
+
 <g
    id="g2995-3"
    transform="translate(696.64909,-47.416742)"><text
-     y="353.24786"
-     x="66.935738"
-     id="text75-8-8-4"
-     style="font-size:12.00000095px;font-family:MyriadPro-Regular">D</text>
+   y="353.24786"
+   x="66.935738"
+   id="text75-8-8-4"
+   style="font-size:12.00000095px;font-family:MyriadPro-Regular">D</text>
+
 <text
-     y="353.25433"
-     x="88.406219"
-     id="text75-8-8-0-66"
-     style="font-size:12.00000191px;font-family:MyriadPro-Regular">O</text>
+   y="353.25433"
+   x="88.406219"
+   id="text75-8-8-0-66"
+   style="font-size:12.00000191px;font-family:MyriadPro-Regular">O</text>
+
 <path
-     inkscape:connector-curvature="0"
-     transform="translate(0,-1.895777e-5)"
-     id="path2993-0"
-     d="m 40.360171,332.2369 -17.71716,17.71716 17.581178,17.58118 84.669881,-0.38948 17.47882,-17.58894 -17.31992,-17.31992 -84.692799,0 z"
-     style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" /></g><text
+   inkscape:connector-curvature="0"
+   transform="translate(0,-1.895777e-5)"
+   id="path2993-0"
+   d="m 40.360171,332.2369 -17.71716,17.71716 17.581178,17.58118 84.669881,-0.38948 17.47882,-17.58894 -17.31992,-17.31992 -84.692799,0 z"
+   style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" /></g><text
    xml:space="preserve"
    style="font-size:12.00000191px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
    x="727.85358"
@@ -1186,6 +1212,7 @@
      id="tspan4905-1-5"
      x="727.85358"
      y="279.73676">BoxPresenceSensor</tspan></text>
+
 <path
    style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
    d="m 777.35927,319.17404 0,32.35913 -276.62558,0"
@@ -1275,9 +1302,9 @@
    id="polygon91-04"
    transform="matrix(-1,0,0,1,318.30318,-306.6613)" /><polygon
    style="stroke:#000000;stroke-width:1"
-   points="83.15,413.079 83.15,432.922 99.125,423 "
+   points="83.15,432.922 99.125,423 83.15,413.079 "
    id="polygon91-12"
-   transform="matrix(-1,0,0,1,424.12948,-0.57092473)" /><polygon
+   transform="matrix(-1,0,0,1,349.12947,11.505348)" /><polygon
    style="stroke:#000000;stroke-width:1"
    points="83.15,413.079 83.15,432.922 99.125,423 "
    id="polygon91-04-9"
@@ -1299,7 +1326,7 @@
    id="polygon91-04-0"
    transform="translate(240.26548,-313.52118)" /><path
    style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-   d="m 441.6784,433.31407 -133.15679,0 0,121.08052 743.64409,0 0,-423.30511 -86.44065,0"
+   d="m 441.6784,411.7039 -156.67374,0 0,142.69069 767.16104,0 0,-423.30511 -86.44065,0"
    id="path3533"
    inkscape:connector-curvature="0"
    sodipodi:nodetypes="cccccc" /><g
@@ -1323,6 +1350,7 @@
      id="tspan4905-2-5"
      x="800.53827"
      y="108.34072">Init</tspan></text>
+
 <text
    xml:space="preserve"
    style="font-size:12.00000286px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -1334,6 +1362,7 @@
      id="tspan4905-2-5-7"
      x="836.54553"
      y="241.93597">Init, id+=1</tspan></text>
+
 <text
    xml:space="preserve"
    style="font-size:12.00000381px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -1345,6 +1374,7 @@
      id="tspan4905-2-5-7-9"
      x="823.60516"
      y="368.84918">filling = true</tspan></text>
+
 <path
    style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
    d="m 500.47077,392.31831 289.83053,0 0,50.21187 113.77119,0"
@@ -1380,6 +1410,7 @@
      x="298.8671"
      y="182.03839"
      id="tspan3654">filled box data</tspan></text>
+
 <g
    id="g4037-5"
    transform="matrix(0.6377746,0,0,1.6261852,61.465707,46.500804)"><path
@@ -1406,6 +1437,7 @@
      x="109.96423"
      y="255.04582"
      id="tspan3686">filled box data</tspan></text>
+
 <g
    id="g4037-5-0"
    transform="matrix(0.6377746,0,0,-1.6261852,187.27992,475.35529)"><path
@@ -1433,6 +1465,7 @@
      x="234.40286"
      y="281.24692"
      id="tspan3686-2">filled box data</tspan></text>
+
 <g
    id="g4037-5-1"
    transform="matrix(0.6377746,0,0,-1.6261852,220.17455,525.54833)"><path
@@ -1460,6 +1493,7 @@
      x="267.40192"
      y="339.50629"
      id="tspan3686-1">no box data</tspan></text>
+
 <path
    style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
    d="m 441.6784,325.58102 -115.67798,0 0,-30.50848 -134.74576,0 0,117.26696"
@@ -1492,6 +1526,7 @@
      x="291.94434"
      y="402.93427"
      id="tspan3686-1-9">no box data</tspan></text>
+
 <path
    style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
    d="m 500.47077,249.30983 176.69493,0 0,-26.69493 116.31356,0 0,-13.34745"
@@ -1518,6 +1553,7 @@
      id="tspan4905-2-5-7-90"
      x="681.8678"
      y="242.67706">batchBoxesCount+=1</tspan></text>
+
 <text
    xml:space="preserve"
    style="font-size:12px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
@@ -1529,4 +1565,30 @@
      id="tspan3841"
      x="670.55298"
      y="431.86264">OPEN</tspan></text>
-</svg>
+
+<path
+   style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+   d="m 499.5763,94.55558 -124.57628,0 0,-106.779667 646.39828,0 0,475.423757 -76.90672,0"
+   id="path3226"
+   inkscape:connector-curvature="0"
+   transform="translate(0,-1.4587881e-5)"
+   sodipodi:nodetypes="cccccc" /><path
+   style="fill:none;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+   d="m 441.73732,423.1573 -143.64408,0 0,122.0339 626.69495,0 0,-62.28814"
+   id="path3228"
+   inkscape:connector-curvature="0"
+   transform="translate(0,-1.4587881e-5)" /><g
+   id="g3212-4-9"
+   transform="translate(397.53831,-128.26025)"><path
+     id="path3118-9-8-4"
+     d="m 536.18796,631.60162 -17.28019,17.28019"
+     style="fill:none;stroke:#000000;stroke-width:1.00000012px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     inkscape:connector-curvature="0" /><path
+     id="path3120-9-5-2"
+     d="m 518.62969,631.68106 17.51854,17.51854"
+     style="fill:none;stroke:#000000;stroke-width:1.00000012px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     inkscape:connector-curvature="0" /></g><polygon
+   style="stroke:#000000;stroke-width:1"
+   points="83.15,432.922 99.125,423 83.15,413.079 "
+   id="polygon91-0-2"
+   transform="matrix(-1,0,0,1,1091.5613,40.199179)" /></svg>

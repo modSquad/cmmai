@@ -54,18 +54,17 @@ static BOOL sendBox ( )
 {
 	boxData_t boxData;
 	boxesQueueMsg_t boxMsg;
-	getCurrentBoxData(&boxMsg.boxData);
 
 	boxMsg.lastMessage = FALSE;
 	getCurrentBoxData(&boxMsg.boxData);
-	
+
 	if ( msgQSend(_boxesQueue, (char*)&boxMsg, sizeof(boxMsg),
 				NO_WAIT, MSG_PRI_NORMAL) == OK )
 	{
 		sendEvent(EVT_BOX_PROCESSED,&boxData,WAIT_FOREVER);
 
-		_settings->batchBoxesCount += 1;
-		_boxState.boxID += 1;
+		++_settings->batchBoxesCount;
+		++_boxState.boxID;
 		_boxState.boxedProductsCount = 0;
 		_boxState.defectiveProductsCount = 0;
 		_boxState.filling = FALSE;
@@ -157,7 +156,7 @@ static int ProductStarvationHandler ( int DUMMY )
 	}
 	else /* The product is rejected */
 	{
-		setValveState(OUTLET_VALVE, OPEN); /* TODO : modifier le schéma de conception en conséquence */
+		setValveState(OUTLET_VALVE, OPEN);
 		++_boxState.defectiveProductsCount;
 
 		/* The number of defective products can exceed
@@ -200,9 +199,9 @@ static int ProductStarvationHandler ( int DUMMY )
 int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 		settings_t* settings, SEM_ID boxHandlingRequest)
 {
-	/* INIT */
-	boxData_t boxData; /* Used only at the end */
 	boxesQueueMsg_t boxMsg; /* Used only at the end */
+
+	/* INIT */
 	_boxesQueue = boxesQueue;
 	_eventsQueue = eventsQueue;
 	_settings = settings;
@@ -214,7 +213,6 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 	_boxState.filling = FALSE;
 
 	_productStarvationHandlerID = wdCreate();
-	setValveState(INLET_VALVE, CLOSED);
 
 	/* JOB */
 	for ( ; ; )
@@ -254,16 +252,14 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 	}
 
 	/* END */
-	getCurrentBoxData(&boxMsg.boxData);
+	wdDelete(_productStarvationHandlerID);
 
 	boxMsg.lastMessage = FALSE;
 	getCurrentBoxData(&boxMsg.boxData);
-	
+
 	sendEvent(EVT_END_FILLING,&boxData,WAIT_FOREVER);
 	msgQSend(_boxesQueue, (char*)&boxMsg, sizeof(boxMsg),
 			WAIT_FOREVER, MSG_PRI_NORMAL);
-	
-	wdDelete(_productStarvationHandlerID);
 
 	taskSuspend(taskIdSelf());
 
