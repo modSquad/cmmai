@@ -5,7 +5,7 @@
 \usetheme{Berlin}
 
 \title{Conception et développement multi-lots / multi-équipes\\ \emph{Application à la supervision à distance d'une ligne de conditionnement temps réel}}
-\author{Hexanôme 4203\\ Etienne \textsc{Brodu} Martin \textsc{Richard} Maxime \textsc{Gaudin}\\ Monica \textsc{Golumbeanu} Paul \textsc{Adenot} Yoann \textsc{Rodière}}
+\author{Hexanôme 4203\\ Etienne \textsc{Brodu} \and Martin \textsc{Richard} \and Maxime \textsc{Gaudin} \\ \and Monica \textsc{Golumbeanu} \and Paul \textsc{Adenot} \and Yoann \textsc{Rodière}}
 
 \begin{document}
 
@@ -53,10 +53,11 @@
 
 \section{Binôme 1 (Monica, Yoann)}
 	\begin{frame}
-	\begin{center}
-		\huge Lot 1 : partie métier
+\frametitle{Lot 1 : partie métier}
+	\begin{figure}
+		\centering
 		\includegraphics[height=0.8\textheight]{../../SchemasLCG/schemaGlobal.png}
-	\end{center}
+	\end{figure}
 	\end{frame}
 
 \subsection{Gestion du remplissage}
@@ -91,154 +92,66 @@
 
 \section{Binôme 2 (Paul, Maxime)}
 	\begin{frame}
-	\begin{center}
-		\huge Lot 2 : TODO décrire
-		\includegraphics[height=0.8\textheight]{../../SchemasLCG/schemaGlobal.png}
-	\end{center}
+		\begin{center}
+			\frametitle{Lot 2 : réseau, journalisation, gestion des évènements.}
+			\includegraphics[height=0.8\textheight]{../../SchemasLCG/schemaGlobal.png}
+		\end{center}
 	\end{frame}
 
+	\subsection{Protocole}
 	\begin{frame}
-
-	\frametitle{Lot 2 : réseau, journalisation, gestion des évènements.}
-
-	    \begin{block}{Réalisé par Paul et Maxime}
-
-	  \begin{itemize}
-
-	      \item   Communication réseau en entrée et en sortie du système.
-
-	      \item   Communication des évènements par boite aux lettres à
-
-	      l'intérieur du système.
-
-	      \item   Gestion de la journalisation sur disque.
-
-	  \end{itemize}
-
-	    \end{block}
-
-	\end{frame}
-
-	
-
-	\begin{frame}
-
-	\frametitle{Protocole}
-
 	    \begin{block}{Choix}
-
-	  \begin{itemize}
-
-	      \item Protocole \texttt{plain text}.
-
-	      \item Séparateur : retour chariot.
-
-	      \item 9 commandes différentes dans les deux sens.
-
-	  \end{itemize}
-
+		  \begin{itemize}
+		      \item Protocole \texttt{plain text}.
+		      \item Séparateur : retour chariot.
+		      \item 9 commandes différentes dans les deux sens.
+		  \end{itemize}
 	    \end{block}
-
 	\end{frame}
 
-	
-
 	\begin{frame}
-
-	\frametitle{Protocole en entrée}
-
-	\begin{enumerate}
-
-	    \item \texttt{RESUME} : reprise sur erreur.
-
-	    \item \texttt{STOP} : arrêt du système après les cartons courants.
-
-	    \item \texttt{CONFIG} : 5 valeurs chiffrées pour configurer le système.
-
-	    \item \texttt{LAUNCH} : lancer le système.
-
-	\end{enumerate}
-
+		\frametitle{Protocole en entrée}
+		\begin{enumerate}
+		    \item \texttt{RESUME} : reprise sur erreur.
+		    \item \texttt{STOP} : arrêt du système après les cartons courants.
+		    \item \texttt{CONFIG} : 5 valeurs chiffrées pour configurer le système.
+		    \item \texttt{LAUNCH} : lancer le système.
+		\end{enumerate}
 	\end{frame}
 
-	
-
 	\begin{frame}
-
 	    \frametitle{LCG : Réseau, en entrée}
+	    \includegraphics[width=\textwidth]{../../SchemasLCG/NetworkListener-run.pdf}
+	\end{frame}
 
-	    \includegraphics[width=\textwidth]{../SchemasLCG/NetworkListener-run.pdf}
-
+	\begin{frame}
+		\frametitle{Protocole en sortie}
+		\begin{enumerate}
+			\item \texttt{REJECTED} : nombre de pièces ayant un défaut.
+			\item \texttt{ACCEPTED} : un carton a été accepté par le système. Un argument pour indiquer le nombre de pièces.
+			\item \texttt{LOG} : l'argument est un message à afficher.
+			\item \texttt{ERROR} : erreur critique nécessitant une intervention. Un argument pour le code d'erreur.
+			\item \texttt{WARNING} : erreur non critique (panne d'imprimante).
+		\end{enumerate}
 	\end{frame}
 
 	
-
+	\subsection{Conception}
 	\begin{frame}
-
-	\frametitle{Protocole en sortie}
-
-	    \begin{enumerate}
-
-	    \item \texttt{REJECTED} : nombre de pièces ayant un défaut.
-
-	    \item \texttt{ACCEPTED} : un carton a été accepté par le système. Un argument pour indiquer le nombre de pièces.
-
-	    \item \texttt{LOG} : l'argument est un message à afficher.
-
-	    \item \texttt{ERROR} : erreur critique nécessitant une intervention. Un argument pour le code d'erreur.
-
-	    \item \texttt{WARNING} : erreur non critique (panne d'imprimante).
-
-	    \end{enumerate}
-
-	\end{frame}
-
-	
-
-	\begin{frame}
-
 	    \frametitle{LCG : EventManager : réseau en sortie}
-
-	    \includegraphics[width=\textwidth]{../SchemasLCG/src/EventsManager.pdf}
-
+	    \includegraphics[width=\textwidth]{../../SchemasLCG/src/EventsManager.pdf}
 	\end{frame}
 
-	
-
-	
-
 	\begin{frame}
-
 	    \frametitle{LCG : Journalisation sur disque}
-
-	    \includegraphics[width=\textwidth]{../SchemasLCG/LogsManager.pdf}
-
+	    \includegraphics[width=0.8\textwidth]{../../SchemasLCG/LogsManager.pdf}
 	\end{frame}
 
-	
-
-	\begin{frame}
-
-	Binôme 2
-
-	- LCG détaillé et complet en mode simulation
-
-	\end{frame}
-
-	
-
-	\begin{frame}
-
-	Binôme 2
-
-	- justification des choix effectués pour la simulation  
-
-	\end{frame}
 
 \section{Binôme 3 (Martin, Etienne)}
 	\begin{frame}
 	\begin{center}
-		\huge Lot 3 : TODO décrire
+		\frametitle{Lot 3 : TODO décrire}
 		\includegraphics[height=0.8\textheight]{../../SchemasLCG/schemaGlobal.png}
 	\end{center}
 	\end{frame}
