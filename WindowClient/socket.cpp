@@ -15,11 +15,14 @@ Socket::Socket(QObject *parent) :
 void Socket::Receive()
 {
     static QString message;
-    message += readLine();
+    message += readAll();
 
-    if(message.endsWith("\n\n"))
+    qDebug() << message;
+
+    QList<QString> messages = message.split("\n\n", QString::SkipEmptyParts);
+    foreach(QString line, messages)
     {
-        QList<QString> list = message.split("\n", QString::SkipEmptyParts);
+        QList<QString> list = line.split("\n", QString::SkipEmptyParts);
 
         if(list[0].compare("LOG") == 0)
         {
@@ -45,8 +48,8 @@ void Socket::Receive()
         {
             emit gotLog(QString("Unknown message received : ") + message);
         }
-        message.clear();
     }
+    message.clear();
 }
 
 

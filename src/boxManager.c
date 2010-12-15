@@ -256,7 +256,7 @@ int boxManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue,
 	boxMsg.lastMessage = FALSE;
 	getCurrentBoxData(&boxMsg.boxData);
 
-	sendEvent(EVT_END_FILLING,&boxData,WAIT_FOREVER);
+	sendEvent(EVT_END_FILLING,&boxMsg.boxData,WAIT_FOREVER);
 	msgQSend(_boxesQueue, (char*)&boxMsg, sizeof(boxMsg),
 			WAIT_FOREVER, MSG_PRI_NORMAL);
 
