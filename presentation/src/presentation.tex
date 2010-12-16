@@ -98,7 +98,6 @@
 		\end{center}
 	\end{frame}
 
-	\subsection{Protocole}
 	\begin{frame}
 	    \begin{block}{Choix}
 		  \begin{itemize}
@@ -109,8 +108,8 @@
 	    \end{block}
 	\end{frame}
 
+	\subsection{Protocole en entrée}
 	\begin{frame}
-		\frametitle{Protocole en entrée}
 		\begin{enumerate}
 		    \item \texttt{RESUME} : reprise sur erreur.
 		    \item \texttt{STOP} : arrêt du système après les cartons courants.
@@ -124,8 +123,8 @@
 	    \includegraphics[width=\textwidth]{../../SchemasLCG/NetworkListener-run.pdf}
 	\end{frame}
 
+	\subsection{Protocole en sortie}
 	\begin{frame}
-		\frametitle{Protocole en sortie}
 		\begin{enumerate}
 			\item \texttt{REJECTED} : nombre de pièces ayant un défaut.
 			\item \texttt{ACCEPTED} : un carton a été accepté par le système. Un argument pour indiquer le nombre de pièces.
@@ -135,8 +134,6 @@
 		\end{enumerate}
 	\end{frame}
 
-	
-	\subsection{Conception}
 	\begin{frame}
 	    \frametitle{LCG : EventManager : réseau en sortie}
 	    \includegraphics[width=\textwidth]{../../SchemasLCG/src/EventsManager.pdf}
