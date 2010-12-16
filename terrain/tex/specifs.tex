@@ -7,7 +7,7 @@ réalisation du projet.
 
 Dans l'atelier, les lampes des trois couleurs (rouge, orange et verte) sont
 reliées à un contrôleur tricolore auquel on demande d'allumer l'une des lampes
-(une seule lampe n'est allumée à la fois).
+(il ne peut y avoir qu'une lampe allumée à la fois).
 
 Le serveur sera hébergé sur le poste \textit{VxWorks}.
 
@@ -23,12 +23,6 @@ la seconde imprimante sera sollicitée.
 
 \section{Journaux d'exploitation}
 
-Les éléments enregistrés dans les journaux d'exploitation sont les suivants :
-
-\begin{itemize}
-	\item 
-\end{itemize}
-
 L'enregistrement d'un message dans les journaux d'exploitation s'effectue
 suffisament rapidement pour considérer la date d'enregistrement du message
 comme la date d'un événement (imprecision inférieuse à une seconde, tandis que
@@ -39,12 +33,11 @@ l'horloge est précise à la seconde).
 Le superviseur, qui accède à l'application à partir du logiciel client sous
 windows doit indiquer les paramètres de configuration suivants :
 
-Au lancement de l'application :\\
+Au lancement de l'application :
 \begin{itemize}
 	\item Le seuil de pièces deffectueuses acceptées
 \end{itemize}
-
-Pour chaque nouveau lot à traiter :\\
+Pour chaque nouveau lot à traiter :
 \begin{itemize}
 	\item Le code opérateur (permet d'identifier le superviseur),
 	\item la référence du lot (permet d'identifier le lot traité),
@@ -54,7 +47,7 @@ Pour chaque nouveau lot à traiter :\\
 
 \section{Liste des erreurs et anomalies émises par le serveur}
 
-\begin{itermize}
+\begin{itemize}
 	\item Le seuil des pièces deffectueuses est atteint,
 	\item La file de cartons est pleine,
 	\item Il n'y a plus de cartons disponible,
