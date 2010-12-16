@@ -15,14 +15,17 @@
 
 \section{Introduction}
 	\begin{frame}
+		Complément de spécifications
+
 		\begin{itemize}	
-			\item Voyants
-			\item Impression des étiquettes %Charge des imprimantes
-			\item Journal d'exploitation
-			\item Client Windows
-			\item Erreurs et Anomalies
-			\item Protocole
-			%TODO Est-ce bien nécessaire de tout détailler ?
+			\item Les voyants sont reliés à un contrôleur tricolore, une seule
+couleur peut être visible à la fois
+			\item Le serveur de l'application est hébergé sur le poste
+\textit{VxWorks}
+			\item Les imprimantes sont sollicitées à tour de rôle afin
+d'équilibrer la charge
+			\item La date d'un événement est supposée équivalente à la date de
+l'enregistrement de l'événement dans les journaux
 		\end{itemize}
 	\end{frame}
 
@@ -99,7 +102,6 @@
 		\end{center}
 	\end{frame}
 
-	\subsection{Protocole}
 	\begin{frame}
 	    \begin{block}{Choix}
 		  \begin{itemize}
@@ -110,8 +112,8 @@
 	    \end{block}
 	\end{frame}
 
+	\subsection{Protocole en entrée}
 	\begin{frame}
-		\frametitle{Protocole en entrée}
 		\begin{enumerate}
 		    \item \texttt{RESUME} : reprise sur erreur.
 		    \item \texttt{STOP} : arrêt du système après les cartons courants.
@@ -125,8 +127,8 @@
 	    \includegraphics[width=\textwidth]{../../SchemasLCG/NetworkListener-run.pdf}
 	\end{frame}
 
+	\subsection{Protocole en sortie}
 	\begin{frame}
-		\frametitle{Protocole en sortie}
 		\begin{enumerate}
 			\item \texttt{REJECTED} : nombre de pièces ayant un défaut.
 			\item \texttt{ACCEPTED} : un carton a été accepté par le système. Un argument pour indiquer le nombre de pièces.
@@ -136,8 +138,6 @@
 		\end{enumerate}
 	\end{frame}
 
-	
-	\subsection{Conception}
 	\begin{frame}
 	    \frametitle{LCG : EventManager : réseau en sortie}
 	    \includegraphics[width=\textwidth]{../../SchemasLCG/src/EventsManager.pdf}
