@@ -31,7 +31,7 @@
  */
 static int sendData(const int fd, char* buffer,const int len){ /* PRIVATE */
 	int sent = write(fd, buffer, len);
-	printf("write done\n");
+
 	return (sent == len) ? len : NETWORK_ERROR;
 }
 
@@ -91,8 +91,6 @@ int getClientSocket(int port) {
 
 		return NETWORK_ERROR;
 	}
-	
-	printf("Accept OK\n");
 
 	return newFd;
 }
@@ -101,7 +99,7 @@ int partAccepted(int fd, int n) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result, msgLen;
 	msgLen = sprintf(msg, "ACCEPTED\n%d\n\n", n);
-	printf("acc :\n|%s|", msg);
+	
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
@@ -111,7 +109,7 @@ int partRejected(int fd, int n) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result, msgLen;
 	msgLen = sprintf(msg, "REJECTED\n%d\n\n", n);
-	printf("rej :\n|%s|", msg);
+
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
@@ -121,7 +119,7 @@ int sendError(int fd, int errCode) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result, msgLen;
 	msgLen = sprintf(msg, "ERROR\n%d\n\n", errCode);
-	printf("err :\n|%s|", msg);
+
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
@@ -131,7 +129,7 @@ int sendWarning(int fd, int errCode) {
 	char msg[128]; /* In case of a reaaaaally big number ;) */
 	int result, msgLen;
 	msgLen = sprintf(msg, "WARNINGS\n%d\n\n", errCode);
-	printf("war :\n|%s|", msg);
+
 	result = sendData(fd, msg, msgLen);
 
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;
@@ -141,7 +139,7 @@ int sendLog(int fd, char* logMessage, int len) {
 	char msg[MIN_EVENT_STRING_BUFFER_SIZE + 9];
 	int result, msgLen;
 	msgLen = sprintf(msg, "LOG\n%s\n\n", logMessage);
-	printf("log :\n|%s|", msg);
+
 	result = sendData(fd, msg, msgLen);
 	
 	return (result != msgLen) ? NETWORK_ERROR : NETWORK_SUCCESS;

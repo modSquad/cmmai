@@ -73,6 +73,7 @@ BOOL printManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue)
 		alternatePrinter();
 		msgQReceive(_boxesQueue, (char*)&currentBox,
 					sizeof(boxesQueueMsg_t),WAIT_FOREVER);
+		eventMsg.boxData = currentBox.boxData;
 		
 		if(currentBox.lastMessage == TRUE)
 		{
@@ -85,7 +86,7 @@ BOOL printManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue)
 		else
 		{
 			/* trying to print using PRINTER1 */
-			if ( !printBox(printer1, &(currentBox.boxData)) )
+			if ( !printBox(printer1, &(eventMsg.boxData)) )
 			{
 				/* PRINTER1 doesn't work, we report the anomaly */
 				eventMsg.event = (printer1 == PRINTR1 ? EVT_ANOMALY_PRINTER1
@@ -94,7 +95,7 @@ BOOL printManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue)
 						WAIT_FOREVER, MSG_PRI_NORMAL);
 				
 				/* attempting to print using PRINTER2 */			
-				if ( !printBox(printer2, &(currentBox.boxData)) )
+				if ( !printBox(printer2, &(eventMsg.boxData)) )
 				{
 					/* PRINTER2 doesn't work, we report the anomaly */
 					eventMsg.event = (printer2 == PRINTR1 ? EVT_ANOMALY_PRINTER1
@@ -104,9 +105,9 @@ BOOL printManager(MSG_Q_ID boxesQueue, MSG_Q_ID eventsQueue)
 							
 					/* we wait for one printer to be fixed */
 					while (
-							!printBox(printer1, &(currentBox.boxData))
+							!printBox(printer1, &(eventMsg.boxData))
 							&&
-							!printBox(printer2, &(currentBox.boxData))
+							!printBox(printer2, &(eventMsg.boxData))
 						)
 					{
 						alternatePrinter();

@@ -88,7 +88,7 @@ void MainWindow::addRejected(int number)
     ui->RejectedNumber->setText(QString::number(number));
     ui->RejectedCumul->setText(QString::number(number + ui->RejectedCumul->text().toInt()));
 
-    ui->RejectedBar->setValue(ui->RejectedBar->value()+number);
+    ui->RejectedBar->setValue(ui->RejectedCumul->text().toInt());
 
     int acc = ui->AcceptedCumul->text().toInt();
     int rej = ui->RejectedCumul->text().toInt();
