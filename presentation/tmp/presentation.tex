@@ -15,14 +15,17 @@
 
 \section{Introduction}
 	\begin{frame}
+		Complément de spécifications
+
 		\begin{itemize}	
-			\item Voyants
-			\item Impression des étiquettes %Charge des imprimantes
-			\item Journal d'exploitation
-			\item Client Windows
-			\item Erreurs et Anomalies
-			\item Protocole
-			%TODO Est-ce bien nécessaire de tout détailler ?
+			\item Les voyants sont reliés à un contrôleur tricolore, une seule
+couleur peut être visible à la fois
+			\item Le serveur de l'application est hébergé sur le poste
+\textit{VxWorks}
+			\item Les imprimantes sont sollicitées à tour de rôle afin
+d'équilibrer la charge
+			\item La date d'un événement est supposée équivalente à la date de
+l'enregistrement de l'événement dans les journaux
 		\end{itemize}
 	\end{frame}
 
@@ -32,65 +35,66 @@
 	\end{frame}
 
 	\begin{frame}
-		IHM du poste distant
-		connection
+        \begin{figure}
+	        \centering
+	        \includegraphics[width=0.9\textwidth]{img/connection.png}
+        \end{figure}
 	\end{frame}
 
 	\begin{frame}
-		IHM du poste distant
-		configuration
+        \begin{figure}
+	        \centering
+	        \includegraphics[width=0.9\textwidth]{img/log.png}
+        \end{figure}
 	\end{frame}
 
 	\begin{frame}
-		IHM du poste distant
-		log
-	\end{frame}
-
-	\begin{frame}
-		IHM du poste distant
-		erreur \/ warning
+        \begin{figure}
+	        \centering
+	        \includegraphics[width=0.9\textwidth]{img/error.png}
+        \end{figure}
 	\end{frame}
 
 \section{Binôme 1 (Monica, Yoann)}
 	\begin{frame}
-\frametitle{Lot 1 : partie métier}
-	\begin{figure}
-		\centering
-		\includegraphics[height=0.8\textheight]{../../SchemasLCG/schemaGlobal.png}
-	\end{figure}
+        \frametitle{Lot 1 : partie métier}
+        \begin{figure}
+	        \centering
+	        \includegraphics[height=0.8\textheight]{../../SchemasLCG/schemaGlobal.png}
+        \end{figure}
 	\end{frame}
 
-\subsection{Gestion du remplissage}
+    \subsection{Gestion du remplissage}
 	\begin{frame}
-	\begin{figure}
-		\centering
-		\includegraphics[width=0.9\textwidth]{../../SchemasLCG/ProductInflowHandler.png}
-	\end{figure}
-	\end{frame}
-
-	\begin{frame}
-	\begin{figure}
-		\centering
-		\includegraphics[width=\textwidth]{../../SchemasLCG/BoxManager.pdf}
-	\end{figure}
+	    \begin{figure}
+		    \centering
+		    \includegraphics[width=0.9\textwidth]{../../SchemasLCG/ProductInflowHandler.png}
+	    \end{figure}
 	\end{frame}
 
 	\begin{frame}
-	\begin{figure}
-		\centering
-		\includegraphics[width=0.7\textwidth]{../../SchemasLCG/ProductStarvationHandler.png}
-	\end{figure}
+	    \begin{figure}
+		    \centering
+		    \includegraphics[width=\textwidth]{../../SchemasLCG/BoxManager.pdf}
+	    \end{figure}
 	\end{frame}
 
-\subsection{Gestion de l'impression}
 	\begin{frame}
-	\begin{figure}
-		\centering
-		\includegraphics[width=0.85\textwidth]{../../SchemasLCG/PrintManager.png}
-	\end{figure}
+	    \begin{figure}
+		    \centering
+		    \includegraphics[width=0.7\textwidth]{../../SchemasLCG/ProductStarvationHandler.png}
+	    \end{figure}
 	\end{frame}
 
-\section{Binôme 2 (Paul, Maxime)}
+    \subsection{Gestion de l'impression}
+	\begin{frame}
+	    \begin{figure}
+		    \centering
+		    \includegraphics[width=0.85\textwidth]{../../SchemasLCG/PrintManager.png}
+	    \end{figure}
+	\end{frame}
+
+    \section{Binôme 2 (Paul, Maxime)}
 	\begin{frame}
 		\begin{center}
 			\frametitle{Lot 2 : réseau, journalisation, gestion des évènements.}
@@ -98,7 +102,6 @@
 		\end{center}
 	\end{frame}
 
-	\subsection{Protocole}
 	\begin{frame}
 	    \begin{block}{Choix}
 		  \begin{itemize}
@@ -109,8 +112,8 @@
 	    \end{block}
 	\end{frame}
 
+	\subsection{Protocole en entrée}
 	\begin{frame}
-		\frametitle{Protocole en entrée}
 		\begin{enumerate}
 		    \item \texttt{RESUME} : reprise sur erreur.
 		    \item \texttt{STOP} : arrêt du système après les cartons courants.
@@ -124,8 +127,8 @@
 	    \includegraphics[width=\textwidth]{../../SchemasLCG/NetworkListener-run.pdf}
 	\end{frame}
 
+	\subsection{Protocole en sortie}
 	\begin{frame}
-		\frametitle{Protocole en sortie}
 		\begin{enumerate}
 			\item \texttt{REJECTED} : nombre de pièces ayant un défaut.
 			\item \texttt{ACCEPTED} : un carton a été accepté par le système. Un argument pour indiquer le nombre de pièces.
@@ -135,8 +138,6 @@
 		\end{enumerate}
 	\end{frame}
 
-	
-	\subsection{Conception}
 	\begin{frame}
 	    \frametitle{LCG : EventManager : réseau en sortie}
 	    \includegraphics[width=\textwidth]{../../SchemasLCG/src/EventsManager.pdf}
@@ -150,10 +151,10 @@
 
 \section{Binôme 3 (Martin, Etienne)}
 	\begin{frame}
-	\begin{center}
-		\frametitle{Lot 3 : TODO décrire}
-		\includegraphics[height=0.8\textheight]{../../SchemasLCG/schemaGlobal.png}
-	\end{center}
+	    \begin{center}
+		    \frametitle{Lot 3 : TODO décrire}
+		    \includegraphics[height=0.8\textheight]{../../SchemasLCG/schemaGlobal.png}
+	    \end{center}
 	\end{frame}
 
 	\begin{frame}
