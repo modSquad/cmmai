@@ -25,7 +25,7 @@
 \begin{itemize}
 	\item Le carton deposé avant est retiré de la boîte aux lettres.
 	\item Le carton est imprimé avec l'imprimante \kw{Printer1}.
-	\item Après impression, un message \kw{EVT_BOX_PRINTED} est deposé dans la boîte aux lettres \kw{EventsQueue}
+	\item Après impression, un message \kw{EVT\_BOX\_PRINTED} est deposé dans la boîte aux lettres \kw{EventsQueue}
 \end{itemize}
 }
 
@@ -42,9 +42,9 @@
 \begin{itemize}
 	\item Le carton deposé avant est retiré de la boîte aux lettres.
 	\item On essaye sans succès d'imprimer le carton avec \kw{Printer1}.
-	\item Un message \kw{EVT_ANOMALY_PRINTER1} est deposé dans la boîte aux lettres \kw{EventsQueue}.
+	\item Un message \kw{EVT\_ANOMALY\_PRINTER1} est deposé dans la boîte aux lettres \kw{EventsQueue}.
 	\item Le carton est delegué à l'imprimante \kw{Printer2}.
-	\item Après impression avec \kw{Printer2}, un message \kw{EVT_BOX_PRINTED} est deposé dans la boîte aux lettres \kw{EventsQueue}
+	\item Après impression avec \kw{Printer2}, un message \kw{EVT\_BOX\_PRINTED} est deposé dans la boîte aux lettres \kw{EventsQueue}
 \end{itemize}
 }
 
@@ -62,10 +62,10 @@
 \begin{itemize}
 	\item Le carton deposé avant est retiré de la boîte aux lettres.
 	\item On essaye sans succès d'imprimer le carton avec \kw{Printer1}.
-	\item Un message \kw{EVT_ANOMALY_PRINTER1} est deposé dans la boîte aux lettres \kw{EventsQueue}.
+	\item Un message \kw{EVT\_ANOMALY\_PRINTER1} est deposé dans la boîte aux lettres \kw{EventsQueue}.
 	\item Le carton est delegué à \kw{Printer2}.
 	\item On essaye sans succès d'imprimer le carton avec \kw{Printer2}.
-	\item Un message \kw{EVT_ANOMALY_PRINTER2} est deposé dans la boîte aux lettres \kw{EventsQueue}.
+	\item Un message \kw{EVT\_ANOMALY\_PRINTER2} est deposé dans la boîte aux lettres \kw{EventsQueue}.
 	\item La tâche attend la réparation d'une imprimante en vérifiant en boucle infinie les états des deux imprimantes.
 \end{itemize}
 }
@@ -82,14 +82,8 @@
 {
 \begin{itemize}
 	\item Le message est retiré de la boîte aux lettres.
-	\item Un message \kw{EVT_APPLICATION_STOP} est deposé dans la boîte aux lettres \kw{EventsQueue}. 
+	\item Un message \kw{EVT\_APPLICATION\_STOP} est deposé dans la boîte aux lettres \kw{EventsQueue}. 
 	\item La tâche se suspend.
 \end{itemize}
 }
-
-
-
-
-
-
 
