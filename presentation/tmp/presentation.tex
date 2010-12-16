@@ -15,22 +15,20 @@
 
 \section{Introduction}
 	\begin{frame}
-		Complément de spécifications
-
 		\begin{itemize}	
-			\item Les voyants sont reliés à un contrôleur tricolore, une seule
-couleur peut être visible à la fois
-			\item Le serveur de l'application est hébergé sur le poste
-\textit{VxWorks}
-			\item Les imprimantes sont sollicitées à tour de rôle afin
-d'équilibrer la charge
-			\item La date d'un événement est supposée équivalente à la date de
-l'enregistrement de l'événement dans les journaux
+			\item Voyants
+			\item Impression des étiquettes %Charge des imprimantes
+			\item Journal d'exploitation
+			\item Client Windows
+			\item Erreurs et Anomalies
+			\item Protocole
+			%TODO Est-ce bien nécessaire de tout détailler ?
 		\end{itemize}
 	\end{frame}
 
 	\begin{frame}
 		\includegraphics[width=\textwidth]{../../SchemasLCG/schemaGlobal.png}
+		%TODO Découpage en lot fonctionnel.
 	\end{frame}
 
 	\begin{frame}
@@ -101,6 +99,7 @@ l'enregistrement de l'événement dans les journaux
 		\end{center}
 	\end{frame}
 
+	\subsection{Protocole}
 	\begin{frame}
 	    \begin{block}{Choix}
 		  \begin{itemize}
@@ -111,8 +110,8 @@ l'enregistrement de l'événement dans les journaux
 	    \end{block}
 	\end{frame}
 
-	\subsection{Protocole en entrée}
 	\begin{frame}
+		\frametitle{Protocole en entrée}
 		\begin{enumerate}
 		    \item \texttt{RESUME} : reprise sur erreur.
 		    \item \texttt{STOP} : arrêt du système après les cartons courants.
@@ -126,8 +125,8 @@ l'enregistrement de l'événement dans les journaux
 	    \includegraphics[width=\textwidth]{../../SchemasLCG/NetworkListener-run.pdf}
 	\end{frame}
 
-	\subsection{Protocole en sortie}
 	\begin{frame}
+		\frametitle{Protocole en sortie}
 		\begin{enumerate}
 			\item \texttt{REJECTED} : nombre de pièces ayant un défaut.
 			\item \texttt{ACCEPTED} : un carton a été accepté par le système. Un argument pour indiquer le nombre de pièces.
@@ -137,6 +136,8 @@ l'enregistrement de l'événement dans les journaux
 		\end{enumerate}
 	\end{frame}
 
+	
+	\subsection{Conception}
 	\begin{frame}
 	    \frametitle{LCG : EventManager : réseau en sortie}
 	    \includegraphics[width=\textwidth]{../../SchemasLCG/src/EventsManager.pdf}
@@ -150,17 +151,10 @@ l'enregistrement de l'événement dans les journaux
 
 \section{Binôme 3 (Martin, Etienne)}
 	\begin{frame}
-<<<<<<< HEAD
-	\begin{center}
-		\frametitle{Lot 3 : Tâche mère}
-		\includegraphics[height=0.8\textheight]{../../SchemasLCG/masterTask.pdf}
-	\end{center}
-=======
 	    \begin{center}
 		    \frametitle{Lot 3 : TODO décrire}
 		    \includegraphics[height=0.8\textheight]{../../SchemasLCG/schemaGlobal.png}
 	    \end{center}
->>>>>>> d305a76d99f3f86569f9b0da531e9da9ab2615de
 	\end{frame}
 
 	\begin{frame}
